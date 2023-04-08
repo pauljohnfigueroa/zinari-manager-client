@@ -6,12 +6,13 @@ import { createTheme } from '@mui/material/styles'
 import { themeSettings } from './theme'
 
 import LoginPage from './pages/login/LoginPage'
+import Dashboard from './pages/users/Dashboard'
 
 function App() {
 
   // get the theme mode from the global state
   const mode = useSelector(state => state.mode)
-  const theme = useMemo(() => createTheme(themeSettings(mode), [mode]))
+  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
 
   const isAuth = Boolean(useSelector(state => state.token))
 
@@ -22,6 +23,7 @@ function App() {
           <CssBaseline />
           <Routes>
             <Route path="/" element={<LoginPage />} />
+            <Route path="/dashboard" element={isAuth ? <Dashboard /> : <Navigate to='/' />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
