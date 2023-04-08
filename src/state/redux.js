@@ -25,13 +25,6 @@ export const authSlice = createSlice({
             state.user = null
             state.token = null
         },
-        setFriends: (state, action) => {
-            if (state.user) {
-                state.user.friends = action.payload.friends
-            } else {
-                console.error("User's friends are non-existent.")
-            }
-        },
         setTasks: (state, action) => {
             state.tasks = action.payload.tasks
         },

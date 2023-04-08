@@ -30,6 +30,9 @@ const LoginForm = () => {
     const loggedIn = await loggedInResponse.json()
     onSubmitProps.resetForm()
     if (loggedIn) {
+      // save the {email, token} in the local storage
+      //localStorage.setItem('user', JSON.stringify(loggedIn))
+
       dispatch(
         setLogin({
           user: loggedIn.user,

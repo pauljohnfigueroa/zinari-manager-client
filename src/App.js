@@ -6,7 +6,13 @@ import { createTheme } from '@mui/material/styles'
 import { themeSettings } from './theme'
 
 import LoginPage from './pages/login/LoginPage'
+import Layout from 'pages/layout/Layout'
 import Dashboard from './pages/users/Dashboard'
+import Tasks from './pages/tasks/Tasks'
+import Teams from './pages/teams/Teams'
+import Projects from './pages/projects/Projects'
+import Appraisals from './pages/appraisals/Appraisals'
+
 
 function App() {
 
@@ -23,7 +29,13 @@ function App() {
           <CssBaseline />
           <Routes>
             <Route path="/" element={<LoginPage />} />
-            <Route path="/dashboard" element={isAuth ? <Dashboard /> : <Navigate to='/' />} />
+            <Route element={isAuth ? <Layout /> : <Navigate to='/' />} >
+              <Route path="/dashboard" element={isAuth ? <Dashboard /> : <Navigate to='/' />} />
+              <Route path="/tasks" element={isAuth ? <Tasks /> : <Navigate to='/' />} />
+              <Route path="/teams" element={isAuth ? <Teams /> : <Navigate to='/' />} />
+              <Route path="/projects" element={isAuth ? <Projects /> : <Navigate to='/' />} />
+              <Route path="/appraisals" element={isAuth ? <Appraisals /> : <Navigate to='/' />} />
+            </Route>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
