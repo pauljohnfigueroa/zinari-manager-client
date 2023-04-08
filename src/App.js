@@ -3,9 +3,9 @@ import { BrowserRouter, Routes, Navigate, Route } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { createTheme } from '@mui/material/styles'
-import { themeSettings } from 'theme'
+import { themeSettings } from './theme'
 
-import LoginPage from 'pages/login/LoginPage'
+import LoginPage from './pages/login/LoginPage'
 
 function App() {
 
@@ -22,7 +22,6 @@ function App() {
           <CssBaseline />
           <Routes>
             <Route path="/" element={<LoginPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

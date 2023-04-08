@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Global app state
 const initialState = {
-    mode: "dark",
+    mode: "light",
     user: null,
     token: null,
     tasks: []
@@ -36,7 +36,7 @@ export const authSlice = createSlice({
             state.tasks = action.payload.tasks
         },
         setTask: (state, action) => {
-            const updatedPosts = state.tasks.map(task => {
+            const updatedTasks = state.tasks.map(task => {
                 if (task._id === action.payload.task._id) return action.payload.task
 
                 return task
