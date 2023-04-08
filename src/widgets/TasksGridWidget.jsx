@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
-import { setTasks } from 'state/redux'
+import { fetchTasks } from 'state/redux'
 
 import { Box } from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
@@ -11,13 +11,12 @@ import LinearProgress from '@mui/material/LinearProgress'
 import { tokens } from '../theme.js'
 
 const TasksGridWidget = () => {
+  const theme = useTheme()
+  const colors = tokens(theme.palette.mode)
+
   const dispatch = useDispatch()
   const tasks = useSelector(state => state.tasks)
   const token = useSelector(state => state.token)
-  const [gridData, setGridData] = useState()
-
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
 
   const getTasks = async () => {
     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks`, {
@@ -26,8 +25,8 @@ const TasksGridWidget = () => {
     })
 
     const data = await response.json()
-    dispatch(setTasks({ tasks: data }))
-    setGridData(data)
+
+    dispatch(fetchTasks({ tasks: data }))
   }
 
   useEffect(() => {
@@ -79,7 +78,7 @@ const TasksGridWidget = () => {
         }}
         experimentalFeatures={{ newEditingApi: false }}
         rowsPerPageOptions={[5, 10, 20]}
-        rows={gridData ? gridData : []}
+        rows={tasks ? tasks : []}
         columns={columns}
         checkboxSelection
         disableSelectionOnClick

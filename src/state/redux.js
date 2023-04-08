@@ -5,7 +5,8 @@ const initialState = {
     mode: "light",
     user: null,
     token: null,
-    tasks: []
+    tasks: [],
+    formState: false
 }
 
 export const authSlice = createSlice({
@@ -25,20 +26,18 @@ export const authSlice = createSlice({
             state.user = null
             state.token = null
         },
-        setTasks: (state, action) => {
+        fetchTasks: (state, action) => {
             state.tasks = action.payload.tasks
         },
-        setTask: (state, action) => {
-            const updatedTasks = state.tasks.map(task => {
-                if (task._id === action.payload.task._id) return action.payload.task
-
-                return task
-            })
-            state.tasks = updatedTasks
+        createTask: (state, action) => {
+            state.tasks = [...state, ...action.payload]
+        },
+        addTaskFormState: (state, action) => {
+            state.formState = action.payload.formState
         }
     }
 
 })
 
-export const { setMode, setLogin, setLogout, setFriends, setTasks, setTask } = authSlice.actions
+export const { setMode, setLogin, setLogout, setFriends, fetchTasks, setTask, addTaskFormState } = authSlice.actions
 export default authSlice.reducer
