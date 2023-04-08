@@ -2,7 +2,7 @@
 export const colorTokens = {
     grey: {
         0: "#FFFFFF",
-        10: "#EFEFEF", // custom Body dirty white 
+        10: "#EFEFEF", // custom Body dirty white | light mode 800
         50: "#D4D4D4", // custom Sidebar Menu text 
         100: "#a4a4a4",
         200: "#777777",
@@ -58,7 +58,7 @@ export const themeSettings = (mode) => {
                 : {
                     // palette values for light mode
                     primary: {
-                        dark: colorTokens.primary[700],
+                        dark: colorTokens.primary[600],
                         main: colorTokens.primary[500],
                         light: colorTokens.primary[50],
                     },
