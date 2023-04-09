@@ -23,7 +23,7 @@ import {
 } from '@mui/icons-material'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { setMode, setLogout } from 'state/auth.redux'
+import { setMode, setLogout } from 'state/authSlice'
 import { useNavigate } from 'react-router-dom'
 
 import FlexBetween from 'components/FlexBetween'
@@ -33,7 +33,7 @@ const Navbar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   // pull from global state
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.auth.user)
   const isNonMobileScreens = useMediaQuery('(min-width: 600px)')
 
   const theme = useTheme()

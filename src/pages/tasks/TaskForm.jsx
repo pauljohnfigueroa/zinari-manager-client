@@ -10,7 +10,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { createTask, addTaskFormState } from '../../state/task.redux'
+import { createTask, addTaskFormState } from '../../state/tasksSlice'
 
 // MUI
 import { Box, useMediaQuery, InputLabel, MenuItem, Select, FormControl } from '@mui/material'

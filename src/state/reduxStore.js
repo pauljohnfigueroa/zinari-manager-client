@@ -1,5 +1,5 @@
-import authReducer from './auth.redux'
-import taskReducer from './task.redux'
+import authReducer from './authSlice'
+import taskReducer from './tasksSlice'
 
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { persistStore } from 'redux-persist'
@@ -21,16 +21,14 @@ const persistConfig = {
     storage
 }
 
-const persistedAuth = persistReducer(persistConfig, authReducer)
-
 const rootReducer = combineReducers({
-    auth: persistedAuth,
+    auth: authReducer,
     tasks: taskReducer
 })
-
+const persistedReducers = persistReducer(persistConfig, rootReducer)
 
 export const store = configureStore({
-    reducer: persistedAuth,
+    reducer: persistedReducers,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: {
             ignoredActions: [

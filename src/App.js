@@ -16,10 +16,10 @@ import Appraisals from './pages/appraisals/Appraisals'
 function App() {
 
   // get the theme mode from the global state
-  const mode = useSelector(state => state.mode)
+  const mode = useSelector(state => state.auth.mode)
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
 
-  const isAuth = Boolean(useSelector(state => state.token))
+  const isAuth = Boolean(useSelector(state => state.auth.token))
   console.log(isAuth)
 
   return (

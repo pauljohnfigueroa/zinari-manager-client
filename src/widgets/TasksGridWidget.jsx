@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
-import { fetchTasks } from 'state/task.redux.js'
+import { fetchTasks } from 'state/tasksSlice.js'
 
 import { Box, IconButton } from '@mui/material'
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
@@ -16,8 +16,8 @@ const TasksGridWidget = () => {
   const colors = tokens(theme.palette.mode)
 
   const dispatch = useDispatch()
-  const tasks = useSelector(state => state.tasks)
-  const token = useSelector(state => state.token)
+  const tasks = useSelector(state => state.tasks.tasks)
+  const token = useSelector(state => state.auth.token)
 
   const getTasks = async () => {
     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks`, {

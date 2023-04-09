@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 
 import { useTheme } from '@emotion/react'
 
-import { addTaskFormState } from '../../state/task.redux'
+import { addTaskFormState } from '../../state/tasksSlice'
 
 import TasksGridWidget from 'widgets/TasksGridWidget.jsx'
 import AvgCompletionRateWidget from 'widgets/AvgCompletionRateWidget'
@@ -21,7 +21,7 @@ const Tasks = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
-  const formState = useSelector(state => state.formState)
+  const formState = useSelector(state => state.tasks.formState)
   const dispatch = useDispatch()
 
   const openAddTaskForm = () => {
