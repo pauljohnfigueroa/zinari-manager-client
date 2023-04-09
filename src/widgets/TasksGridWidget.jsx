@@ -2,9 +2,10 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
-import { fetchTasks } from 'state/redux'
+import { fetchTasks } from 'state/task.redux.js'
 
-import { Box } from '@mui/material'
+import { Box, IconButton } from '@mui/material'
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import LinearProgress from '@mui/material/LinearProgress'
 
@@ -33,6 +34,10 @@ const TasksGridWidget = () => {
     getTasks()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const showEditForm = () => {
+    console.log('show edit form')
+  }
+
   const columns = [
     {
       field: '_id',
@@ -57,6 +62,20 @@ const TasksGridWidget = () => {
       field: 'category',
       headerName: 'Category',
       flex: 1
+    },
+    {
+      field: 'action',
+      headerName: 'Action',
+      flex: 1,
+      renderCell: rowdata => {
+        return (
+          <Box>
+            <IconButton onClick={() => showEditForm(rowdata.row)}>
+              <ModeEditOutlineOutlinedIcon />
+            </IconButton>
+          </Box>
+        )
+      }
     }
   ]
 
@@ -65,7 +84,6 @@ const TasksGridWidget = () => {
       <DataGrid
         getRowId={row => row._id}
         sx={{
-          boxShadow: 4,
           backgroundColor: colors.grey[800],
           '& .MuiDataGrid-row:hover': {
             color: colors.grey[400],

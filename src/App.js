@@ -13,7 +13,6 @@ import Teams from './pages/teams/Teams'
 import Projects from './pages/projects/Projects'
 import Appraisals from './pages/appraisals/Appraisals'
 
-
 function App() {
 
   // get the theme mode from the global state
@@ -21,6 +20,7 @@ function App() {
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
 
   const isAuth = Boolean(useSelector(state => state.token))
+  console.log(isAuth)
 
   return (
     <div className="App">

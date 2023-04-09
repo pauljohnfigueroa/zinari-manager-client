@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 
 import { useTheme } from '@emotion/react'
 
-import { addTaskFormState } from '../../state/redux'
+import { addTaskFormState } from '../../state/task.redux'
 
 import TasksGridWidget from 'widgets/TasksGridWidget.jsx'
 import AvgCompletionRateWidget from 'widgets/AvgCompletionRateWidget'
@@ -40,30 +40,30 @@ const Tasks = () => {
       >
         Tasks
       </Typography>
-      <Box border="1px solid red">
+      <Box border="1px solid gray">
         <FlexBetween justifyContent="start">
           <FlexBetween
             sx={{
               flexDirection: 'column',
-              border: '1px solid yellow',
+              border: '1px solid gray',
               width: '50%'
             }}
           >
-            <Box height="300px" border="1px solid red">
+            <Box height="300px" border="1px solid gray">
               <TasksPieChartWidget />
             </Box>
           </FlexBetween>
           <FlexBetween
             sx={{
               flexDirection: 'column',
-              border: '1px solid yellow',
+              border: '1px solid gray',
               width: '50%'
             }}
           >
-            <Box height="150px" border="1px solid red">
+            <Box height="150px" border="1px solid gray">
               <AvgCompletionRateWidget />
             </Box>
-            <Box height="150px" border="1px solid red">
+            <Box height="150px" border="1px solid gray">
               <AvgOverdueRateWidget />
             </Box>
           </FlexBetween>

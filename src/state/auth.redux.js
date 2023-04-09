@@ -5,8 +5,7 @@ const initialState = {
     mode: "light",
     user: null,
     token: null,
-    tasks: [],
-    formState: false
+
 }
 
 export const authSlice = createSlice({
@@ -25,19 +24,10 @@ export const authSlice = createSlice({
         setLogout: (state) => {
             state.user = null
             state.token = null
-        },
-        fetchTasks: (state, action) => {
-            state.tasks = action.payload.tasks
-        },
-        createTask: (state, action) => {
-            state.tasks = [...state, ...action.payload]
-        },
-        addTaskFormState: (state, action) => {
-            state.formState = action.payload.formState
         }
     }
 
 })
 
-export const { setMode, setLogin, setLogout, setFriends, fetchTasks, setTask, addTaskFormState } = authSlice.actions
+export const { setMode, setLogin, setLogout, setFriends } = authSlice.actions
 export default authSlice.reducer
