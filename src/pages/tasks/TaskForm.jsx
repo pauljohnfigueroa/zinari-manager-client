@@ -1,19 +1,13 @@
 import { useState } from 'react'
 
-import { Formik, Form } from 'formik'
+import { Formik, Form, Field } from 'formik'
 // import * as yup from 'yup'
-
-import dayjs from 'dayjs'
-
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { createTask, addTaskFormState } from '../../state/tasksSlice'
 
 // MUI
-import { Box, useMediaQuery, InputLabel, MenuItem, Select, FormControl } from '@mui/material'
+import { Box, useMediaQuery, InputLabel, MenuItem, Select, FormControl, Input } from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select'
 
 import Button from '@mui/material/Button'
@@ -24,21 +18,17 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
-const TaskForm = ({ formLabel }) => {
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+
+const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
   const isNonMobile = useMediaQuery('(min-width: 600px)')
   const [formValues, setFormValues] = useState()
   const [error, setError] = useState()
 
-  const initFormValues = {
-    title: '',
-    description: '',
-    priority: '',
-    category: '',
-    duedate: ''
-  }
-
-  const formState = useSelector(state => state.formState)
-  const token = useSelector(state => state.token)
+  const formState = useSelector(state => state.tasks.formState)
+  const token = useSelector(state => state.auth.token)
   const dispatch = useDispatch()
 
   const handleClose = (event, reason) => {
@@ -50,9 +40,20 @@ const TaskForm = ({ formLabel }) => {
 
   const handleCreateTask = async values => {
     // await registerUser(values.email, values.name, values.password, values.phone, values.roles)
+    console.log(JSON.stringify(values))
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(values)
+    })
+    const newTask = await response.json()
+
     /* Dispatch */
-    dispatch(createTask({ task: values }))
-    dispatch(addTaskFormState({ formState: false }))
+    dispatch(createTask({ task: newTask }))
+    dispatch(addTaskFormState({ addTaskFormState: false }))
   }
 
   const handleUpdateUser = async values => {
@@ -79,7 +80,7 @@ const TaskForm = ({ formLabel }) => {
   return (
     <div>
       {error && <div>{error}</div>}
-      <Dialog fullWidth open={addTaskFormState} onClose={handleClose}>
+      <Dialog fullWidth open={formState} onClose={handleClose}>
         <DialogTitle>{formLabel}</DialogTitle>
         <DialogContent>
           <DialogContentText>Please fill up all the required ( * ) fields.</DialogContentText>
@@ -105,6 +106,8 @@ const TaskForm = ({ formLabel }) => {
                     '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
                   }}
                 >
+                  <Field type="hidden" id="email" name="email" value={values.email} />
+
                   <TextField
                     fullWidth
                     autoFocus
@@ -121,7 +124,6 @@ const TaskForm = ({ formLabel }) => {
                     onBlur={handleBlur}
                     required
                   />
-
                   <TextField
                     autoComplete="off"
                     fullWidth
@@ -141,42 +143,52 @@ const TaskForm = ({ formLabel }) => {
                     <InputLabel id="priority-label">Priority</InputLabel>
                     <Select
                       labelId="priority-label"
+                      name="priority"
                       id="priority"
                       value={values.priority}
                       label="Priority"
                       onChange={handleChange}
                       onBlur={handleBlur}
                     >
-                      <MenuItem value={1}>Low</MenuItem>
-                      <MenuItem value={2}>Normal</MenuItem>
-                      <MenuItem value={3}>Urgent</MenuItem>
+                      <MenuItem value="1">Low</MenuItem>
+                      <MenuItem value="2">Normal</MenuItem>
+                      <MenuItem value="3">Urgent</MenuItem>
                     </Select>
                   </FormControl>
                   <FormControl sx={{ gridColumn: 'span 2' }} required>
                     <InputLabel id="category-label">Category</InputLabel>
                     <Select
                       labelId="category-label"
+                      name="category"
                       id="category"
                       value={values.category}
                       label="Category"
                       onChange={handleChange}
                       onBlur={handleBlur}
                     >
-                      <MenuItem value={1}>Financial</MenuItem>
-                      <MenuItem value={2}>Customer</MenuItem>
-                      <MenuItem value={3}>Internal Business</MenuItem>
-                      <MenuItem value={3}>Learning and Growth</MenuItem>
+                      <MenuItem value="1">Financial</MenuItem>
+                      <MenuItem value="2">Customer</MenuItem>
+                      <MenuItem value="3">Internal Business</MenuItem>
+                      <MenuItem value="4">Learning and Growth</MenuItem>
                     </Select>
                   </FormControl>
-
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      defaultValue={dayjs().add(0, 'day')}
-                      disablePast
-                      sx={{ gridColumn: 'span 2' }}
-                      label="Due Date"
-                    />
-                  </LocalizationProvider>
+                  <FormControl sx={{ gridColumn: 'span 2' }}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="Due Date"
+                        name="dueDate"
+                        id="dueDate"
+                        disablePast
+                        defaultValue={due}
+                        value={due}
+                        onChange={date => {
+                          setDue(date)
+                        }}
+                        // onChange={handleChange}
+                        // onBlur={handleBlur}
+                      />
+                    </LocalizationProvider>
+                  </FormControl>
                 </Box>
 
                 <DialogActions>

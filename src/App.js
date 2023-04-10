@@ -20,7 +20,6 @@ function App() {
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
 
   const isAuth = Boolean(useSelector(state => state.auth.token))
-  console.log(isAuth)
 
   return (
     <div className="App">

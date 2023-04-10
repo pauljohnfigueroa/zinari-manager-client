@@ -1,9 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
-import { fetchTasks } from 'state/tasksSlice.js'
+import dayjs from 'dayjs'
 
+import { fetchTasks, addTaskFormState } from 'state/tasksSlice.js'
+import TaskForm from 'pages/tasks/TaskForm.jsx'
 import { Box, IconButton } from '@mui/material'
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
@@ -14,28 +16,42 @@ import { tokens } from '../theme.js'
 const TasksGridWidget = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
+  const [due, setDue] = useState(dayjs().add(0, 'day'))
 
   const dispatch = useDispatch()
   const tasks = useSelector(state => state.tasks.tasks)
+  const formState = useSelector(state => state.tasks.formState)
   const token = useSelector(state => state.auth.token)
+  const user = useSelector(state => state.auth.user)
 
-  const getTasks = async () => {
-    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks`, {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${token}` }
-    })
-
-    const data = await response.json()
-
-    dispatch(fetchTasks({ tasks: data }))
+  const initialValues = {
+    email: user.email,
+    title: '',
+    description: '',
+    priority: '',
+    category: '',
+    dueDate: due
   }
 
+  const [initFormValues, setInitFormValues] = useState(initialValues)
+
   useEffect(() => {
+    const getTasks = async () => {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      const tasks = await response.json()
+
+      /* Dispatch */
+      dispatch(fetchTasks({ tasks }))
+    }
     getTasks()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const showEditForm = () => {
-    console.log('show edit form')
+  const showEditForm = row => {
+    dispatch(addTaskFormState({ formState: true }))
+    setInitFormValues(row)
   }
 
   const columns = [
@@ -81,6 +97,14 @@ const TasksGridWidget = () => {
 
   return (
     <Box height="60vh">
+      {formState && (
+        <TaskForm
+          formLabel="Update Task"
+          due={due}
+          setDue={setDue}
+          initFormValues={initFormValues}
+        />
+      )}
       <DataGrid
         getRowId={row => row._id}
         sx={{
@@ -94,8 +118,6 @@ const TasksGridWidget = () => {
           Toolbar: GridToolbar,
           LoadingOverlay: LinearProgress
         }}
-        experimentalFeatures={{ newEditingApi: false }}
-        rowsPerPageOptions={[5, 10, 20]}
         rows={tasks ? tasks : []}
         columns={columns}
         checkboxSelection

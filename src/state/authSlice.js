@@ -1,3 +1,6 @@
+/*  Reference
+    https://redux.js.org/tutorials/essentials/part-2-app-structure
+*/
 import { createSlice } from "@reduxjs/toolkit";
 
 // Global app state

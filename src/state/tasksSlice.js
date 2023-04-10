@@ -1,3 +1,8 @@
+/* 
+    Recommended Articles
+    https://www.meltstudio.co/post/react-apps-with-redux-toolkit-and-a-short-guide-to-reducers-with-createslice
+    https://snyk.io/advisor/npm-package/redux-persist/functions/redux-persist.persistCombineReducers
+*/
 import { createSlice } from "@reduxjs/toolkit";
 
 // Global app state
@@ -9,14 +14,20 @@ const initialState = {
 export const taskSlice = createSlice({
     name: "tasks",
     initialState,
+
+    // Redux Toolkit allows us to write "mutating" logic in reducers. It
+    // doesn't actually mutate the state because it uses the immer library,
+    // which detects changes to a "draft state" and produces a brand new
+    // immutable state based off those changes
     // reducer are functions that modify the global state
     reducers: {
         fetchTasks: (state, action) => {
             state.tasks = action.payload.tasks
         },
         createTask: (state, action) => {
-            state.tasks = [...state, ...action.payload.task]
+            state.tasks = [...state.tasks, { ...action.payload.task }]
         },
+        // Is the Task add/update form Open/Close 
         addTaskFormState: (state, action) => {
             state.formState = action.payload.formState
         }
