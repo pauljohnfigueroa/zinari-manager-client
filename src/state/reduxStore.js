@@ -1,5 +1,6 @@
 import authReducer from './authSlice'
 import taskReducer from './tasksSlice'
+import datagridReducer from './datagridSlice'
 
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { persistStore } from 'redux-persist'
@@ -23,7 +24,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    tasks: taskReducer
+    task: taskReducer,
+    datagrid: datagridReducer
 })
 const persistedReducers = persistReducer(persistConfig, rootReducer)
 

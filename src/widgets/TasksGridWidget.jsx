@@ -9,6 +9,8 @@ import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutl
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import LinearProgress from '@mui/material/LinearProgress'
 
+import { setCheckedIds } from 'state/datagridSlice.js'
+
 import { tokens } from '../theme.js'
 
 const TasksGridWidget = ({ initFormValues, setInitFormValues, due, setDue }) => {
@@ -16,8 +18,8 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues, due, setDue }) => 
   const colors = tokens(theme.palette.mode)
 
   const dispatch = useDispatch()
-  const tasks = useSelector(state => state.tasks.tasks)
-  const formState = useSelector(state => state.tasks.formState)
+  const tasks = useSelector(state => state.task.tasks)
+  const formState = useSelector(state => state.task.formState)
   const token = useSelector(state => state.auth.token)
 
   useEffect(() => {
@@ -108,6 +110,11 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues, due, setDue }) => 
         checkboxSelection
         disableSelectionOnClick
         disableRowSelectionOnClick
+        onRowSelectionModelChange={checkedIds => {
+          // pass the ids to a state
+          console.log(checkedIds)
+          dispatch(setCheckedIds({ checkedIds }))
+        }}
       />
     </Box>
   )

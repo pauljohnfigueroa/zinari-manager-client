@@ -4,7 +4,7 @@ import { Formik, Form, Field } from 'formik'
 // import * as yup from 'yup'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { createTask, addTaskFormState } from '../../state/tasksSlice'
+import { createTask, updateTask, addTaskFormState } from '../../state/tasksSlice'
 
 // MUI
 import { Box, useMediaQuery, InputLabel, MenuItem, Select, FormControl } from '@mui/material'
@@ -28,7 +28,7 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
   // const [formValues, setFormValues] = useState()
   const [error, setError] = useState()
 
-  const formState = useSelector(state => state.tasks.formState)
+  const formState = useSelector(state => state.task.formState)
   const token = useSelector(state => state.auth.token)
   const dispatch = useDispatch()
 
@@ -42,7 +42,7 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
 
   const handleCreateTask = async values => {
     // await registerUser(values.email, values.name, values.password, values.phone, values.roles)
-    console.log(JSON.stringify(values))
+
     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks`, {
       method: 'POST',
       headers: {
@@ -59,8 +59,9 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
   }
 
   const handleUpdateUser = async values => {
-    // Delete item/s from the database - Backend
-    const response = await fetch(`${process.env.REACT_APP_API_SERVER}/tasks/${values._id}`, {
+    console.log(values)
+    // Update item from the database - Backend
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/${values._id}`, {
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json',
@@ -68,15 +69,18 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
       },
       body: JSON.stringify(values)
     })
+    // const updatedTask = await response.json()
 
-    const json = await response.json()
+    /* Dispatch */
+    dispatch(updateTask({ task: values }))
+    dispatch(addTaskFormState({ addTaskFormState: false }))
 
     // check for errors
-    if (!response.ok) {
-      setError(json.error)
-    }
+    // if (!response.ok) {
+    //   setError(updatedTask.error)
+    // }
     // Remove the item/s from the DataGrid - Frontend
-    dispatch()
+    // dispatch()
   }
 
   return (
@@ -152,9 +156,9 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     >
-                      <MenuItem value="1">Low</MenuItem>
-                      <MenuItem value="2">Normal</MenuItem>
-                      <MenuItem value="3">Urgent</MenuItem>
+                      <MenuItem value="Low">Low</MenuItem>
+                      <MenuItem value="Normal">Normal</MenuItem>
+                      <MenuItem value="Urgent">Urgent</MenuItem>
                     </Select>
                   </FormControl>
                   <FormControl sx={{ gridColumn: 'span 2' }} required>
@@ -168,10 +172,12 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     >
-                      <MenuItem value="1">Financial</MenuItem>
-                      <MenuItem value="2">Customer</MenuItem>
-                      <MenuItem value="3">Internal Business</MenuItem>
-                      <MenuItem value="4">Learning and Growth</MenuItem>
+                      <MenuItem value="Financial">Financial</MenuItem>
+                      <MenuItem value="Customer">Customer</MenuItem>
+                      <MenuItem value="Internal Business Process">
+                        Internal Business Process
+                      </MenuItem>
+                      <MenuItem value="Learning And Growth">Learning and Growth</MenuItem>
                     </Select>
                   </FormControl>
                   <FormControl sx={{ gridColumn: 'span 2' }}>

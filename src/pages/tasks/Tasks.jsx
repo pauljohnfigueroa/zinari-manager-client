@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 
 import { useTheme } from '@emotion/react'
 
-import { addTaskFormState } from '../../state/tasksSlice'
+import { addTaskFormState, deleteTasks } from '../../state/tasksSlice'
 
 import dayjs from 'dayjs'
 
@@ -25,9 +25,11 @@ const Tasks = () => {
 
   const [due, setDue] = useState(dayjs().add(0, 'day'))
 
-  const user = useSelector(state => state.auth.user)
-  const formState = useSelector(state => state.tasks.formState)
   const dispatch = useDispatch()
+  const user = useSelector(state => state.auth.user)
+  const token = useSelector(state => state.auth.token)
+  const formState = useSelector(state => state.task.formState)
+  const checkedIds = useSelector(state => state.datagrid.checkedIds)
 
   const initialValues = {
     _id: null,
@@ -40,9 +42,26 @@ const Tasks = () => {
   }
   const [initFormValues, setInitFormValues] = useState(initialValues)
 
+  /* OPEN FORM */
   const openAddTaskForm = () => {
     setInitFormValues(initialValues)
     dispatch(addTaskFormState({ formState: true }))
+  }
+
+  /* DELETE TASKS */
+  const handleDeleteTasks = async () => {
+    console.log('checkedIds', checkedIds)
+    checkedIds.map(async id => {
+      await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+    })
+
+    /* Dispatch */
+    dispatch(deleteTasks({ checkedIds }))
   }
 
   return (
@@ -102,10 +121,8 @@ const Tasks = () => {
               Add Task
             </Button>
             <Button
-              // disabled={checkedIds.length ? false : true}
-              onClick={() => {
-                console.log('Add User clicked')
-              }}
+              disabled={checkedIds.length ? false : true}
+              onClick={handleDeleteTasks}
               variant="outlined"
             >
               Delete Selected

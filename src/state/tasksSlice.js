@@ -12,7 +12,7 @@ const initialState = {
 }
 
 export const taskSlice = createSlice({
-    name: "tasks",
+    name: "task",
     initialState,
 
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -27,13 +27,20 @@ export const taskSlice = createSlice({
         createTask: (state, action) => {
             state.tasks = [...state.tasks, { ...action.payload.task }]
         },
+        updateTask: (state, action) => {
+            state.tasks = state.tasks.map(item => item._id === action.payload.task._id ? action.payload.task : item)
+        },
+        deleteTasks: (state, action) => {
+            state.tasks = state.tasks.filter(item => !action.payload.checkedIds.includes(item._id))
+        },
         // Is the Task add/update form Open/Close 
         addTaskFormState: (state, action) => {
             state.formState = action.payload.formState
         }
+
     }
 
 })
 
-export const { fetchTasks, createTask, addTaskFormState } = taskSlice.actions
+export const { fetchTasks, createTask, updateTask, deleteTasks, addTaskFormState } = taskSlice.actions
 export default taskSlice.reducer
