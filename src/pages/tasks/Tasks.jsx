@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { Box, Stack, Typography } from '@mui/material'
@@ -6,6 +7,8 @@ import Button from '@mui/material/Button'
 import { useTheme } from '@emotion/react'
 
 import { addTaskFormState } from '../../state/tasksSlice'
+
+import dayjs from 'dayjs'
 
 import TasksGridWidget from 'widgets/TasksGridWidget.jsx'
 import AvgCompletionRateWidget from 'widgets/AvgCompletionRateWidget'
@@ -20,15 +23,38 @@ const Tasks = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
+  const [due, setDue] = useState(dayjs().add(0, 'day'))
+
+  const user = useSelector(state => state.auth.user)
   const formState = useSelector(state => state.tasks.formState)
   const dispatch = useDispatch()
 
+  const initialValues = {
+    _id: null,
+    email: user.email,
+    title: '',
+    description: '',
+    priority: '',
+    category: '',
+    dueDate: due
+  }
+  const [initFormValues, setInitFormValues] = useState(initialValues)
+
   const openAddTaskForm = () => {
+    setInitFormValues(initialValues)
     dispatch(addTaskFormState({ formState: true }))
   }
 
   return (
     <Box sx={{ p: '1rem 5%' }}>
+      {formState && (
+        <TaskForm
+          formLabel={initFormValues._id ? 'Update Task' : 'New Task'}
+          due={due}
+          setDue={setDue}
+          initFormValues={initFormValues}
+        />
+      )}
       <Typography
         sx={{
           color: colors.primary.main,
@@ -68,7 +94,7 @@ const Tasks = () => {
           </FlexBetween>
         </FlexBetween>
       </Box>
-      {formState && <TaskForm formLabel="Create a New Task" />}
+
       <Box>
         <Box m="10px 0 0 0">
           <Stack spacing={2} direction="row">
@@ -87,7 +113,12 @@ const Tasks = () => {
           </Stack>
         </Box>
         <Box m="10px 0 0 0">
-          <TasksGridWidget />
+          <TasksGridWidget
+            initFormValues={initFormValues}
+            setInitFormValues={setInitFormValues}
+            due={due}
+            setDue={setDue}
+          />
         </Box>
       </Box>
     </Box>

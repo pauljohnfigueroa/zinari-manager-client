@@ -7,8 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { createTask, addTaskFormState } from '../../state/tasksSlice'
 
 // MUI
-import { Box, useMediaQuery, InputLabel, MenuItem, Select, FormControl, Input } from '@mui/material'
-import { SelectChangeEvent } from '@mui/material/Select'
+import { Box, useMediaQuery, InputLabel, MenuItem, Select, FormControl } from '@mui/material'
 
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -18,13 +17,15 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
+import dayjs from 'dayjs'
+
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 
 const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
   const isNonMobile = useMediaQuery('(min-width: 600px)')
-  const [formValues, setFormValues] = useState()
+  // const [formValues, setFormValues] = useState()
   const [error, setError] = useState()
 
   const formState = useSelector(state => state.tasks.formState)
@@ -35,6 +36,7 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
     if (reason !== 'backdropClick') {
       /* Dispatch */
       dispatch(addTaskFormState({ formState: false }))
+      setDue(dayjs().add(0, 'day'))
     }
   }
 
@@ -199,7 +201,7 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
                     type="submit"
                     sx={{ minWidth: 100 }}
                     variant="contained"
-                    onClick={values._id ? () => setFormValues(values) : undefined}
+                    // onClick={values._id ? () => setFormValues(values) : undefined}
                   >
                     {values._id ? 'Update' : 'Save'}
                   </Button>

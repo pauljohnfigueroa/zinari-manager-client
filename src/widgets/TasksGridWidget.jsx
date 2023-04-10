@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
-
-import dayjs from 'dayjs'
 
 import { fetchTasks, addTaskFormState } from 'state/tasksSlice.js'
 import TaskForm from 'pages/tasks/TaskForm.jsx'
@@ -13,27 +11,14 @@ import LinearProgress from '@mui/material/LinearProgress'
 
 import { tokens } from '../theme.js'
 
-const TasksGridWidget = () => {
+const TasksGridWidget = ({ initFormValues, setInitFormValues, due, setDue }) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  const [due, setDue] = useState(dayjs().add(0, 'day'))
 
   const dispatch = useDispatch()
   const tasks = useSelector(state => state.tasks.tasks)
   const formState = useSelector(state => state.tasks.formState)
   const token = useSelector(state => state.auth.token)
-  const user = useSelector(state => state.auth.user)
-
-  const initialValues = {
-    email: user.email,
-    title: '',
-    description: '',
-    priority: '',
-    category: '',
-    dueDate: due
-  }
-
-  const [initFormValues, setInitFormValues] = useState(initialValues)
 
   useEffect(() => {
     const getTasks = async () => {
@@ -99,7 +84,7 @@ const TasksGridWidget = () => {
     <Box height="60vh">
       {formState && (
         <TaskForm
-          formLabel="Update Task"
+          formLabel={initFormValues._id ? 'Update Task' : 'New Task'}
           due={due}
           setDue={setDue}
           initFormValues={initFormValues}
@@ -122,6 +107,7 @@ const TasksGridWidget = () => {
         columns={columns}
         checkboxSelection
         disableSelectionOnClick
+        disableRowSelectionOnClick
       />
     </Box>
   )
