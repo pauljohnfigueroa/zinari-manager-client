@@ -12,6 +12,7 @@ export const datagridSlice = createSlice({
 
         // The row ids of the the selected datagrid rows.
         // This is used for deletion of rows and enable/disable the Delete Selected button
+        // dispatched in the TasksGriidWidget.jsx
         setCheckedIds: (state, action) => {
             state.checkedIds = [...action.payload.checkedIds]
         }

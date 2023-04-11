@@ -5,10 +5,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Global app state
 const initialState = {
-    mode: "light",
+    mode: "dark",
     user: null,
     token: null,
-
 }
 
 export const authSlice = createSlice({
@@ -29,7 +28,6 @@ export const authSlice = createSlice({
             state.token = null
         }
     }
-
 })
 
 export const { setMode, setLogin, setLogout, setFriends } = authSlice.actions

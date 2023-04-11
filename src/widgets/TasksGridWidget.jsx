@@ -1,3 +1,9 @@
+/* 
+The TasksGridWidget.jsx component is a datagrid where all tasks are listed.
+
+Components
+
+*/
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
@@ -22,7 +28,9 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues, due, setDue }) => 
   const formState = useSelector(state => state.task.formState)
   const token = useSelector(state => state.auth.token)
 
+  /* FETCH TASKS */
   useEffect(() => {
+    // Backend
     const getTasks = async () => {
       const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks`, {
         method: 'GET',
@@ -30,17 +38,20 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues, due, setDue }) => 
       })
       const tasks = await response.json()
 
+      // Frontend
       /* Dispatch */
       dispatch(fetchTasks({ tasks }))
     }
     getTasks()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  /* UPDATE TASK FORM */
   const showEditForm = row => {
     dispatch(addTaskFormState({ formState: true }))
     setInitFormValues(row)
   }
 
+  /* GRID COLUMNS */
   const columns = [
     {
       field: '_id',
@@ -92,6 +103,8 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues, due, setDue }) => 
           initFormValues={initFormValues}
         />
       )}
+
+      {/* DATAGRID */}
       <DataGrid
         getRowId={row => row._id}
         sx={{
@@ -111,8 +124,7 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues, due, setDue }) => 
         disableSelectionOnClick
         disableRowSelectionOnClick
         onRowSelectionModelChange={checkedIds => {
-          // pass the ids to a state
-          console.log(checkedIds)
+          // Pass the checked row ids to a redux state
           dispatch(setCheckedIds({ checkedIds }))
         }}
       />

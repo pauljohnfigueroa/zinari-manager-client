@@ -1,10 +1,15 @@
+/* 
+The Tasks.jsx component serves as the dashboard page for Tasks.
+
+Components
+  - TasksGridWidget.jsx
+  - TaskForm.jsx
+*/
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { Box, Stack, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
-
-import { useTheme } from '@emotion/react'
 
 import { addTaskFormState, deleteTasks } from '../../state/tasksSlice'
 
@@ -15,6 +20,8 @@ import AvgCompletionRateWidget from 'widgets/AvgCompletionRateWidget'
 import AvgOverdueRateWidget from 'widgets/AvgOverdueRateWidget'
 import TasksPieChartWidget from 'widgets/TasksPieChartWidget'
 import TaskForm from './TaskForm'
+
+import { useTheme } from '@emotion/react'
 
 import { tokens } from '../../theme.js'
 import FlexBetween from 'components/FlexBetween.jsx'
@@ -31,6 +38,7 @@ const Tasks = () => {
   const formState = useSelector(state => state.task.formState)
   const checkedIds = useSelector(state => state.datagrid.checkedIds)
 
+  // Create/Update Form
   const initialValues = {
     _id: null,
     email: user.email,
@@ -50,6 +58,7 @@ const Tasks = () => {
 
   /* DELETE TASKS */
   const handleDeleteTasks = async () => {
+    // Backend
     console.log('checkedIds', checkedIds)
     checkedIds.map(async id => {
       await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/${id}`, {
@@ -59,8 +68,8 @@ const Tasks = () => {
         }
       })
     })
-
-    /* Dispatch */
+    // Frontend
+    /* DISPATCH */
     dispatch(deleteTasks({ checkedIds }))
   }
 
@@ -113,7 +122,6 @@ const Tasks = () => {
           </FlexBetween>
         </FlexBetween>
       </Box>
-
       <Box>
         <Box m="10px 0 0 0">
           <Stack spacing={2} direction="row">
