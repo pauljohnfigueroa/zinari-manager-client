@@ -19,7 +19,7 @@ import { setCheckedIds } from 'state/datagridSlice.js'
 
 import { tokens } from '../theme.js'
 
-const TasksGridWidget = ({ initFormValues, setInitFormValues, due, setDue }) => {
+const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
@@ -98,8 +98,6 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues, due, setDue }) => 
       {formState && (
         <TaskForm
           formLabel={initFormValues._id ? 'Update Task' : 'New Task'}
-          due={due}
-          setDue={setDue}
           initFormValues={initFormValues}
         />
       )}

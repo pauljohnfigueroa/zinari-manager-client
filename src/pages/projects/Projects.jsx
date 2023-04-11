@@ -10,7 +10,6 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { Box, Stack, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
-
 import { addProjectFormState, deleteProjects } from '../../state/projectsSlice'
 
 import dayjs from 'dayjs'
@@ -19,7 +18,7 @@ import ProjectsGridWidget from 'widgets/ProjectsGridWidget.jsx'
 import AvgCompletionRateWidget from 'widgets/AvgCompletionRateWidget'
 import AvgOverdueRateWidget from 'widgets/AvgOverdueRateWidget'
 import ProjectsPieChartWidget from 'widgets/ProjectsPieChartWidget'
-import ProjectForm from './TaskForm'
+import ProjectForm from './ProjectForm'
 
 import { useTheme } from '@emotion/react'
 
@@ -69,7 +68,7 @@ const Projects = () => {
   return (
     <Box sx={{ p: '1rem 5%' }}>
       {formState && (
-        <TaskForm
+        <ProjectForm
           formLabel={initFormValues._id ? 'Update Task' : 'New Task'}
           due={due}
           setDue={setDue}
@@ -118,7 +117,7 @@ const Projects = () => {
       <Box>
         <Box m="10px 0 0 0">
           <Stack spacing={2} direction="row">
-            <Button onClick={openAddTaskForm} variant="contained">
+            <Button onClick={openAddProjectForm} variant="contained">
               Add Task
             </Button>
             <Button

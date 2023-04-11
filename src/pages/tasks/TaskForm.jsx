@@ -1,7 +1,6 @@
 /* 
-The TaskForm.jsx component is used on both create and update Task.
 
-Components
+The TaskForm.jsx component is used on both create and update Task.
 
 */
 import { useState } from 'react'
@@ -27,24 +26,23 @@ import dayjs from 'dayjs'
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 
-const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
+import FormikDatePicker from 'components/FormikDatePicker'
+
+const TaskForm = ({ formLabel, initFormValues }) => {
   const isNonMobile = useMediaQuery('(min-width: 600px)')
   // const [formValues, setFormValues] = useState()
   const [error, setError] = useState()
 
-  const [value, setValue] = useState()
-
   const formState = useSelector(state => state.task.formState)
   const token = useSelector(state => state.auth.token)
+  const user = useSelector(state => state.auth.user)
   const dispatch = useDispatch()
 
   const handleClose = (event, reason) => {
     if (reason !== 'backdropClick') {
-      /* Dispatch */
+      /* DISPATCH */
       dispatch(addTaskFormState({ formState: false }))
-      setDue(dayjs().add(0, 'day'))
     }
   }
 
@@ -60,7 +58,7 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
     })
     const newTask = await response.json()
 
-    /* Dispatch */
+    /* DISPATCH */
     dispatch(createTask({ task: newTask }))
     dispatch(addTaskFormState({ addTaskFormState: false }))
   }
@@ -76,18 +74,10 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
       },
       body: JSON.stringify(values)
     })
-    // const updatedTask = await response.json()
 
-    /* Dispatch */
+    /* DISPATCH */
     dispatch(updateTask({ task: values }))
     dispatch(addTaskFormState({ addTaskFormState: false }))
-
-    // check for errors
-    // if (!response.ok) {
-    //   setError(updatedTask.error)
-    // }
-    // Remove the item/s from the DataGrid - Frontend
-    // dispatch()
   }
 
   return (
@@ -189,16 +179,11 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
                   </FormControl>
                   <FormControl sx={{ gridColumn: 'span 2' }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Due Date"
+                      <FormikDatePicker
                         name="dueDate"
                         id="dueDate"
                         disablePast
-                        defaultValue={due}
-                        value={value}
-                        onChange={newValue => {
-                          setValue(newValue)
-                        }}
+                        renderInput={params => <TextField {...params} label="Due Date" />}
                       />
                     </LocalizationProvider>
                   </FormControl>

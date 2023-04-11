@@ -30,7 +30,7 @@ const Tasks = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
-  const [due, setDue] = useState(dayjs().add(0, 'day'))
+  // const [due, setDue] = useState()
 
   const dispatch = useDispatch()
   const user = useSelector(state => state.auth.user)
@@ -46,7 +46,7 @@ const Tasks = () => {
     description: '',
     priority: '',
     category: '',
-    dueDate: due
+    dueDate: dayjs().add(0, 'day')
   }
   const [initFormValues, setInitFormValues] = useState(initialValues)
 
@@ -78,8 +78,6 @@ const Tasks = () => {
       {formState && (
         <TaskForm
           formLabel={initFormValues._id ? 'Update Task' : 'New Task'}
-          due={due}
-          setDue={setDue}
           initFormValues={initFormValues}
         />
       )}
@@ -138,12 +136,7 @@ const Tasks = () => {
           </Stack>
         </Box>
         <Box m="10px 0 0 0">
-          <TasksGridWidget
-            initFormValues={initFormValues}
-            setInitFormValues={setInitFormValues}
-            due={due}
-            setDue={setDue}
-          />
+          <TasksGridWidget initFormValues={initFormValues} setInitFormValues={setInitFormValues} />
         </Box>
       </Box>
     </Box>
