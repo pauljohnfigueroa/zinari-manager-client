@@ -1,5 +1,5 @@
 /* 
-The TaskForm.jsx component is used on both create and update Task.
+The ProjectForm.jsx component is used on both create and update Project.
 
 Components
 
@@ -10,7 +10,7 @@ import { Formik, Form, Field } from 'formik'
 // import * as yup from 'yup'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { createTask, updateTask, addTaskFormState } from '../../state/tasksSlice'
+import { createProject, updateProject, addProjectFormState } from '../../state/projectsSlice'
 
 // MUI
 import { Box, useMediaQuery, InputLabel, MenuItem, Select, FormControl } from '@mui/material'
@@ -29,28 +29,28 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 
-const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
+const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
   const isNonMobile = useMediaQuery('(min-width: 600px)')
   // const [formValues, setFormValues] = useState()
   const [error, setError] = useState()
 
   const [value, setValue] = useState()
 
-  const formState = useSelector(state => state.task.formState)
+  const formState = useSelector(state => state.project.formState)
   const token = useSelector(state => state.auth.token)
   const dispatch = useDispatch()
 
   const handleClose = (event, reason) => {
     if (reason !== 'backdropClick') {
       /* Dispatch */
-      dispatch(addTaskFormState({ formState: false }))
+      dispatch(addProjectFormState({ formState: false }))
       setDue(dayjs().add(0, 'day'))
     }
   }
 
-  const handleCreateTask = async values => {
+  const handleCreateProject = async values => {
     // await registerUser(values.email, values.name, values.password, values.phone, values.roles)
-    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks`, {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/projects`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -58,17 +58,17 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
       },
       body: JSON.stringify(values)
     })
-    const newTask = await response.json()
+    const newProject = await response.json()
 
     /* Dispatch */
-    dispatch(createTask({ task: newTask }))
-    dispatch(addTaskFormState({ addTaskFormState: false }))
+    dispatch(createProject({ project: newProject }))
+    dispatch(addProjectFormState({ addProjectFormState: false }))
   }
 
-  const handleUpdateTask = async values => {
+  const handleUpdateProject = async values => {
     console.log(values)
     // Update item from the database - Backend
-    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/${values._id}`, {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/projects/${values._id}`, {
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json',
@@ -76,15 +76,15 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
       },
       body: JSON.stringify(values)
     })
-    // const updatedTask = await response.json()
+    // const updatedProject = await response.json()
 
     /* Dispatch */
-    dispatch(updateTask({ task: values }))
-    dispatch(addTaskFormState({ addTaskFormState: false }))
+    dispatch(updateProject({ project: values }))
+    dispatch(addProjectFormState({ addProjectFormState: false }))
 
     // check for errors
     // if (!response.ok) {
-    //   setError(updatedTask.error)
+    //   setError(updatedProject.error)
     // }
     // Remove the item/s from the DataGrid - Frontend
     // dispatch()
@@ -101,10 +101,10 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
             onSubmit={
               initFormValues._id
                 ? (values, actions) => {
-                    handleUpdateTask(values)
+                    handleUpdateProject(values)
                   }
                 : (values, actions) => {
-                    handleCreateTask(values)
+                    handleCreateProject(values)
                   }
             }
             initialValues={initFormValues}
@@ -225,4 +225,4 @@ const TaskForm = ({ formLabel, initFormValues, due, setDue }) => {
     </div>
   )
 }
-export default TaskForm
+export default ProjectForm
