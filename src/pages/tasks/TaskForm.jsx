@@ -39,6 +39,11 @@ const TaskForm = ({ formLabel, initFormValues }) => {
   const user = useSelector(state => state.auth.user)
   const dispatch = useDispatch()
 
+  // When we do record update, the date format will be in the saved ISO format similar to 2018-04-04T16:00:00.000Z
+  // To enable the Update form to load the current record's date,
+  // We first need to convert the ISO format date to dayjs format.
+  const initialFormValues = { ...initFormValues, dueDate: dayjs(initFormValues.dueDate) }
+
   const handleClose = (event, reason) => {
     if (reason !== 'backdropClick') {
       /* DISPATCH */
@@ -89,7 +94,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
           <DialogContentText>Please fill up all the required ( * ) fields.</DialogContentText>
           <Formik
             onSubmit={
-              initFormValues._id
+              initialFormValues._id
                 ? (values, actions) => {
                     handleUpdateTask(values)
                   }
@@ -97,7 +102,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
                     handleCreateTask(values)
                   }
             }
-            initialValues={initFormValues}
+            initialValues={initialFormValues}
           >
             {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
               <Form>
@@ -183,7 +188,13 @@ const TaskForm = ({ formLabel, initFormValues }) => {
                         name="dueDate"
                         id="dueDate"
                         disablePast
-                        renderInput={params => <TextField {...params} label="Due Date" />}
+                        renderInput={params => (
+                          <TextField
+                            {...params}
+                            value={values.dueDate ? 'hi' : 'hello'}
+                            label="Due Date"
+                          />
+                        )}
                       />
                     </LocalizationProvider>
                   </FormControl>
