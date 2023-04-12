@@ -13,6 +13,12 @@ const FormikDatePicker = ({ name }) => {
   const [field] = useField(name)
   const { setFieldValue } = useFormikContext()
 
-  return <DatePicker value={field.value ?? null} onChange={val => setFieldValue(name, val)} />
+  return (
+    <DatePicker
+      disablePast
+      value={field.value ?? null}
+      onChange={val => setFieldValue(name, val)}
+    />
+  )
 }
 export default FormikDatePicker

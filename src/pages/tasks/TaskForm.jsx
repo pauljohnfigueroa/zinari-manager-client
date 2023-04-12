@@ -187,14 +187,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
                       <FormikDatePicker
                         name="dueDate"
                         id="dueDate"
-                        disablePast
-                        renderInput={params => (
-                          <TextField
-                            {...params}
-                            value={values.dueDate ? 'hi' : 'hello'}
-                            label="Due Date"
-                          />
-                        )}
+                        renderInput={params => <TextField {...params} label="Due Date" />}
                       />
                     </LocalizationProvider>
                   </FormControl>
@@ -204,12 +197,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
                   <Button sx={{ minWidth: 100 }} onClick={handleClose} variant="outlined">
                     Cancel
                   </Button>
-                  <Button
-                    type="submit"
-                    sx={{ minWidth: 100 }}
-                    variant="contained"
-                    // onClick={values._id ? () => setFormValues(values) : undefined}
-                  >
+                  <Button type="submit" sx={{ minWidth: 100 }} variant="contained">
                     {values._id ? 'Update' : 'Save'}
                   </Button>
                 </DialogActions>

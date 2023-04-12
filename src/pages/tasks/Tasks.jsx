@@ -60,6 +60,7 @@ const Tasks = () => {
   const handleDeleteTasks = async () => {
     // Backend
     console.log('checkedIds', checkedIds)
+
     checkedIds.map(async id => {
       await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/${id}`, {
         method: 'DELETE',

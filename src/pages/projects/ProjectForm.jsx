@@ -23,7 +23,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -44,7 +44,7 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
     if (reason !== 'backdropClick') {
       /* Dispatch */
       dispatch(addProjectFormState({ formState: false }))
-      setDue(dayjs().add(0, 'day'))
+      // setDue(dayjs().add(0, 'day'))
     }
   }
 
@@ -152,41 +152,6 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
                     onBlur={handleBlur}
                     required
                   />
-                  <FormControl sx={{ gridColumn: 'span 2' }} required>
-                    <InputLabel id="priority-label">Priority</InputLabel>
-                    <Select
-                      labelId="priority-label"
-                      name="priority"
-                      id="priority"
-                      value={values.priority}
-                      label="Priority"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    >
-                      <MenuItem value="Low">Low</MenuItem>
-                      <MenuItem value="Normal">Normal</MenuItem>
-                      <MenuItem value="Urgent">Urgent</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <FormControl sx={{ gridColumn: 'span 2' }} required>
-                    <InputLabel id="category-label">Category</InputLabel>
-                    <Select
-                      labelId="category-label"
-                      name="category"
-                      id="category"
-                      value={values.category}
-                      label="Category"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    >
-                      <MenuItem value="Financial">Financial</MenuItem>
-                      <MenuItem value="Customer">Customer</MenuItem>
-                      <MenuItem value="Internal Business Process">
-                        Internal Business Process
-                      </MenuItem>
-                      <MenuItem value="Learning And Growth">Learning and Growth</MenuItem>
-                    </Select>
-                  </FormControl>
                   <FormControl sx={{ gridColumn: 'span 2' }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker

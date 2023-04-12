@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { Box, Stack, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
+
 import { addProjectFormState, deleteProjects } from '../../state/projectsSlice'
 
 import dayjs from 'dayjs'
@@ -29,16 +30,24 @@ const Projects = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
-  const [due, setDue] = useState(dayjs().add(0, 'day'))
+  // const [due, setDue] = useState(dayjs().add(0, 'day'))
 
   const dispatch = useDispatch()
   const user = useSelector(state => state.auth.user)
   const token = useSelector(state => state.auth.token)
   const formState = useSelector(state => state.task.formState)
-  const checkedIds = useSelector(state => state.datagrid.projectCheckedIds)
+  const checkedIds = useSelector(state => state.datagrid.checkedIds)
 
   // Create/Update Form
-  const initialValues = {}
+  const initialValues = {
+    _id: null,
+    email: user.email,
+    title: '',
+    description: '',
+    priority: '',
+    category: '',
+    dueDate: dayjs().add(0, 'day')
+  }
   const [initFormValues, setInitFormValues] = useState(initialValues)
 
   /* OPEN FORM */
@@ -69,9 +78,7 @@ const Projects = () => {
     <Box sx={{ p: '1rem 5%' }}>
       {formState && (
         <ProjectForm
-          formLabel={initFormValues._id ? 'Update Task' : 'New Task'}
-          due={due}
-          setDue={setDue}
+          formLabel={initFormValues._id ? 'Update Project' : 'New Project'}
           initFormValues={initFormValues}
         />
       )}
@@ -133,8 +140,6 @@ const Projects = () => {
           <ProjectsGridWidget
             initFormValues={initFormValues}
             setInitFormValues={setInitFormValues}
-            due={due}
-            setDue={setDue}
           />
         </Box>
       </Box>
