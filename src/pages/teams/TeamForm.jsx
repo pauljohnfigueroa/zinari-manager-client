@@ -1,7 +1,6 @@
 /* 
-The ProjectForm.jsx component is used on both create and update Project.
 
-Components
+The TeamForm.jsx component is used on both create and update Team.
 
 */
 import { useState } from 'react'
@@ -10,7 +9,7 @@ import { Formik, Form, Field } from 'formik'
 // import * as yup from 'yup'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { createProject, updateProject, addProjectFormState } from '../../state/projectsSlice'
+import { createTeam, updateTeam, addTeamFormState } from '../../state/teamsSlice'
 
 // MUI
 import { Box, useMediaQuery, InputLabel, MenuItem, Select, FormControl } from '@mui/material'
@@ -23,31 +22,38 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
+import dayjs from 'dayjs'
+
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 
-const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
+import FormikDatePicker from 'components/FormikDatePicker'
+
+const TeamForm = ({ formLabel, initFormValues }) => {
   const isNonMobile = useMediaQuery('(min-width: 600px)')
+  // const [formValues, setFormValues] = useState()
   const [error, setError] = useState()
 
-  const [value, setValue] = useState()
-
-  const formState = useSelector(state => state.project.formState)
+  const formState = useSelector(state => state.team.formState)
   const token = useSelector(state => state.auth.token)
+  const user = useSelector(state => state.auth.user)
   const dispatch = useDispatch()
+
+  // When we do record update, the date format will be in the saved ISO format similar to 2018-04-04T16:00:00.000Z
+  // To enable the Update form to load the current record's date,
+  // We first need to convert the ISO format date to dayjs format.
+  const initialFormValues = { ...initFormValues, dueDate: dayjs(initFormValues.dueDate) }
 
   const handleClose = (event, reason) => {
     if (reason !== 'backdropClick') {
-      /* Dispatch */
-      dispatch(addProjectFormState({ formState: false }))
-      // setDue(dayjs().add(0, 'day'))
+      /* DISPATCH */
+      dispatch(addTeamFormState({ formState: false }))
     }
   }
 
-  const handleCreateProject = async values => {
+  const handleCreateTeam = async values => {
     // await registerUser(values.email, values.name, values.password, values.phone, values.roles)
-    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/projects`, {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -55,17 +61,17 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
       },
       body: JSON.stringify(values)
     })
-    const newProject = await response.json()
+    const newTeam = await response.json()
 
-    /* Dispatch */
-    dispatch(createProject({ project: newProject }))
-    dispatch(addProjectFormState({ addProjectFormState: false }))
+    /* DISPATCH */
+    dispatch(createTeam({ Team: newTeam }))
+    dispatch(addTeamFormState({ addTeamFormState: false }))
   }
 
-  const handleUpdateProject = async values => {
+  const handleUpdateTeam = async values => {
     console.log(values)
     // Update item from the database - Backend
-    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/projects/${values._id}`, {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams/${values._id}`, {
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json',
@@ -73,18 +79,10 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
       },
       body: JSON.stringify(values)
     })
-    // const updatedProject = await response.json()
 
-    /* Dispatch */
-    dispatch(updateProject({ project: values }))
-    dispatch(addProjectFormState({ addProjectFormState: false }))
-
-    // check for errors
-    // if (!response.ok) {
-    //   setError(updatedProject.error)
-    // }
-    // Remove the item/s from the DataGrid - Frontend
-    // dispatch()
+    /* DISPATCH */
+    dispatch(updateTeam({ Team: values }))
+    dispatch(addTeamFormState({ addTeamFormState: false }))
   }
 
   return (
@@ -96,15 +94,15 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
           <DialogContentText>Please fill up all the required ( * ) fields.</DialogContentText>
           <Formik
             onSubmit={
-              initFormValues._id
+              initialFormValues._id
                 ? (values, actions) => {
-                    handleUpdateProject(values)
+                    handleUpdateTeam(values)
                   }
                 : (values, actions) => {
-                    handleCreateProject(values)
+                    handleCreateTeam(values)
                   }
             }
-            initialValues={initFormValues}
+            initialValues={initialFormValues}
           >
             {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
               <Form>
@@ -149,18 +147,47 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
                     onBlur={handleBlur}
                     required
                   />
+                  <FormControl sx={{ gridColumn: 'span 2' }} required>
+                    <InputLabel id="priority-label">Priority</InputLabel>
+                    <Select
+                      labelId="priority-label"
+                      name="priority"
+                      id="priority"
+                      value={values.priority}
+                      label="Priority"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    >
+                      <MenuItem value="Low">Low</MenuItem>
+                      <MenuItem value="Normal">Normal</MenuItem>
+                      <MenuItem value="Urgent">Urgent</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl sx={{ gridColumn: 'span 2' }} required>
+                    <InputLabel id="category-label">Category</InputLabel>
+                    <Select
+                      labelId="category-label"
+                      name="category"
+                      id="category"
+                      value={values.category}
+                      label="Category"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    >
+                      <MenuItem value="Financial">Financial</MenuItem>
+                      <MenuItem value="Customer">Customer</MenuItem>
+                      <MenuItem value="Internal Business Process">
+                        Internal Business Process
+                      </MenuItem>
+                      <MenuItem value="Learning And Growth">Learning and Growth</MenuItem>
+                    </Select>
+                  </FormControl>
                   <FormControl sx={{ gridColumn: 'span 2' }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Due Date"
+                      <FormikDatePicker
                         name="dueDate"
                         id="dueDate"
-                        disablePast
-                        defaultValue={due}
-                        value={value}
-                        onChange={newValue => {
-                          setValue(newValue)
-                        }}
+                        renderInput={params => <TextField {...params} label="Due Date" />}
                       />
                     </LocalizationProvider>
                   </FormControl>
@@ -170,12 +197,7 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
                   <Button sx={{ minWidth: 100 }} onClick={handleClose} variant="outlined">
                     Cancel
                   </Button>
-                  <Button
-                    type="submit"
-                    sx={{ minWidth: 100 }}
-                    variant="contained"
-                    // onClick={values._id ? () => setFormValues(values) : undefined}
-                  >
+                  <Button type="submit" sx={{ minWidth: 100 }} variant="contained">
                     {values._id ? 'Update' : 'Save'}
                   </Button>
                 </DialogActions>
@@ -187,4 +209,4 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
     </div>
   )
 }
-export default ProjectForm
+export default TeamForm

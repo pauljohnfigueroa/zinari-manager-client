@@ -30,8 +30,6 @@ const Projects = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
-  // const [due, setDue] = useState(dayjs().add(0, 'day'))
-
   const dispatch = useDispatch()
   const user = useSelector(state => state.auth.user)
   const token = useSelector(state => state.auth.token)
@@ -125,7 +123,7 @@ const Projects = () => {
         <Box m="10px 0 0 0">
           <Stack spacing={2} direction="row">
             <Button onClick={openAddProjectForm} variant="contained">
-              Add Task
+              Add Project
             </Button>
             <Button
               disabled={checkedIds.length ? false : true}
