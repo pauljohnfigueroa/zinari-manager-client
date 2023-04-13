@@ -70,11 +70,6 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
       flex: 1
     },
     {
-      field: 'projects',
-      headerName: 'Projects',
-      flex: 1
-    },
-    {
       field: 'leader',
       headerName: 'Leader',
       flex: 1
@@ -82,7 +77,12 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
     {
       field: 'members',
       headerName: 'Members',
-      flex: 1
+      flex: 1,
+      renderCell: rowdata => (
+        <ul>
+          {rowdata.row.members.map(item => (<li>{item}</li>))}
+        </ul>
+      )
     },
     {
       field: 'action',
@@ -119,6 +119,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
             backgroundColor: colors.primary.main
           }
         }}
+        getRowHeight={() => 'auto'}
         components={{
           Toolbar: GridToolbar,
           LoadingOverlay: LinearProgress

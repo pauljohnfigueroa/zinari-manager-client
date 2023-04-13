@@ -26,6 +26,8 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import OutlinedInput from '@mui/material/OutlinedInput'
 
+import FormikChip from 'components/FormikChip'
+
 /* *************** */
 
 const ITEM_HEIGHT = 48
@@ -128,7 +130,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
     const newTeam = await response.json()
 
     /* DISPATCH */
-    dispatch(createTeam({ Team: newTeam }))
+    dispatch(createTeam({ team: newTeam }))
     dispatch(addTeamFormState({ addTeamFormState: false }))
   }
 
@@ -211,6 +213,14 @@ const TeamForm = ({ formLabel, initFormValues }) => {
                     onBlur={handleBlur}
                     required
                   />
+                  {/* FormikChip */}
+                  {/* <FormControl sx={{ gridColumn: 'span 2' }}>
+                    <FormikChip
+                      name="members"
+                      id="members"
+                      renderInput={params => <TextField {...params} label="Members" />}
+                    />
+                  </FormControl> */}
 
                   {/* Team Members */}
                   <FormControl sx={{ gridColumn: 'span 4' }}>
@@ -220,8 +230,8 @@ const TeamForm = ({ formLabel, initFormValues }) => {
                       id="members"
                       name="members"
                       multiple
-                      value={personName}
-                      onChange={handleChangeX}
+                      value={values.members}
+                      onChange={handleChange}
                       input={<OutlinedInput id="members-input" label="Members" />}
                       renderValue={selected => (
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>

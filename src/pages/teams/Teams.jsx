@@ -39,9 +39,8 @@ const Teams = () => {
     _id: null,
     name: '',
     description: '',
-    projects: '',
     leader: user.email,
-    members: ''
+    members: []
   }
   const [initFormValues, setInitFormValues] = useState(initialValues)
 
