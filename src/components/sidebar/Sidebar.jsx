@@ -13,20 +13,13 @@ import {
 } from '@mui/material'
 
 import {
-  SettingsOutlined,
   ChevronLeft,
   ChevronRightOutlined,
   HomeOutlined,
   ShoppingCartOutlined,
   Groups2Outlined,
   ReceiptLongOutlined,
-  PublicOutlined,
-  PointOfSaleOutlined,
-  TodayOutlined,
-  CalendarMonthOutlined,
-  AdminPanelSettingsOutlined,
-  TrendingUpOutlined,
-  PieChartOutlined
+  PointOfSaleOutlined
 } from '@mui/icons-material'
 
 import { useState, useEffect } from 'react'
@@ -136,7 +129,7 @@ const Sidebar = ({ isNonMobile, drawerWidth, isSidebarOpen, setIsSidebarOpen }) 
                       // change backgroundColor when selected
                       sx={{
                         backgroundColor:
-                          activePath === lcText ? theme.palette.primary[300] : 'transparent',
+                          activePath === lcText ? theme.palette.primary[500] : 'transparent',
                         color:
                           activePath === lcText
                             ? theme.palette.primary[400]
@@ -154,9 +147,10 @@ const Sidebar = ({ isNonMobile, drawerWidth, isSidebarOpen, setIsSidebarOpen }) 
                       >
                         {icon}
                       </ListItemIcon>
-                      <ListItemText primary={text}>
+                      {lcText}
+                      <ListItemIcon>
                         {activePath === lcText && <ChevronRightOutlined sx={{ ml: 'auto' }} />}
-                      </ListItemText>
+                      </ListItemIcon>
                     </ListItemButton>
                   </ListItem>
                 )

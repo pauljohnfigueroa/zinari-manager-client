@@ -70,8 +70,18 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
       flex: 1
     },
     {
-      field: 'manager',
-      headerName: 'Manager',
+      field: 'projects',
+      headerName: 'Projects',
+      flex: 1
+    },
+    {
+      field: 'leader',
+      headerName: 'Leader',
+      flex: 1
+    },
+    {
+      field: 'members',
+      headerName: 'Members',
       flex: 1
     },
     {

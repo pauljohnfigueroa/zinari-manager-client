@@ -13,8 +13,6 @@ import Button from '@mui/material/Button'
 
 import { addTeamFormState, deleteTeams } from '../../state/teamsSlice'
 
-import dayjs from 'dayjs'
-
 import TeamsGridWidget from 'widgets/TeamsGridWidget.jsx'
 import AvgCompletionRateWidget from 'widgets/AvgCompletionRateWidget'
 import AvgOverdueRateWidget from 'widgets/AvgOverdueRateWidget'
@@ -30,8 +28,6 @@ const Teams = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
-  // const [due, setDue] = useState()
-
   const dispatch = useDispatch()
   const user = useSelector(state => state.auth.user)
   const token = useSelector(state => state.auth.token)
@@ -41,12 +37,11 @@ const Teams = () => {
   // Create/Update Form
   const initialValues = {
     _id: null,
-    email: user.email,
-    title: '',
+    name: '',
     description: '',
-    priority: '',
-    category: '',
-    dueDate: dayjs().add(0, 'day')
+    projects: '',
+    leader: user.email,
+    members: ''
   }
   const [initFormValues, setInitFormValues] = useState(initialValues)
 
