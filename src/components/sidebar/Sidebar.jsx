@@ -117,6 +117,7 @@ const Sidebar = ({ isNonMobile, drawerWidth, isSidebarOpen, setIsSidebarOpen }) 
                     </Typography>
                   )
                 }
+
                 const lcText = text.toLowerCase()
 
                 return (
@@ -125,15 +126,14 @@ const Sidebar = ({ isNonMobile, drawerWidth, isSidebarOpen, setIsSidebarOpen }) 
                       onClick={() => {
                         navigate(`/${lcText}`)
                         setActivePath(lcText)
+                        console.log('menu item clicked')
                       }}
                       // change backgroundColor when selected
                       sx={{
                         backgroundColor:
-                          activePath === lcText ? theme.palette.primary[500] : 'transparent',
+                          activePath === lcText ? theme.palette.neutral.main : 'transparent',
                         color:
-                          activePath === lcText
-                            ? theme.palette.primary[400]
-                            : theme.palette.primary[200]
+                          activePath === lcText ? theme.palette.secondary : theme.palette.primary
                       }}
                     >
                       <ListItemIcon
@@ -147,7 +147,7 @@ const Sidebar = ({ isNonMobile, drawerWidth, isSidebarOpen, setIsSidebarOpen }) 
                       >
                         {icon}
                       </ListItemIcon>
-                      {lcText}
+                      {text}
                       <ListItemIcon>
                         {activePath === lcText && <ChevronRightOutlined sx={{ ml: 'auto' }} />}
                       </ListItemIcon>

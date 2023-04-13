@@ -1,4 +1,5 @@
 import authReducer from './authSlice'
+import userReducer from './usersSlice'
 import taskReducer from './tasksSlice'
 import projectReducer from './projectsSlice'
 import teamReducer from './teamsSlice'
@@ -26,6 +27,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     auth: authReducer,
+    user: userReducer,
     task: taskReducer,
     project: projectReducer,
     team: teamReducer,
