@@ -28,14 +28,19 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
   const teams = useSelector(state => state.team.teams)
   const formState = useSelector(state => state.team.formState)
   const token = useSelector(state => state.auth.token)
+  const user = useSelector(state => state.auth.user)
 
   /* FETCH TeamS */
   useEffect(() => {
     // Backend
     const getTeams = async () => {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams`, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` }
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/users/teams`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(user)
       })
       const teams = await response.json()
 
@@ -80,7 +85,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
       flex: 1,
       renderCell: rowdata => (
         <ul>
-          {rowdata.row.members.map(item => (<li>{item}</li>))}
+          {rowdata.row.members.map(item => (<li key={item}>{item}</li>))}
         </ul>
       )
     },

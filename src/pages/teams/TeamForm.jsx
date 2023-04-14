@@ -26,8 +26,6 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import OutlinedInput from '@mui/material/OutlinedInput'
 
-import FormikChip from 'components/FormikChip'
-
 /* *************** */
 
 const ITEM_HEIGHT = 48
@@ -122,7 +120,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams`, {
       method: 'POST',
       headers: {
-        'Content-type': 'application/json',
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
       body: JSON.stringify(values)
@@ -147,7 +145,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
     })
 
     /* DISPATCH */
-    dispatch(updateTeam({ Team: values }))
+    dispatch(updateTeam({ team: values }))
     dispatch(addTeamFormState({ addTeamFormState: false }))
   }
 
@@ -162,11 +160,11 @@ const TeamForm = ({ formLabel, initFormValues }) => {
             onSubmit={
               initialFormValues._id
                 ? (values, actions) => {
-                    handleUpdateTeam(values)
-                  }
+                  handleUpdateTeam(values)
+                }
                 : (values, actions) => {
-                    handleCreateTeam(values)
-                  }
+                  handleCreateTeam(values)
+                }
             }
             initialValues={initialFormValues}
           >
@@ -213,14 +211,6 @@ const TeamForm = ({ formLabel, initFormValues }) => {
                     onBlur={handleBlur}
                     required
                   />
-                  {/* FormikChip */}
-                  {/* <FormControl sx={{ gridColumn: 'span 2' }}>
-                    <FormikChip
-                      name="members"
-                      id="members"
-                      renderInput={params => <TextField {...params} label="Members" />}
-                    />
-                  </FormControl> */}
 
                   {/* Team Members */}
                   <FormControl sx={{ gridColumn: 'span 4' }}>
@@ -246,7 +236,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
                         <MenuItem
                           key={name}
                           value={name}
-                          style={getStyles(name, personName, theme)}
+                          style={getStyles(name, values.members, theme)}
                         >
                           {name}
                         </MenuItem>
