@@ -82,23 +82,20 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
       headerName: 'Members',
       flex: 1,
       renderCell: rowdata => (
+        /* Show names of Team Members as a <Chip /> */
         <Stack direction="column" spacing={1} justifyContent="center" alignItems="center">
-          {rowdata.row.members.map(item => (
+          {rowdata.row.members.map((item, index) => (
             <Chip
+              key={index}
               size="small"
-              avatar={<Avatar alt={item} src="../assets/paul.jpg" />}
+              avatar={<Avatar alt={item} src="/assets/paul.jpg" />}
               label={item}
               variant="outlined"
+              color="success"
             />
           ))}
         </Stack>
       )
-
-      //   <ul>
-      //   {rowdata.row.members.map(item => (
-      //     <li key={item}>{item}</li>
-      //   ))}
-      // </ul>
     },
     {
       field: 'action',

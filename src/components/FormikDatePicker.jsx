@@ -9,13 +9,14 @@ This is utilized in all forms.
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { useField, useFormikContext } from 'formik'
 
-const FormikDatePicker = ({ name }) => {
+const FormikDatePicker = ({ name, label }) => {
   const [field] = useField(name)
   const { setFieldValue } = useFormikContext()
 
   return (
     <DatePicker
       disablePast
+      label={label}
       value={field.value ?? null}
       onChange={val => setFieldValue(name, val)}
     />

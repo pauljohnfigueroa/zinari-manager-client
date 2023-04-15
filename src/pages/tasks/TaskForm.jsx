@@ -187,7 +187,8 @@ const TaskForm = ({ formLabel, initFormValues }) => {
                       <FormikDatePicker
                         name="dueDate"
                         id="dueDate"
-                        renderInput={params => <TextField {...params} label="Due Date" />}
+                        label="Due Date"
+                        renderInput={params => <TextField {...params} />}
                       />
                     </LocalizationProvider>
                   </FormControl>

@@ -15,7 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useTheme } from '@emotion/react'
 
-import { ExpandLess, ExpandMore } from '@mui/icons-material'
+import { ExpandLess, ExpandMore, ChevronRightOutlined } from '@mui/icons-material'
 
 const SidebarMenuItem = ({ name, link, Icon, items = [] }) => {
   const [activePath, setActivePath] = useState('')
@@ -51,11 +51,19 @@ const SidebarMenuItem = ({ name, link, Icon, items = [] }) => {
         >
           {/* Display an icon if any */}
           {!!Icon && (
-            <ListItemIcon>
+            <ListItemIcon
+              sx={{
+                ml: '.5rem',
+                color:
+                  activePath === lcText ? theme.palette.primary[600] : theme.palette.secondary[200]
+              }}
+            >
               <Icon />
             </ListItemIcon>
           )}
-          {name}
+          <ListItemText primary={name}>
+            {activePath === lcText && <ExpandMore sx={{ ml: 'auto' }} />}
+          </ListItemText>
           {/* Display the expand menu if the item has children */}
           {isExpandable && !open && <ExpandMore />}
           {isExpandable && open && <ExpandLess />}
@@ -63,14 +71,15 @@ const SidebarMenuItem = ({ name, link, Icon, items = [] }) => {
       </ListItem>
     </>
   )
+
   const menuItemChildren = isExpandable ? (
     <Collapse in={open} timeout="auto" unmountOnExit>
-      <Divider />
       <List component="div" disablePadding>
         {items.map((item, index) => (
           <SidebarMenuItem {...item} key={index} />
         ))}
       </List>
+      <Divider />
     </Collapse>
   ) : null
 
