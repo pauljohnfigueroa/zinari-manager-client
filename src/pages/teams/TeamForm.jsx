@@ -47,8 +47,6 @@ const TeamForm = ({ formLabel, initFormValues }) => {
   const [error, setError] = useState()
   const theme = useTheme()
 
-  const [personName, setPersonName] = useState([])
-
   const formState = useSelector(state => state.team.formState)
   const token = useSelector(state => state.auth.token)
   const users = useSelector(state => state.user.users)
@@ -96,15 +94,6 @@ const TeamForm = ({ formLabel, initFormValues }) => {
     }
   }
 
-  const handleChangeX = event => {
-    const {
-      target: { value }
-    } = event
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value
-    )
-  }
 
   /* ****** End Chip ********* */
 

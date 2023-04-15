@@ -40,11 +40,11 @@ const Projects = () => {
   const initialValues = {
     _id: null,
     email: user.email,
-    title: '',
+    name: '',
     description: '',
-    priority: '',
-    category: '',
-    dueDate: dayjs().add(0, 'day')
+    teams: [],
+    tasks: [],
+    dueDate: dayjs().add(0, 'day').format('L')
   }
   const [initFormValues, setInitFormValues] = useState(initialValues)
 

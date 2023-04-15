@@ -19,6 +19,8 @@ import { setCheckedIds } from 'state/datagridSlice.js'
 
 import { tokens } from '../theme.js'
 
+import dayjs from 'dayjs'
+
 const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
@@ -58,14 +60,8 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
       headerName: 'ID'
     },
     {
-      field: 'manager',
-      headerName: 'Manager',
-      flex: 1
-    },
-    {
-      field: 'title',
-      headerName: 'Title',
-      flex: 1
+      field: 'name',
+      headerName: 'Name'
     },
     {
       field: 'description',
@@ -73,19 +69,26 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
       flex: 1
     },
     {
+      field: 'dueDate',
+      headerName: 'Due Date',
+      valueFormatter: params =>
+        dayjs(params?.value).format("LL"),
+    },
+    {
       field: 'teams',
       headerName: 'Teams',
-      flex: 1
     },
     {
       field: 'tasks',
       headerName: 'Tasks',
-      flex: 1
+    },
+    {
+      field: 'manager',
+      headerName: 'Manager',
     },
     {
       field: 'action',
       headerName: 'Action',
-      flex: 1,
       renderCell: rowdata => {
         return (
           <Box>
@@ -109,6 +112,15 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 
       {/* DATAGRID */}
       <DataGrid
+        initialState={{
+          columns: {
+            columnVisibilityModel: {
+              // Hide columns listed here, the other columns will remain visible
+              _id: false,
+              tasks: false
+            },
+          },
+        }}
         getRowId={row => row._id}
         sx={{
           backgroundColor: colors.grey[800],

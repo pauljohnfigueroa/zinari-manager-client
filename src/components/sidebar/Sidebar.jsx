@@ -16,58 +16,139 @@ import {
   ChevronLeft,
   ChevronRightOutlined,
   HomeOutlined,
+  Dashboard,
   ShoppingCartOutlined,
   Groups2Outlined,
   ReceiptLongOutlined,
   PointOfSaleOutlined
 } from '@mui/icons-material'
 
+import InboxIcon from '@mui/icons-material/MoveToInbox'
+import ExpandLess from '@mui/icons-material/ExpandLess'
+import ExpandMore from '@mui/icons-material/ExpandMore'
+import Collapse from '@mui/material/Collapse'
+import StarBorder from '@mui/icons-material/StarBorder'
+
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import FlexBetween from 'components/FlexBetween'
 import profileImage from '../../assets/paul.jpg'
 
-const navItems = [
-  {
-    text: 'Dashboard',
-    icon: <HomeOutlined />
-  },
-  {
-    text: 'Project Management',
-    icon: null
-  },
-  {
-    text: 'Tasks',
-    icon: <ShoppingCartOutlined />
-  },
-  {
-    text: 'Teams',
-    icon: <Groups2Outlined />
-  },
-  {
-    text: 'Projects',
-    icon: <ReceiptLongOutlined />
-  },
+import SidebarMenuItem from './SidebarMenuItem'
 
+const sidebarMenuItems = [
   {
-    text: 'Performance',
-    icon: null
+    name: 'Dashboard',
+    link: '/dashboard',
+    Icon: Dashboard
   },
   {
-    text: 'Appraisals',
-    icon: <PointOfSaleOutlined />
+    name: 'Projects',
+    Icon: InboxIcon,
+    items: [
+      {
+        name: 'Tasks',
+        link: '/tasks',
+        Icon: InboxIcon
+      },
+      {
+        name: 'Teams',
+        link: '/teams',
+        Icon: InboxIcon
+      },
+      {
+        name: 'Projects',
+        link: '/projects',
+        Icon: InboxIcon
+      }
+    ]
+  },
+  {
+    name: 'Performance',
+    Icon: InboxIcon,
+    items: [
+      {
+        name: 'Appraisals',
+        link: '/appraisals',
+        Icon: InboxIcon
+      }
+    ]
+  },
+  {
+    name: 'Users',
+    Icon: Dashboard,
+    items: [
+      {
+        name: 'Users',
+        link: '/admin/users',
+        Icon: Dashboard
+      },
+      {
+        name: 'Roles',
+        link: '/admin/roles',
+        Icon: Dashboard
+      }
+    ]
   }
 ]
+
+// const navItems = [
+//   {
+//     text: 'Dashboard',
+//     icon: <HomeOutlined />
+//   },
+//   {
+//     text: 'Project Management',
+//     icon: null
+//   },
+//   {
+//     text: 'Tasks',
+//     icon: <ShoppingCartOutlined />
+//   },
+//   {
+//     text: 'Teams',
+//     icon: <Groups2Outlined />
+//   },
+//   {
+//     text: 'Projects',
+//     icon: <ReceiptLongOutlined />
+//   },
+//   {
+//     text: 'Performance',
+//     icon: null
+//   },
+//   {
+//     text: 'Appraisals',
+//     icon: <PointOfSaleOutlined />
+//   },
+//   {
+//     text: 'Users Management',
+//     icon: null
+//   },
+//   {
+//     text: 'Users',
+//     icon: <PointOfSaleOutlined />
+//   },
+//   {
+//     text: 'Roles',
+//     icon: <PointOfSaleOutlined />
+//   }
+// ]
 
 const Sidebar = ({ isNonMobile, drawerWidth, isSidebarOpen, setIsSidebarOpen }) => {
   const { pathname } = useLocation() // the current path
   const [activePath, setActivePath] = useState('')
+  const [open, setOpen] = useState(true)
   const navigate = useNavigate()
   const theme = useTheme() // from the ThemeProvider
 
   useEffect(() => {
     setActivePath(pathname.substring(1))
   }, [pathname])
+
+  const handleToggleMenu = () => {
+    setOpen(!open)
+  }
 
   return (
     <Box component="nav">
@@ -109,52 +190,71 @@ const Sidebar = ({ isNonMobile, drawerWidth, isSidebarOpen, setIsSidebarOpen }) 
             </Box>
 
             <List>
-              {navItems.map(({ text, icon }) => {
-                if (!icon) {
+              {sidebarMenuItems.map(
+                ({ name, link, Icon, items }, index) => {
                   return (
-                    <Typography variant="h6" key={text} sx={{ m: '2.25rem 0 1rem 3rem' }}>
-                      {text}
-                    </Typography>
+                    <SidebarMenuItem
+                      name={name}
+                      Icon={Icon}
+                      items={items}
+                      link={link}
+                      key={index}
+                    />
                   )
                 }
 
-                const lcText = text.toLowerCase()
+                // return (
+                // <Typography variant="h6" key={text} sx={{ m: '2.25rem 0 1rem 3rem' }}>
+                //   {text}
+                // </Typography>
 
-                return (
-                  <ListItem key={text} disablePadding>
-                    <ListItemButton
-                      onClick={() => {
-                        navigate(`/${lcText}`)
-                        setActivePath(lcText)
-                        console.log('menu item clicked')
-                      }}
-                      // change backgroundColor when selected
-                      sx={{
-                        backgroundColor:
-                          activePath === lcText ? theme.palette.neutral.main : 'transparent',
-                        color:
-                          activePath === lcText ? theme.palette.secondary : theme.palette.primary
-                      }}
-                    >
-                      <ListItemIcon
-                        sx={{
-                          ml: '2rem',
-                          color:
-                            activePath === lcText
-                              ? theme.palette.primary[600]
-                              : theme.palette.secondary[200]
-                        }}
-                      >
-                        {icon}
-                      </ListItemIcon>
-                      {text}
-                      <ListItemIcon>
-                        {activePath === lcText && <ChevronRightOutlined sx={{ ml: 'auto' }} />}
-                      </ListItemIcon>
-                    </ListItemButton>
-                  </ListItem>
-                )
-              })}
+                // <ListItemButton onClick={handleToggleMenu}>
+                //   <ListItemIcon>
+                //     <InboxIcon />
+                //   </ListItemIcon>
+                //   <ListItemText primary={name} />
+                //   {open ? <ExpandLess /> : <ExpandMore />}
+                // </ListItemButton>
+                // )
+
+                //const lcText = name.toLowerCase()
+
+                // return (
+                //   <ListItem key={name} disablePadding>
+                // <ListItemButton
+                // onClick={() => {
+                //   navigate(`/${lcText}`)
+                //   setActivePath(lcText)
+                //   console.log('menu item clicked')
+                // }}
+                // // change backgroundColor when selected
+                // sx={{
+                //   backgroundColor:
+                //     activePath === lcText ? theme.palette.neutral.main : 'transparent',
+                //   color:
+                //     activePath === lcText ? theme.palette.secondary : theme.palette.primary
+                // }}
+                // >
+                //   <ListItemIcon
+                //     sx={{
+                //       ml: '2rem',
+                //       color:
+                //         activePath === lcText
+                //           ? theme.palette.primary[600]
+                //           : theme.palette.secondary[200]
+                //     }}
+                //   >
+                //     {icon}
+                //   </ListItemIcon>
+                //   {name}
+                //   <ListItemIcon>
+                //     {activePath === lcText && <ChevronRightOutlined sx={{ ml: 'auto' }} />}
+                //   </ListItemIcon>
+                // </ListItemButton>
+                //   </ListItem>
+                // )
+                // }
+              )}
             </List>
           </Box>
         </Drawer>

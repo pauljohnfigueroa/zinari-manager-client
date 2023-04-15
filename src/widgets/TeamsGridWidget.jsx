@@ -11,7 +11,7 @@ import { useTheme } from '@emotion/react'
 import { fetchTeams, addTeamFormState } from 'state/teamsSlice.js'
 import TeamForm from 'pages/teams/TeamForm.jsx'
 
-import { Box, IconButton } from '@mui/material'
+import { Box, IconButton, Chip, Avatar, Stack } from '@mui/material'
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import LinearProgress from '@mui/material/LinearProgress'
@@ -66,28 +66,39 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 
     {
       field: 'name',
-      headerName: 'Name',
-      flex: 1
+      headerName: 'Name'
     },
     {
       field: 'description',
       headerName: 'Description',
-      flex: 1
+      flex: 2
     },
     {
       field: 'leader',
-      headerName: 'Leader',
-      flex: 1
+      headerName: 'Leader'
     },
     {
       field: 'members',
       headerName: 'Members',
       flex: 1,
       renderCell: rowdata => (
-        <ul>
-          {rowdata.row.members.map(item => (<li key={item}>{item}</li>))}
-        </ul>
+        <Stack direction="column" spacing={1} justifyContent="center" alignItems="center">
+          {rowdata.row.members.map(item => (
+            <Chip
+              size="small"
+              avatar={<Avatar alt={item} src="../assets/paul.jpg" />}
+              label={item}
+              variant="outlined"
+            />
+          ))}
+        </Stack>
       )
+
+      //   <ul>
+      //   {rowdata.row.members.map(item => (
+      //     <li key={item}>{item}</li>
+      //   ))}
+      // </ul>
     },
     {
       field: 'action',
