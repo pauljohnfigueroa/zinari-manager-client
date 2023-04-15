@@ -39,7 +39,7 @@ import SidebarMenuItem from './SidebarMenuItem'
 const sidebarMenuItems = [
   {
     name: 'Dashboard',
-    link: '/dashboard',
+    link: 'dashboard',
     Icon: Dashboard
   },
   {
@@ -48,17 +48,17 @@ const sidebarMenuItems = [
     items: [
       {
         name: 'Tasks',
-        link: '/tasks',
+        link: 'tasks',
         Icon: InboxIcon
       },
       {
         name: 'Teams',
-        link: '/teams',
+        link: 'teams',
         Icon: InboxIcon
       },
       {
         name: 'Projects',
-        link: '/projects',
+        link: 'projects',
         Icon: InboxIcon
       }
     ]
@@ -69,7 +69,7 @@ const sidebarMenuItems = [
     items: [
       {
         name: 'Appraisals',
-        link: '/appraisals',
+        link: 'appraisals',
         Icon: InboxIcon
       }
     ]
@@ -80,60 +80,17 @@ const sidebarMenuItems = [
     items: [
       {
         name: 'Users',
-        link: '/admin/users',
+        link: 'admin/users',
         Icon: Dashboard
       },
       {
         name: 'Roles',
-        link: '/admin/roles',
+        link: 'admin/roles',
         Icon: Dashboard
       }
     ]
   }
 ]
-
-// const navItems = [
-//   {
-//     text: 'Dashboard',
-//     icon: <HomeOutlined />
-//   },
-//   {
-//     text: 'Project Management',
-//     icon: null
-//   },
-//   {
-//     text: 'Tasks',
-//     icon: <ShoppingCartOutlined />
-//   },
-//   {
-//     text: 'Teams',
-//     icon: <Groups2Outlined />
-//   },
-//   {
-//     text: 'Projects',
-//     icon: <ReceiptLongOutlined />
-//   },
-//   {
-//     text: 'Performance',
-//     icon: null
-//   },
-//   {
-//     text: 'Appraisals',
-//     icon: <PointOfSaleOutlined />
-//   },
-//   {
-//     text: 'Users Management',
-//     icon: null
-//   },
-//   {
-//     text: 'Users',
-//     icon: <PointOfSaleOutlined />
-//   },
-//   {
-//     text: 'Roles',
-//     icon: <PointOfSaleOutlined />
-//   }
-// ]
 
 const Sidebar = ({ isNonMobile, drawerWidth, isSidebarOpen, setIsSidebarOpen }) => {
   const { pathname } = useLocation() // the current path
@@ -190,71 +147,11 @@ const Sidebar = ({ isNonMobile, drawerWidth, isSidebarOpen, setIsSidebarOpen }) 
             </Box>
 
             <List>
-              {sidebarMenuItems.map(
-                ({ name, link, Icon, items }, index) => {
-                  return (
-                    <SidebarMenuItem
-                      name={name}
-                      Icon={Icon}
-                      items={items}
-                      link={link}
-                      key={index}
-                    />
-                  )
-                }
-
-                // return (
-                // <Typography variant="h6" key={text} sx={{ m: '2.25rem 0 1rem 3rem' }}>
-                //   {text}
-                // </Typography>
-
-                // <ListItemButton onClick={handleToggleMenu}>
-                //   <ListItemIcon>
-                //     <InboxIcon />
-                //   </ListItemIcon>
-                //   <ListItemText primary={name} />
-                //   {open ? <ExpandLess /> : <ExpandMore />}
-                // </ListItemButton>
-                // )
-
-                //const lcText = name.toLowerCase()
-
-                // return (
-                //   <ListItem key={name} disablePadding>
-                // <ListItemButton
-                // onClick={() => {
-                //   navigate(`/${lcText}`)
-                //   setActivePath(lcText)
-                //   console.log('menu item clicked')
-                // }}
-                // // change backgroundColor when selected
-                // sx={{
-                //   backgroundColor:
-                //     activePath === lcText ? theme.palette.neutral.main : 'transparent',
-                //   color:
-                //     activePath === lcText ? theme.palette.secondary : theme.palette.primary
-                // }}
-                // >
-                //   <ListItemIcon
-                //     sx={{
-                //       ml: '2rem',
-                //       color:
-                //         activePath === lcText
-                //           ? theme.palette.primary[600]
-                //           : theme.palette.secondary[200]
-                //     }}
-                //   >
-                //     {icon}
-                //   </ListItemIcon>
-                //   {name}
-                //   <ListItemIcon>
-                //     {activePath === lcText && <ChevronRightOutlined sx={{ ml: 'auto' }} />}
-                //   </ListItemIcon>
-                // </ListItemButton>
-                //   </ListItem>
-                // )
-                // }
-              )}
+              {sidebarMenuItems.map(({ name, link, Icon, items }, index) => {
+                return (
+                  <SidebarMenuItem name={name} Icon={Icon} items={items} link={link} key={index} />
+                )
+              })}
             </List>
           </Box>
         </Drawer>

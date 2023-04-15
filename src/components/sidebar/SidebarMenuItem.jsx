@@ -33,7 +33,6 @@ const SidebarMenuItem = ({ name, link, Icon, items = [] }) => {
     setOpen(!open)
   }
 
-  console.log('link ', link)
   const lcText = link
 
   const menuItemRoot = (
@@ -41,7 +40,7 @@ const SidebarMenuItem = ({ name, link, Icon, items = [] }) => {
       <ListItem onClick={handleToggleMenu}>
         <ListItemButton
           onClick={() => {
-            link && navigate(`${lcText}`)
+            link && navigate(`/${lcText}`)
             link && setActivePath(lcText)
           }}
           // change backgroundColor when selected
@@ -56,7 +55,6 @@ const SidebarMenuItem = ({ name, link, Icon, items = [] }) => {
               <Icon />
             </ListItemIcon>
           )}
-
           {name}
           {/* Display the expand menu if the item has children */}
           {isExpandable && !open && <ExpandMore />}
