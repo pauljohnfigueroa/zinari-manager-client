@@ -14,7 +14,7 @@ function a11yProps(index) {
   }
 }
 
-const BasicTabs = ({ item }) => {
+const BasicTabs = () => {
   const [value, setValue] = useState(0)
 
   const handleChange = (event, newValue) => {
@@ -30,7 +30,13 @@ const BasicTabs = ({ item }) => {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        {item}
+        Tasks
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        Teams
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        Projects
       </TabPanel>
     </Box>
   )
