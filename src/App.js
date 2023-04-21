@@ -12,9 +12,10 @@ import Tasks from './pages/tasks/Tasks'
 import Teams from './pages/teams/Teams'
 import Projects from './pages/projects/Projects'
 import Appraisals from './pages/appraisals/Appraisals'
+import Roles from 'pages/admin/roles/Roles'
+import Users from 'pages/admin/users/Users'
 
 function App() {
-
   // get the theme mode from the global state
   const mode = useSelector(state => state.auth.mode)
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
@@ -28,18 +29,20 @@ function App() {
           <CssBaseline />
           <Routes>
             <Route path="/" element={<LoginPage />} />
-            <Route element={isAuth ? <Layout /> : <Navigate to='/' />} >
-              <Route path="/dashboard" element={isAuth ? <Dashboard /> : <Navigate to='/' />} />
-              <Route path="/tasks" element={isAuth ? <Tasks /> : <Navigate to='/' />} />
-              <Route path="/teams" element={isAuth ? <Teams /> : <Navigate to='/' />} />
-              <Route path="/projects" element={isAuth ? <Projects /> : <Navigate to='/' />} />
-              <Route path="/appraisals" element={isAuth ? <Appraisals /> : <Navigate to='/' />} />
+            <Route element={isAuth ? <Layout /> : <Navigate to="/" />}>
+              <Route path="/dashboard" element={isAuth ? <Dashboard /> : <Navigate to="/" />} />
+              <Route path="/tasks" element={isAuth ? <Tasks /> : <Navigate to="/" />} />
+              <Route path="/teams" element={isAuth ? <Teams /> : <Navigate to="/" />} />
+              <Route path="/projects" element={isAuth ? <Projects /> : <Navigate to="/" />} />
+              <Route path="/appraisals" element={isAuth ? <Appraisals /> : <Navigate to="/" />} />
+              <Route path="/admin/users" element={isAuth ? <Users /> : <Navigate to="/" />} />
+              <Route path="/admin/roles" element={isAuth ? <Roles /> : <Navigate to="/" />} />
             </Route>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
