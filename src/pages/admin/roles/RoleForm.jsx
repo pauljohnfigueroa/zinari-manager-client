@@ -22,7 +22,8 @@ import {
   FormControlLabel,
   FormGroup,
   FormLabel,
-  Checkbox
+  Checkbox,
+  Typography
 } from '@mui/material'
 
 import Button from '@mui/material/Button'
@@ -33,8 +34,9 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
-import dayjs from 'dayjs'
 import FlexBetween from 'components/FlexBetween'
+
+import { permissionsValues } from 'data/data'
 
 const RoleForm = ({ formLabel, initFormValues }) => {
   const isNonMobile = useMediaQuery('(min-width: 600px)')
@@ -61,7 +63,7 @@ const RoleForm = ({ formLabel, initFormValues }) => {
 
   const handleCreateRole = async values => {
     console.log(values)
-    return
+    // return
     // await registerUser(values.email, values.name, values.password, values.phone, values.roles)
     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/roles`, {
       method: 'POST',
@@ -99,7 +101,9 @@ const RoleForm = ({ formLabel, initFormValues }) => {
     <div>
       {error && <div>{error}</div>}
       <Dialog fullWidth open={formState} onClose={handleClose}>
-        <DialogTitle>{formLabel}</DialogTitle>
+        <DialogTitle>
+          <Typography variant="h3">{formLabel}</Typography>
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>Please fill up all the required ( * ) fields.</DialogContentText>
           <Formik
@@ -158,34 +162,98 @@ const RoleForm = ({ formLabel, initFormValues }) => {
                     required
                   />
                   {/* Permissions */}
-
-                  <FormControl sx={{ m: 3 }} value={values.permissions}>
+                  <Box sx={{ gridColumn: 'span 4' }}>
+                    <Typography>Permissions</Typography>
+                  </Box>
+                  <Box sx={{ gridColumn: 'span 4' }}>
+                    <Typography>
+                      A permission is the ability that you wannt to give to a user role. Always
+                      practice the least priviledge principle when giving permissions.
+                    </Typography>
+                  </Box>
+                  <FormControl sx={{ gridColumn: 'span 4' }} value={values.permissions}>
                     <FormGroup position="row">
                       <FlexBetween>
                         <Box>
-                          <FormLabel component="legend">User Management</FormLabel>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                name="permissions"
-                                value="fetch_users"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                              />
-                            }
-                            label="Fetch users."
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                name="permissions"
-                                value="create_user"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                              />
-                            }
-                            label="Create a new user."
-                          />
+                          <FormLabel component="legend" sx={{ mt: '10px' }}>
+                            User Management
+                          </FormLabel>
+                          <Box>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  name="permissions"
+                                  value={permissionsValues[0].value}
+                                  checked={
+                                    values.permissions.includes(permissionsValues[0].value)
+                                      ? true
+                                      : false
+                                  }
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                />
+                              }
+                              label={permissionsValues[0].description}
+                            />
+                          </Box>
+                          <Box>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  name="permissions"
+                                  value={permissionsValues[1].value}
+                                  checked={
+                                    values.permissions.includes(permissionsValues[1].value)
+                                      ? true
+                                      : false
+                                  }
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                />
+                              }
+                              label={permissionsValues[1].description}
+                            />
+                          </Box>
+
+                          <FormLabel component="legend" sx={{ mt: '20px' }}>
+                            Project Management
+                          </FormLabel>
+                          <Box>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  name="permissions"
+                                  value={permissionsValues[2].value}
+                                  checked={
+                                    values.permissions.includes(permissionsValues[2].value)
+                                      ? true
+                                      : false
+                                  }
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                />
+                              }
+                              label={permissionsValues[2].description}
+                            />
+                          </Box>
+                          <Box>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  name="permissions"
+                                  value={permissionsValues[3].value}
+                                  checked={
+                                    values.permissions.includes(permissionsValues[3].value)
+                                      ? true
+                                      : false
+                                  }
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                />
+                              }
+                              label={permissionsValues[3].description}
+                            />
+                          </Box>
                         </Box>
                       </FlexBetween>
                     </FormGroup>

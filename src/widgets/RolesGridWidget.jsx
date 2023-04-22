@@ -58,13 +58,8 @@ const RolesGridWidget = ({ initFormValues, setInitFormValues }) => {
       headerName: 'ID'
     },
     {
-      field: 'owner',
-      headerName: 'Owner',
-      flex: 1
-    },
-    {
-      field: 'title',
-      headerName: 'Title',
+      field: 'name',
+      headerName: 'Name',
       flex: 1
     },
     {
@@ -73,8 +68,8 @@ const RolesGridWidget = ({ initFormValues, setInitFormValues }) => {
       flex: 1
     },
     {
-      field: 'category',
-      headerName: 'Category',
+      field: 'createdBy',
+      headerName: 'Created by',
       flex: 1
     },
     {
