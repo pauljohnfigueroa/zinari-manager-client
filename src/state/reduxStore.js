@@ -4,6 +4,7 @@ import taskReducer from './tasksSlice'
 import projectReducer from './projectsSlice'
 import teamReducer from './teamsSlice'
 import datagridReducer from './datagridSlice'
+import roleReducer from './rolesSlice'
 
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { persistStore } from 'redux-persist'
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
   task: taskReducer,
   project: projectReducer,
   team: teamReducer,
-  datagrid: datagridReducer
+  datagrid: datagridReducer,
+  role: roleReducer
 })
 const persistedReducers = persistReducer(persistConfig, rootReducer)
 
