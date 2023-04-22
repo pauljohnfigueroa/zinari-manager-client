@@ -21,6 +21,7 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
+  FormLabel,
   Checkbox
 } from '@mui/material'
 
@@ -33,6 +34,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
 import dayjs from 'dayjs'
+import FlexBetween from 'components/FlexBetween'
 
 const RoleForm = ({ formLabel, initFormValues }) => {
   const isNonMobile = useMediaQuery('(min-width: 600px)')
@@ -58,6 +60,8 @@ const RoleForm = ({ formLabel, initFormValues }) => {
   }
 
   const handleCreateRole = async values => {
+    console.log(values)
+    return
     // await registerUser(values.email, values.name, values.password, values.phone, values.roles)
     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/roles`, {
       method: 'POST',
@@ -120,7 +124,7 @@ const RoleForm = ({ formLabel, initFormValues }) => {
                     '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
                   }}
                 >
-                  <Field type="hidden" id="email" name="email" value={values.email} />
+                  <Field type="hidden" id="createdBy" name="createdBy" value={values.email} />
 
                   <TextField
                     fullWidth
@@ -154,15 +158,38 @@ const RoleForm = ({ formLabel, initFormValues }) => {
                     required
                   />
                   {/* Permissions */}
-                  <Box>
-                    <FormControl>
-                      <FormGroup>
-                        <FormControlLabel control={<Checkbox />} label="Create a new user." />
-                        <FormControlLabel control={<Checkbox />} label="Delete user/s." />
-                        <FormControlLabel control={<Checkbox />} label="Update/Edit a user." />
-                      </FormGroup>
-                    </FormControl>
-                  </Box>
+
+                  <FormControl sx={{ m: 3 }} value={values.permissions}>
+                    <FormGroup position="row">
+                      <FlexBetween>
+                        <Box>
+                          <FormLabel component="legend">User Management</FormLabel>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                name="permissions"
+                                value="fetch_users"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                            }
+                            label="Fetch users."
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                name="permissions"
+                                value="create_user"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                            }
+                            label="Create a new user."
+                          />
+                        </Box>
+                      </FlexBetween>
+                    </FormGroup>
+                  </FormControl>
                 </Box>
                 <DialogActions>
                   <Button sx={{ minWidth: 100 }} onClick={handleClose} variant="outlined">

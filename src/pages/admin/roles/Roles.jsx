@@ -43,7 +43,8 @@ const Roles = () => {
     _id: null,
     createdBy: user.email,
     name: '',
-    description: ''
+    description: '',
+    permissions: []
   }
   const [initFormValues, setInitFormValues] = useState(initialValues)
 
