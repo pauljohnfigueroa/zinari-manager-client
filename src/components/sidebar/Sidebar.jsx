@@ -79,12 +79,12 @@ const sidebarMenuItems = [
     Icon: Dashboard,
     items: [
       {
-        name: 'Users',
+        name: 'User Accounts',
         link: 'admin/users',
         Icon: Dashboard
       },
       {
-        name: 'Roles',
+        name: 'User Roles',
         link: 'admin/roles',
         Icon: Dashboard
       }
