@@ -3,7 +3,7 @@
 The UserForm.jsx component is used on both create and update User.
 
 */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { Formik, Form, Field } from 'formik'
 // import * as yup from 'yup'
@@ -23,8 +23,11 @@ import {
   FormGroup,
   FormLabel,
   Checkbox,
-  Typography
+  Typography,
+  Chip
 } from '@mui/material'
+
+import { useTheme } from '@emotion/react'
 
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -33,19 +36,38 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
+import OutlinedInput from '@mui/material/OutlinedInput'
 
 import FlexBetween from 'components/FlexBetween'
+import { fetchRoles } from 'state/rolesSlice'
 
 import { permissionsValues } from 'data/data'
+
+/* *************** */
+
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  }
+}
+
+/* *************** */
 
 const UserForm = ({ formLabel, initFormValues }) => {
   const isNonMobile = useMediaQuery('(min-width: 600px)')
   // const [formValues, setFormValues] = useState()
   const [error, setError] = useState()
+  const theme = useTheme()
 
   const formState = useSelector(state => state.user.formState)
   const token = useSelector(state => state.auth.token)
   const user = useSelector(state => state.auth.user)
+  const roles = useSelector(state => state.role.roles)
   const dispatch = useDispatch()
 
   // When we do record update, the date format will be in the saved ISO format similar to 2018-04-04T16:00:00.000Z
@@ -53,6 +75,45 @@ const UserForm = ({ formLabel, initFormValues }) => {
   // We first need to convert the ISO format date to dayjs format.
   //   const initialFormValues = { ...initFormValues, dueDate: dayjs(initFormValues.dueDate) }
   const initialFormValues = initFormValues
+
+  /* Fetch Roles */
+  useEffect(() => {
+    const getRoles = async () => {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/roles`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      const roles = await response.json()
+
+      // Frontend
+      /* Dispatch */
+      dispatch(fetchRoles({ roles }))
+    }
+    getRoles()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ****** Chip ********* */
+
+  /* 
+    Convert the user object and get only the user's name 
+    Make sure that you format this correctly like the array below.
+    const memberNames = [
+       'Oliver Hansen',
+       'Van Henry',
+    ]
+  */
+  const memberNames = roles.map(row => row.name)
+
+  function getStyles(name, roleName, theme) {
+    return {
+      fontWeight:
+        roleName.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium
+    }
+  }
+
+  /* ****** End Chip ********* */
 
   const handleClose = (event, reason) => {
     if (reason !== 'backdropClick') {
@@ -128,7 +189,6 @@ const UserForm = ({ formLabel, initFormValues }) => {
                   }}
                 >
                   <Field type="hidden" id="createdBy" name="createdBy" value={values.createdBy} />
-
                   <TextField
                     fullWidth
                     autoFocus
@@ -211,6 +271,7 @@ const UserForm = ({ formLabel, initFormValues }) => {
                     name="password"
                     id="password"
                     label="Password"
+                    value={values.password}
                     type="password"
                     variant="outlined"
                     sx={{ gridColumn: 'span 4' }}
@@ -218,6 +279,36 @@ const UserForm = ({ formLabel, initFormValues }) => {
                     onBlur={handleBlur}
                     required
                   />
+                  {/* User Roles */}
+                  <FormControl sx={{ gridColumn: 'span 4' }}>
+                    <InputLabel id="roles-label">Select Roles</InputLabel>
+                    <Select
+                      labelId="roles-label"
+                      id="roles"
+                      name="roles"
+                      value={values.roles}
+                      onChange={handleChange}
+                      input={<OutlinedInput id="roles-input" label="Roles" />}
+                      renderValue={selected => (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                          {selected.map(value => (
+                            <Chip key={value} label={value} />
+                          ))}
+                        </Box>
+                      )}
+                      MenuProps={MenuProps}
+                    >
+                      {memberNames.map(name => (
+                        <MenuItem
+                          key={name}
+                          value={name}
+                          style={getStyles(name, values.roles, theme)}
+                        >
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Box>
                 <DialogActions>
                   <Button sx={{ minWidth: 100 }} onClick={handleClose} variant="outlined">

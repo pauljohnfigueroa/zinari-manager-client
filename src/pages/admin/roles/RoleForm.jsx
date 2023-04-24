@@ -102,7 +102,7 @@ const RoleForm = ({ formLabel, initFormValues }) => {
       {error && <div>{error}</div>}
       <Dialog fullWidth open={formState} onClose={handleClose}>
         <DialogTitle>
-          <Typography variant="h3">{formLabel}</Typography>
+          <h1>{formLabel}</h1>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>Please fill up all the required ( * ) fields.</DialogContentText>

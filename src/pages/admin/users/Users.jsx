@@ -46,7 +46,8 @@ const Users = () => {
     lastName: '',
     email: '',
     phone: '',
-    password: ''
+    password: '',
+    roles: []
   }
   const [initFormValues, setInitFormValues] = useState(initialValues)
 
