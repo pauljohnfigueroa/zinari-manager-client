@@ -264,36 +264,36 @@ const UserForm = ({ formLabel, initFormValues }) => {
                     onBlur={handleBlur}
                     required
                   />
-                  <TextField
-                    autoComplete="off"
-                    fullWidth
-                    margin="dense"
-                    name="password"
-                    id="password"
-                    label="Password"
-                    value={values.password}
-                    type="password"
-                    variant="outlined"
-                    sx={{ gridColumn: 'span 4' }}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                  />
+                  {!initFormValues._id && (
+                    <TextField
+                      autoComplete="off"
+                      fullWidth
+                      margin="dense"
+                      name="password"
+                      id="password"
+                      label="Password"
+                      value={values.password}
+                      type="password"
+                      variant="outlined"
+                      sx={{ gridColumn: 'span 4' }}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      required
+                    />
+                  )}
                   {/* User Roles */}
                   <FormControl sx={{ gridColumn: 'span 4' }}>
-                    <InputLabel id="roles-label">Select Roles</InputLabel>
+                    <InputLabel id="role-label">Select Role</InputLabel>
                     <Select
-                      labelId="roles-label"
-                      id="roles"
-                      name="roles"
-                      value={values.roles}
+                      labelId="role-label"
+                      id="role"
+                      name="role"
+                      value={values.role}
                       onChange={handleChange}
-                      input={<OutlinedInput id="roles-input" label="Roles" />}
+                      input={<OutlinedInput id="role-input" label="Role" />}
                       renderValue={selected => (
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                          {selected.map(value => (
-                            <Chip key={value} label={value} />
-                          ))}
+                          <Chip key={selected} label={selected} />
                         </Box>
                       )}
                       MenuProps={MenuProps}
@@ -302,7 +302,7 @@ const UserForm = ({ formLabel, initFormValues }) => {
                         <MenuItem
                           key={name}
                           value={name}
-                          style={getStyles(name, values.roles, theme)}
+                          style={getStyles(name, values.role, theme)}
                         >
                           {name}
                         </MenuItem>
