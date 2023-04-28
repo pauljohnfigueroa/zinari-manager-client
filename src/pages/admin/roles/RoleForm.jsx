@@ -175,68 +175,32 @@ const RoleForm = ({ formLabel, initFormValues }) => {
                     <FormGroup position="row">
                       <FlexBetween>
                         <Box>
-                          <FormLabel component="legend" sx={{ mt: '10px' }}>
-                            User Management
-                          </FormLabel>
                           {/* START PERMISSIONS CHECKBOXES */}
-                          {permissionsValues.map(permission => (
-                            <Box>
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    name="permissions"
-                                    value={permission.value}
-                                    checked={
-                                      values.permissions.includes(permission.value) ? true : false
-                                    }
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                  />
-                                }
-                                label={permission.description}
-                              />
-                            </Box>
-                          ))}
+                          {permissionsValues.map(permission =>
+                            permission.header ? (
+                              <FormLabel component="legend" sx={{ mt: '10px' }}>
+                                {permission.header}
+                              </FormLabel>
+                            ) : (
+                              <Box>
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      name="permissions"
+                                      value={permission.value}
+                                      checked={
+                                        values.permissions.includes(permission.value) ? true : false
+                                      }
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                    />
+                                  }
+                                  label={permission.description}
+                                />
+                              </Box>
+                            )
+                          )}
                           {/* END PERMISSIONS CHECKBOXES */}
-                          <FormLabel component="legend" sx={{ mt: '20px' }}>
-                            Project Management
-                          </FormLabel>
-                          <Box>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  name="permissions"
-                                  value={permissionsValues[2].value}
-                                  checked={
-                                    values.permissions.includes(permissionsValues[2].value)
-                                      ? true
-                                      : false
-                                  }
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                />
-                              }
-                              label={permissionsValues[2].description}
-                            />
-                          </Box>
-                          <Box>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  name="permissions"
-                                  value={permissionsValues[3].value}
-                                  checked={
-                                    values.permissions.includes(permissionsValues[3].value)
-                                      ? true
-                                      : false
-                                  }
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                />
-                              }
-                              label={permissionsValues[3].description}
-                            />
-                          </Box>
                         </Box>
                       </FlexBetween>
                     </FormGroup>

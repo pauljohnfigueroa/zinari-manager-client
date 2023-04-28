@@ -102,7 +102,7 @@ const UserForm = ({ formLabel, initFormValues }) => {
        'Van Henry',
     ]
   */
-  const memberNames = roles.map(row => row.name)
+  const roleNames = roles.map(row => row.name)
 
   function getStyles(name, roleName, theme) {
     return {
@@ -298,7 +298,7 @@ const UserForm = ({ formLabel, initFormValues }) => {
                       )}
                       MenuProps={MenuProps}
                     >
-                      {memberNames.map(name => (
+                      {roleNames.map(name => (
                         <MenuItem
                           key={name}
                           value={name}

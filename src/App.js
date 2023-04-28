@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Navigate, Route } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { CssBaseline, ThemeProvider } from '@mui/material'
@@ -19,12 +19,25 @@ function App() {
   // get the theme mode from the global state
   const mode = useSelector(state => state.auth.mode)
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
-
+  const user = useSelector(state => state.auth.user)
+  const token = useSelector(state => state.auth.token)
   const isAuth = Boolean(useSelector(state => state.auth.token))
 
-  // 1. get the current authenticated users role.
-  // 2. get the permissions based on the role and save in an array
-  const authPermissions = ['create_user', 'view_users_dashboard']
+  const [authPermissions, setAuthPermissions] = useState([])
+
+  /* Fetch the current user's permissions */
+  useEffect(() => {
+    const getPermissions = async () => {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/roles/${user.role}`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      const role = await response.json()
+      //console.log('json', role.permissions)
+      setAuthPermissions(role[0].permissions)
+    }
+    getPermissions()
+  }, [])
 
   return (
     <div className="App">
