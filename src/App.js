@@ -22,6 +22,10 @@ function App() {
 
   const isAuth = Boolean(useSelector(state => state.auth.token))
 
+  // 1. get the current authenticated users role.
+  // 2. get the permissions based on the role and save in an array
+  const authPermissions = ['create_user', 'view_users_dashboard']
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -35,7 +39,16 @@ function App() {
               <Route path="/teams" element={isAuth ? <Teams /> : <Navigate to="/" />} />
               <Route path="/projects" element={isAuth ? <Projects /> : <Navigate to="/" />} />
               <Route path="/appraisals" element={isAuth ? <Appraisals /> : <Navigate to="/" />} />
-              <Route path="/admin/users" element={isAuth ? <Users /> : <Navigate to="/" />} />
+              <Route
+                path="/admin/users"
+                element={
+                  isAuth && authPermissions.includes('view_users_dashboard') ? (
+                    <Users />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
               <Route path="/admin/roles" element={isAuth ? <Roles /> : <Navigate to="/" />} />
             </Route>
           </Routes>

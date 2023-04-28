@@ -178,43 +178,26 @@ const RoleForm = ({ formLabel, initFormValues }) => {
                           <FormLabel component="legend" sx={{ mt: '10px' }}>
                             User Management
                           </FormLabel>
-                          <Box>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  name="permissions"
-                                  value={permissionsValues[0].value}
-                                  checked={
-                                    values.permissions.includes(permissionsValues[0].value)
-                                      ? true
-                                      : false
-                                  }
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                />
-                              }
-                              label={permissionsValues[0].description}
-                            />
-                          </Box>
-                          <Box>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  name="permissions"
-                                  value={permissionsValues[1].value}
-                                  checked={
-                                    values.permissions.includes(permissionsValues[1].value)
-                                      ? true
-                                      : false
-                                  }
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                />
-                              }
-                              label={permissionsValues[1].description}
-                            />
-                          </Box>
-
+                          {/* START PERMISSIONS CHECKBOXES */}
+                          {permissionsValues.map(permission => (
+                            <Box>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    name="permissions"
+                                    value={permission.value}
+                                    checked={
+                                      values.permissions.includes(permission.value) ? true : false
+                                    }
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                  />
+                                }
+                                label={permission.description}
+                              />
+                            </Box>
+                          ))}
+                          {/* END PERMISSIONS CHECKBOXES */}
                           <FormLabel component="legend" sx={{ mt: '20px' }}>
                             Project Management
                           </FormLabel>
