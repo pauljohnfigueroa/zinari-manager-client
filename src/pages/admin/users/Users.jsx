@@ -26,7 +26,7 @@ import { useTheme } from '@emotion/react'
 import { tokens } from '../../../theme.js'
 import FlexBetween from '../../../components/FlexBetween.jsx'
 
-const Users = () => {
+const Users = ({ authPermissions }) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
@@ -74,8 +74,8 @@ const Users = () => {
     /* DISPATCH */
     dispatch(deleteUsers({ checkedIds }))
   }
-
-  return (
+  console.log(authPermissions)
+  return authPermissions.includes('fetch_users') ? (
     <Box sx={{ p: '1rem 5%' }}>
       {formState && (
         <UserForm
@@ -141,6 +141,10 @@ const Users = () => {
           <UsersGridWidget initFormValues={initFormValues} setInitFormValues={setInitFormValues} />
         </Box>
       </Box>
+    </Box>
+  ) : (
+    <Box>
+      <Typography>You have no permission to view this page.</Typography>
     </Box>
   )
 }

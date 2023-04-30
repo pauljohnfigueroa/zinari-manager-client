@@ -25,9 +25,11 @@ function App() {
 
   const [authPermissions, setAuthPermissions] = useState([])
 
-  /* Fetch the current user's permissions */
+  /* Fetch the current user's permissions 
+      then pass it to components as props. */
   useEffect(() => {
     const getPermissions = async () => {
+      console.log('user.role', user.role)
       const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/roles/${user.role}`, {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` }
@@ -38,7 +40,7 @@ function App() {
     }
     getPermissions()
   }, [])
-
+  console.log('authPermissions', authPermissions)
   return (
     <div className="App">
       <BrowserRouter>
@@ -51,16 +53,19 @@ function App() {
               <Route path="/tasks" element={isAuth ? <Tasks /> : <Navigate to="/" />} />
               <Route path="/teams" element={isAuth ? <Teams /> : <Navigate to="/" />} />
               <Route path="/projects" element={isAuth ? <Projects /> : <Navigate to="/" />} />
-              <Route path="/appraisals" element={isAuth ? <Appraisals /> : <Navigate to="/" />} />
               <Route
-                path="/admin/users"
+                path="/appraisals"
                 element={
-                  isAuth && authPermissions.includes('view_users_dashboard') ? (
-                    <Users />
+                  isAuth && authPermissions.includes('view_appraisals_dashboard') ? (
+                    <Appraisals />
                   ) : (
                     <Navigate to="/" />
                   )
                 }
+              />
+              <Route
+                path="/admin/users"
+                element={isAuth ? <Users authPermissions={authPermissions} /> : <Navigate to="/" />}
               />
               <Route path="/admin/roles" element={isAuth ? <Roles /> : <Navigate to="/" />} />
             </Route>
