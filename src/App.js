@@ -39,8 +39,8 @@ function App() {
     }
     // only if user.role exists
     if (user?.role) getPermissions()
-  }, [])
-  // console.log('authPermissions', authPermissions)
+  }, [user])
+
   return (
     <div className="App">
       <BrowserRouter>
