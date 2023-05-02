@@ -9,6 +9,10 @@ export const permissionsValues = [
     description: 'Create a new user.'
   },
   {
+    value: 'delete_users',
+    description: 'Delete user/s.'
+  },
+  {
     value: 'fetch_users',
     description: 'Fetch users records x.'
   },

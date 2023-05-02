@@ -40,7 +40,7 @@ const Users = ({ authPermissions }) => {
 
   // Create/Update Form
   const initialValues = {
-    _id: null,
+    _id: undefined,
     createdBy: user.email,
     firstName: '',
     lastName: '',
@@ -75,7 +75,7 @@ const Users = ({ authPermissions }) => {
     dispatch(deleteUsers({ checkedIds }))
   }
   console.log(authPermissions)
-  return authPermissions.includes('fetch_users') ? (
+  return authPermissions.includes('view_users_dashboard') ? (
     <Box sx={{ p: '1rem 5%' }}>
       {formState && (
         <UserForm
@@ -125,16 +125,29 @@ const Users = ({ authPermissions }) => {
       <Box>
         <Box m="10px 0 0 0">
           <Stack spacing={2} direction="row">
-            <Button onClick={openAddUserForm} variant="contained">
-              Add User
-            </Button>
-            <Button
-              disabled={checkedIds.length ? false : true}
-              onClick={handleDeleteUsers}
-              variant="outlined"
-            >
-              Delete Selected
-            </Button>
+            {authPermissions.includes('create_user') ? (
+              <Button onClick={openAddUserForm} variant="contained">
+                Add User
+              </Button>
+            ) : (
+              <Button onClick={openAddUserForm} disabled variant="contained">
+                Add User
+              </Button>
+            )}
+
+            {authPermissions.includes('delete_users') ? (
+              <Button
+                disabled={checkedIds.length ? false : true}
+                onClick={handleDeleteUsers}
+                variant="outlined"
+              >
+                Delete Selected
+              </Button>
+            ) : (
+              <Button disabled onClick={handleDeleteUsers} variant="outlined">
+                Delete Selected
+              </Button>
+            )}
           </Stack>
         </Box>
         <Box m="10px 0 0 0">

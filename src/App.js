@@ -29,7 +29,6 @@ function App() {
       then pass it to components as props. */
   useEffect(() => {
     const getPermissions = async () => {
-      console.log('user.role', user.role)
       const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/roles/${user.role}`, {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` }
@@ -38,9 +37,10 @@ function App() {
       //console.log('json', role.permissions)
       setAuthPermissions(role[0].permissions)
     }
-    getPermissions()
+    // only if user.role exists
+    if (user?.role) getPermissions()
   }, [])
-  console.log('authPermissions', authPermissions)
+  // console.log('authPermissions', authPermissions)
   return (
     <div className="App">
       <BrowserRouter>
