@@ -70,11 +70,10 @@ const Users = ({ authPermissions }) => {
         }
       })
     })
-    // Frontend
     /* DISPATCH */
     dispatch(deleteUsers({ checkedIds }))
   }
-  console.log(authPermissions)
+
   return authPermissions.includes('view_users_dashboard') ? (
     <Box sx={{ p: '1rem 5%' }}>
       {formState && (
