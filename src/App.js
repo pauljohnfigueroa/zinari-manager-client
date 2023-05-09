@@ -39,7 +39,7 @@ function App() {
     }
     // only if user.role exists
     if (user?.role) getPermissions()
-  }, [user])
+  }, [user, token])
 
   return (
     <div className="App">
@@ -48,26 +48,38 @@ function App() {
           <CssBaseline />
           <Routes>
             <Route path="/" element={<LoginPage />} />
-            <Route element={isAuth ? <Layout /> : <Navigate to="/" />}>
+            <Route
+              element={isAuth ? <Layout authPermissions={authPermissions} /> : <Navigate to="/" />}
+            >
               <Route path="/dashboard" element={isAuth ? <Dashboard /> : <Navigate to="/" />} />
-              <Route path="/tasks" element={isAuth ? <Tasks /> : <Navigate to="/" />} />
-              <Route path="/teams" element={isAuth ? <Teams /> : <Navigate to="/" />} />
-              <Route path="/projects" element={isAuth ? <Projects /> : <Navigate to="/" />} />
+              <Route
+                path="/tasks"
+                element={isAuth ? <Tasks authPermissions={authPermissions} /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/teams"
+                element={isAuth ? <Teams authPermissions={authPermissions} /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/projects"
+                element={
+                  isAuth ? <Projects authPermissions={authPermissions} /> : <Navigate to="/" />
+                }
+              />
               <Route
                 path="/appraisals"
                 element={
-                  isAuth && authPermissions.includes('view_appraisals_dashboard') ? (
-                    <Appraisals />
-                  ) : (
-                    <Navigate to="/" />
-                  )
+                  isAuth ? <Appraisals authPermissions={authPermissions} /> : <Navigate to="/" />
                 }
               />
               <Route
                 path="/admin/users"
                 element={isAuth ? <Users authPermissions={authPermissions} /> : <Navigate to="/" />}
               />
-              <Route path="/admin/roles" element={isAuth ? <Roles /> : <Navigate to="/" />} />
+              <Route
+                path="/admin/roles"
+                element={isAuth ? <Roles authPermissions={authPermissions} /> : <Navigate to="/" />}
+              />
             </Route>
           </Routes>
         </ThemeProvider>

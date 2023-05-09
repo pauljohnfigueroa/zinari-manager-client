@@ -92,7 +92,13 @@ const sidebarMenuItems = [
   }
 ]
 
-const Sidebar = ({ isNonMobile, drawerWidth, isSidebarOpen, setIsSidebarOpen }) => {
+const Sidebar = ({
+  isNonMobile,
+  drawerWidth,
+  isSidebarOpen,
+  setIsSidebarOpen,
+  authPermissions
+}) => {
   const { pathname } = useLocation() // the current path
   const [activePath, setActivePath] = useState('')
   const [open, setOpen] = useState(true)

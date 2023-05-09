@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import Navbar from 'components/navbar/Navbar'
 import Sidebar from 'components/sidebar/Sidebar'
 
-function Layout() {
+function Layout({ authPermissions }) {
   const isNonMobile = useMediaQuery('(min-width: 600px)')
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
@@ -16,9 +16,14 @@ function Layout() {
         drawerWidth="250px"
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
+        authPermissions={authPermissions}
       />
       <Box flexGrow={1}>
-        <Navbar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+        <Navbar
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+          authPermissions={authPermissions}
+        />
         <Outlet />
       </Box>
     </Box>
