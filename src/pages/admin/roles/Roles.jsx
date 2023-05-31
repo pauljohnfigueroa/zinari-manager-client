@@ -90,7 +90,7 @@ const Roles = () => {
       >
         Roles
       </Typography>
-      <Box border="1px solid gray">
+      {/* <Box border="1px solid gray">
         <FlexBetween justifyContent="start">
           <FlexBetween
             sx={{
@@ -118,7 +118,7 @@ const Roles = () => {
             </Box>
           </FlexBetween>
         </FlexBetween>
-      </Box>
+      </Box> */}
       <Box>
         <Box m="10px 0 0 0">
           <Stack spacing={2} direction="row">

@@ -142,7 +142,7 @@ export const themeSettings = mode => {
             },
             background: {
               default: colors.primary[500],
-              alt: colors.grey[100]
+              alt: colors.grey[900]
             }
           }
         : {

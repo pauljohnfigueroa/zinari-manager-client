@@ -44,7 +44,6 @@ const Navbar = () => {
   const alt = theme.palette.background.alt
 
   const fullName = `${user.firstName} ${user.lastName}`
-  // const fullName = `Steve Buscemi`
 
   /* Logout user */
   const handleClickLogout = () => {

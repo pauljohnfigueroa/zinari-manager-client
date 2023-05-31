@@ -1,3 +1,4 @@
+/* Permissions that can be given to roles. */
 export const permissionsValues = [
   { header: 'User Management' },
   {

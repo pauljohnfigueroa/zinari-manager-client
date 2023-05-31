@@ -73,22 +73,22 @@ const Dashboard = () => {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <TasksGridWidget
+            {/* <TasksGridWidget
               initFormValues={initFormValues}
               setInitFormValues={setInitFormValues}
-            />
+            /> */}
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <TeamsGridWidget
+            {/* <TeamsGridWidget
               initFormValues={initFormValues}
               setInitFormValues={setInitFormValues}
-            />
+            /> */}
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <ProjectsGridWidget
+            {/* <ProjectsGridWidget
               initFormValues={initFormValues}
               setInitFormValues={setInitFormValues}
-            />
+            /> */}
           </TabPanel>
         </Box>
       </FlexBetween>
