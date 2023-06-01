@@ -37,7 +37,7 @@ const Navbar = () => {
   const isNonMobileScreens = useMediaQuery('(min-width: 600px)')
 
   const theme = useTheme()
-  const neutralLight = theme.palette.neutral.light
+  const neutralLight = theme.palette.neutral.main
   const primaryLight = theme.palette.primary.light
   const dark = theme.palette.neutral.dark
   const background = theme.palette.background.default

@@ -102,11 +102,11 @@ const LoginForm = () => {
               type="submit"
               sx={{
                 m: '2rem 0',
-                backgroundColor: palette.primary.dark,
+                backgroundColor: palette.neutral.dark,
                 color: palette.neutral.light,
                 '&:hover': {
-                  backgroundColor: palette.primary.main,
-                  color: palette.neutral.light
+                  backgroundColor: palette.neutral.main,
+                  color: palette.neutral.dark
                 }
               }}
             >

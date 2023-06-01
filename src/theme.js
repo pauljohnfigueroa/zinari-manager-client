@@ -154,9 +154,9 @@ export const themeSettings = mode => {
               main: colors.greenAccent[500]
             },
             neutral: {
-              dark: colors.grey[700],
-              main: colors.grey[500],
-              light: colors.grey[100]
+              dark: colors.grey[200],
+              main: colors.grey[800],
+              light: colors.grey[600]
             },
             background: {
               default: '#fcfcfc',
