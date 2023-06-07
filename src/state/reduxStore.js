@@ -14,7 +14,7 @@ import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } fro
 import storage from 'redux-persist/lib/storage'
 
 const persistConfig = {
-  key: 'root',
+  key: 'zinari',
   storage
 }
 

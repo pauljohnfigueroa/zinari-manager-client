@@ -27,14 +27,18 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
   const tasks = useSelector(state => state.task.tasks)
   const formState = useSelector(state => state.task.formState)
   const token = useSelector(state => state.auth.token)
-
+  const user = useSelector(state => state.auth.user)
   /* FETCH TASKS */
   useEffect(() => {
     // Backend
     const getTasks = async () => {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks`, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` }
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/user`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ userId: user._id })
       })
       const tasks = await response.json()
 

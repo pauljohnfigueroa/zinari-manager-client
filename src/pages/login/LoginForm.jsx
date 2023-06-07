@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { setLogin } from 'state/authSlice'
 
 const loginSchema = yup.object().shape({
-  email: yup.string().email('invalid email').required('required'),
+  email: yup.string().email('Invalid email or password').required('required'),
   password: yup.string().required('required')
 })
 
@@ -21,18 +21,28 @@ const LoginForm = () => {
   const navigate = useNavigate()
   const isNonMobile = useMediaQuery('(min-width:600px)')
 
-  const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch(`${process.env.REACT_APP_SERVER_URL}/auth/login`, {
+  /* Form submit handler */
+
+  const handleFormSubmit = async (values, action) => {
+    await login(values, action)
+  }
+
+  /* Log in user */
+
+  const login = async (values, action) => {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(values)
     })
-    const loggedIn = await loggedInResponse.json()
-    onSubmitProps.resetForm()
+
+    const loggedIn = await response.json()
+
+    action.resetForm()
+
     if (loggedIn) {
       // save the {email, token} in the local storage
       //localStorage.setItem('user', JSON.stringify(loggedIn))
-
       dispatch(
         setLogin({
           user: loggedIn.user,
@@ -43,13 +53,9 @@ const LoginForm = () => {
     }
   }
 
-  const handleFormSubmit = async (values, onSubmitProps) => {
-    await login(values, onSubmitProps)
-  }
-
   return (
     <Formik
-      onSubmit={handleFormSubmit}
+      onSubmit={handleFormSubmit} // https://formik.org/docs/guides/form-submission
       initialValues={initialValuesLogin}
       validationSchema={loginSchema}
     >
@@ -59,7 +65,7 @@ const LoginForm = () => {
         touched,
         handleBlur,
         handleChange,
-        handleSubmit,
+        handleSubmit, // event.preventDefault() then proceed to onSubmit above
         setFieldValue,
         resetForm
       }) => (

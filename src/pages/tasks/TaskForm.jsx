@@ -46,7 +46,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
         'Content-type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify(values)
+      body: JSON.stringify({ ...values, userId: user._id })
     })
     const newTask = await response.json()
 
@@ -63,7 +63,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
         'Content-type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify(values)
+      body: JSON.stringify({ ...values, userId: user._id })
     })
 
     dispatch(updateTask({ task: values }))
@@ -102,8 +102,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
                   '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
                 }}
               >
-                <Field type="hidden" id="email" name="email" value={values.email} />
-
+                {/* <Field type="hidden" id="email" name="email" value={values.email} /> */}
                 <TextField
                   fullWidth
                   autoFocus
