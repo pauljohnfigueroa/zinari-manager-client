@@ -1,10 +1,7 @@
 /* 
-
 The TeamForm.jsx component is used on both create and update Team.
-
 */
 import { useEffect, useState } from 'react'
-
 import { Formik, Form, Field } from 'formik'
 // import * as yup from 'yup'
 
@@ -12,17 +9,14 @@ import { useSelector, useDispatch } from 'react-redux'
 import { createTeam, updateTeam, addTeamFormState } from '../../state/teamsSlice'
 import { fetchUsers } from '../../state/usersSlice'
 
-import { useTheme } from '@emotion/react'
-
 // MUI
 import { Box, useMediaQuery, InputLabel, MenuItem, Select, FormControl, Chip } from '@mui/material'
-
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import DialogActions from '@mui/material/DialogActions'
 import OutlinedInput from '@mui/material/OutlinedInput'
 
-/* *************** */
+import { useTheme } from '@emotion/react'
 
 import DialogBox from 'components/dialog/DialogBox'
 
@@ -36,12 +30,10 @@ const MenuProps = {
     }
   }
 }
-
 /* *************** */
 
 const TeamForm = ({ formLabel, initFormValues }) => {
   const isNonMobile = useMediaQuery('(min-width: 600px)')
-  // const [formValues, setFormValues] = useState()
   const [error, setError] = useState()
   const theme = useTheme()
 

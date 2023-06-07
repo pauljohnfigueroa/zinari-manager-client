@@ -86,35 +86,6 @@ const Teams = () => {
       >
         Teams
       </Typography>
-      {/* <Box border="1px solid gray">
-        <FlexBetween justifyContent="start">
-          <FlexBetween
-            sx={{
-              flexDirection: 'column',
-              border: '1px solid gray',
-              width: '50%'
-            }}
-          >
-            <Box height="300px" border="1px solid gray">
-              <TeamsPieChartWidget />
-            </Box>
-          </FlexBetween>
-          <FlexBetween
-            sx={{
-              flexDirection: 'column',
-              border: '1px solid gray',
-              width: '50%'
-            }}
-          >
-            <Box height="150px" border="1px solid gray">
-              <AvgCompletionRateWidget />
-            </Box>
-            <Box height="150px" border="1px solid gray">
-              <AvgOverdueRateWidget />
-            </Box>
-          </FlexBetween>
-        </FlexBetween>
-      </Box> */}
       <Box>
         <Box m="10px 0 0 0">
           <Stack spacing={2} direction="row">
