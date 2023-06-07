@@ -16,9 +16,6 @@ import { addRoleFormState, deleteRoles } from '../../../state/rolesSlice'
 import dayjs from 'dayjs'
 
 import RolesGridWidget from '../../../widgets/RolesGridWidget.jsx'
-import AvgCompletionRateWidget from '../../../widgets/AvgCompletionRateWidget'
-import AvgOverdueRateWidget from '../../../widgets/AvgOverdueRateWidget'
-import RolesPieChartWidget from '../../../widgets/RolesPieChartWidget'
 import RoleForm from './RoleForm'
 
 import { useTheme } from '@emotion/react'

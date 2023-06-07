@@ -14,9 +14,6 @@ import Button from '@mui/material/Button'
 import { addTeamFormState, deleteTeams } from '../../state/teamsSlice'
 
 import TeamsGridWidget from 'widgets/TeamsGridWidget.jsx'
-import AvgCompletionRateWidget from 'widgets/AvgCompletionRateWidget'
-import AvgOverdueRateWidget from 'widgets/AvgOverdueRateWidget'
-import TeamsPieChartWidget from 'widgets/TeamsPieChartWidget'
 import TeamForm from './TeamForm'
 
 import { useTheme } from '@emotion/react'

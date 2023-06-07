@@ -16,9 +16,7 @@ import { addUserFormState, deleteUsers } from '../../../state/usersSlice'
 import dayjs from 'dayjs'
 
 import UsersGridWidget from '../../../widgets/UsersGridWidget.jsx'
-import AvgCompletionRateWidget from '../../../widgets/AvgCompletionRateWidget'
-import AvgOverdueRateWidget from '../../../widgets/AvgOverdueRateWidget'
-import UsersPieChartWidget from '../../../widgets/UsersPieChartWidget'
+
 import UserForm from './UserForm'
 
 import { useTheme } from '@emotion/react'
@@ -92,35 +90,7 @@ const Users = ({ authPermissions }) => {
       >
         Users
       </Typography>
-      {/* <Box border="1px solid gray">
-        <FlexBetween justifyContent="start">
-          <FlexBetween
-            sx={{
-              flexDirection: 'column',
-              border: '1px solid gray',
-              width: '50%'
-            }}
-          >
-            <Box height="300px" border="1px solid gray">
-              <UsersPieChartWidget />
-            </Box>
-          </FlexBetween>
-          <FlexBetween
-            sx={{
-              flexDirection: 'column',
-              border: '1px solid gray',
-              width: '50%'
-            }}
-          >
-            <Box height="150px" border="1px solid gray">
-              <AvgCompletionRateWidget />
-            </Box>
-            <Box height="150px" border="1px solid gray">
-              <AvgOverdueRateWidget />
-            </Box>
-          </FlexBetween>
-        </FlexBetween>
-      </Box> */}
+
       <Box>
         <Box m="10px 0 0 0">
           <Stack spacing={2} direction="row">
