@@ -4,7 +4,7 @@ The ProjectsGridWidget.jsx component is a datagrid where all Projects are listed
 Components
 
 */
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
@@ -14,6 +14,7 @@ import { Box, IconButton } from '@mui/material'
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import LinearProgress from '@mui/material/LinearProgress'
+import Alert from '@mui/material/Alert'
 
 import { setCheckedIds } from 'state/datagridSlice.js'
 
@@ -24,11 +25,16 @@ import dayjs from 'dayjs'
 const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
+  const [rowMessage, setRowMessage] = useState()
 
   const dispatch = useDispatch()
   const projects = useSelector(state => state.project.projects)
   const formState = useSelector(state => state.project.formState)
   const token = useSelector(state => state.auth.token)
+
+  const handleRowClick = params => {
+    setRowMessage(`Show the details page for ${params.row.name}`)
+  }
 
   /* FETCH ProjectS */
   useEffect(() => {
@@ -71,20 +77,19 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
     {
       field: 'dueDate',
       headerName: 'Due Date',
-      valueFormatter: params =>
-        dayjs(params?.value).format("LL"),
+      valueFormatter: params => dayjs(params?.value).format('LL')
     },
     {
       field: 'teams',
-      headerName: 'Teams',
+      headerName: 'Teams'
     },
     {
       field: 'tasks',
-      headerName: 'Tasks',
+      headerName: 'Tasks'
     },
     {
       field: 'manager',
-      headerName: 'Manager',
+      headerName: 'Manager'
     },
     {
       field: 'action',
@@ -118,15 +123,16 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
               // Hide columns listed here, the other columns will remain visible
               _id: false,
               tasks: false
-            },
-          },
+            }
+          }
         }}
         getRowId={row => row._id}
         sx={{
           backgroundColor: colors.grey[800],
           '& .MuiDataGrid-row:hover': {
             color: colors.grey[400],
-            backgroundColor: colors.primary.main
+            backgroundColor: colors.primary.main,
+            cursor: 'pointer'
           }
         }}
         components={{
@@ -142,7 +148,9 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
           // Pass the checked row ids to a redux state
           dispatch(setCheckedIds({ checkedIds }))
         }}
+        onRowClick={handleRowClick}
       />
+      {rowMessage && <Alert severity="info">{rowMessage}</Alert>}
     </Box>
   )
 }

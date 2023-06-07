@@ -104,6 +104,14 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 
       {/* DATAGRID */}
       <DataGrid
+        initialState={{
+          columns: {
+            columnVisibilityModel: {
+              // Hide columns listed here, the other columns will remain visible
+              _id: false
+            }
+          }
+        }}
         getRowId={row => row._id}
         sx={{
           backgroundColor: colors.grey[800],

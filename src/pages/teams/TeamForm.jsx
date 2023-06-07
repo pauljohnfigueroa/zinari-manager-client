@@ -19,14 +19,12 @@ import { Box, useMediaQuery, InputLabel, MenuItem, Select, FormControl, Chip } f
 
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogTitle from '@mui/material/DialogTitle'
 import OutlinedInput from '@mui/material/OutlinedInput'
 
 /* *************** */
+
+import DialogBox from 'components/dialog/DialogBox'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -94,7 +92,6 @@ const TeamForm = ({ formLabel, initFormValues }) => {
     }
   }
 
-
   /* ****** End Chip ********* */
 
   const handleClose = (event, reason) => {
@@ -104,6 +101,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
     }
   }
 
+  /* Create a team handler*/
   const handleCreateTeam = async values => {
     // await registerUser(values.email, values.name, values.password, values.phone, values.roles)
     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams`, {
@@ -121,6 +119,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
     dispatch(addTeamFormState({ addTeamFormState: false }))
   }
 
+  /* Update a team handler*/
   const handleUpdateTeam = async values => {
     console.log(values)
     // Update item from the database - Backend
@@ -141,112 +140,114 @@ const TeamForm = ({ formLabel, initFormValues }) => {
   return (
     <div>
       {error && <div>{error}</div>}
-      <Dialog fullWidth open={formState} onClose={handleClose}>
-        <DialogTitle>{formLabel}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Please fill up all the required ( * ) fields.</DialogContentText>
-          <Formik
-            onSubmit={
-              initialFormValues._id
-                ? (values, actions) => {
+      <DialogBox
+        handleClose={handleClose}
+        formLabel={formLabel}
+        formState={formState}
+        fullWidth={true}
+        requiredFields="Please fill up all the required ( * ) fields."
+      >
+        <Formik
+          onSubmit={
+            initialFormValues._id
+              ? (values, actions) => {
                   handleUpdateTeam(values)
                 }
-                : (values, actions) => {
+              : (values, actions) => {
                   handleCreateTeam(values)
                 }
-            }
-            initialValues={initialFormValues}
-          >
-            {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
-              <Form>
-                <Box
-                  display="grid"
-                  gap="20px"
-                  gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                  sx={{
-                    '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
-                  }}
-                >
-                  <Field type="hidden" id="leader" name="leader" value={values.email} />
+          }
+          initialValues={initialFormValues}
+        >
+          {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
+            <Form>
+              <Box
+                display="grid"
+                gap="20px"
+                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                sx={{
+                  '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
+                }}
+              >
+                <Field type="hidden" id="leader" name="leader" value={values.email} />
 
-                  <TextField
-                    fullWidth
-                    autoFocus
-                    autoComplete="off"
-                    margin="dense"
-                    name="name"
-                    id="name"
-                    value={values.name}
-                    label="Team Name"
-                    type="text"
-                    variant="outlined"
-                    sx={{ gridColumn: 'span 4' }}
+                <TextField
+                  fullWidth
+                  autoFocus
+                  autoComplete="off"
+                  margin="dense"
+                  name="name"
+                  id="name"
+                  value={values.name}
+                  label="Team Name"
+                  type="text"
+                  variant="outlined"
+                  sx={{ gridColumn: 'span 4' }}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                />
+                <TextField
+                  autoComplete="off"
+                  fullWidth
+                  margin="dense"
+                  name="description"
+                  id="description"
+                  value={values.description}
+                  label="Description/Purpose"
+                  type="text"
+                  variant="outlined"
+                  sx={{ gridColumn: 'span 4' }}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                />
+
+                {/* Team Members */}
+                <FormControl sx={{ gridColumn: 'span 4' }}>
+                  <InputLabel id="members-label">Select Members</InputLabel>
+                  <Select
+                    labelId="members-label"
+                    id="members"
+                    name="members"
+                    multiple
+                    value={values.members}
                     onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                  />
-                  <TextField
-                    autoComplete="off"
-                    fullWidth
-                    margin="dense"
-                    name="description"
-                    id="description"
-                    value={values.description}
-                    label="Description/Purpose"
-                    type="text"
-                    variant="outlined"
-                    sx={{ gridColumn: 'span 4' }}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                  />
+                    input={<OutlinedInput id="members-input" label="Members" />}
+                    renderValue={selected => (
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        {selected.map(value => (
+                          <Chip key={value} label={value} />
+                        ))}
+                      </Box>
+                    )}
+                    MenuProps={MenuProps}
+                  >
+                    {memberNames.map(name => (
+                      <MenuItem
+                        key={name}
+                        value={name}
+                        style={getStyles(name, values.members, theme)}
+                      >
+                        {name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
 
-                  {/* Team Members */}
-                  <FormControl sx={{ gridColumn: 'span 4' }}>
-                    <InputLabel id="members-label">Select Members</InputLabel>
-                    <Select
-                      labelId="members-label"
-                      id="members"
-                      name="members"
-                      multiple
-                      value={values.members}
-                      onChange={handleChange}
-                      input={<OutlinedInput id="members-input" label="Members" />}
-                      renderValue={selected => (
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                          {selected.map(value => (
-                            <Chip key={value} label={value} />
-                          ))}
-                        </Box>
-                      )}
-                      MenuProps={MenuProps}
-                    >
-                      {memberNames.map(name => (
-                        <MenuItem
-                          key={name}
-                          value={name}
-                          style={getStyles(name, values.members, theme)}
-                        >
-                          {name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-
-                <DialogActions>
-                  <Button sx={{ minWidth: 100 }} onClick={handleClose} variant="outlined">
-                    Cancel
-                  </Button>
-                  <Button type="submit" sx={{ minWidth: 100 }} variant="contained">
-                    {values._id ? 'Update' : 'Save'}
-                  </Button>
-                </DialogActions>
-              </Form>
-            )}
-          </Formik>
-        </DialogContent>
-      </Dialog>
+              <DialogActions>
+                <Button sx={{ minWidth: 100 }} onClick={handleClose} variant="outlined">
+                  Cancel
+                </Button>
+                <Button type="submit" sx={{ minWidth: 100 }} variant="contained">
+                  {values._id ? 'Update' : 'Save'}
+                </Button>
+              </DialogActions>
+            </Form>
+          )}
+        </Formik>
+      </DialogBox>
     </div>
   )
 }
