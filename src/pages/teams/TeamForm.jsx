@@ -38,8 +38,10 @@ const TeamForm = ({ formLabel, initFormValues }) => {
   const theme = useTheme()
 
   const formState = useSelector(state => state.team.formState)
+  const user = useSelector(state => state.auth.user)
   const token = useSelector(state => state.auth.token)
   const users = useSelector(state => state.user.users)
+
   const dispatch = useDispatch()
 
   // Just to make the variable naming consistent with other forms
@@ -102,7 +104,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify(values)
+      body: JSON.stringify({ ...values, leader: user._id })
     })
     const newTeam = await response.json()
 
@@ -161,7 +163,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
                   '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
                 }}
               >
-                <Field type="hidden" id="leader" name="leader" value={values.email} />
+                {/* <Field type="hidden" id="leader" name="leader" value={values.email} /> */}
 
                 <TextField
                   fullWidth

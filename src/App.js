@@ -20,9 +20,11 @@ function App() {
   // get the theme mode from the global state
   const mode = useSelector(state => state.auth.mode)
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
+
+  /* Check if user is authenticated */
   const isAuth = Boolean(useSelector(state => state.auth.token))
 
-  /* Check user's permissions */
+  /* Get user's permissions */
   const [authPermissions] = useGetPermissions(process.env.REACT_APP_SERVER_URL)
 
   return (

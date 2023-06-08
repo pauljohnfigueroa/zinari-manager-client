@@ -30,7 +30,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
   const token = useSelector(state => state.auth.token)
   const user = useSelector(state => state.auth.user)
 
-  /* FETCH TeamS */
+  /* FETCH Teams */
   useEffect(() => {
     // Backend
     const getTeams = async () => {
@@ -40,7 +40,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify({ userId: user._id })
       })
       const teams = await response.json()
 
