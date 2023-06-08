@@ -2,30 +2,31 @@ import { useState } from 'react'
 import { Box } from '@mui/material'
 import ComplexCard from 'components/cards/ComplexCard'
 import FlexBetween from 'components/FlexBetween'
-import TeamsGridWidget from 'widgets/TeamsGridWidget'
-import TasksGridWidget from 'widgets/TasksGridWidget'
-import ProjectsGridWidget from 'widgets/ProjectsGridWidget'
+// import TeamsGridWidget from 'widgets/TeamsGridWidget'
+// import TasksGridWidget from 'widgets/TasksGridWidget'
+// import ProjectsGridWidget from 'widgets/ProjectsGridWidget'
 
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 
 import TabPanel from 'components/tabs/TabPanel'
 
 const Dashboard = () => {
-  const user = useSelector(state => state.auth.user)
+  // const user = useSelector(state => state.auth.user)
   const [value, setValue] = useState(0)
 
   // Create/Update Form
-  const initialValues = {
-    _id: null,
-    name: '',
-    description: '',
-    leader: user.email,
-    members: []
-  }
-  const [initFormValues, setInitFormValues] = useState(initialValues)
+  // const initialValues = {
+  //   _id: null,
+  //   name: '',
+  //   description: '',
+  //   leader: user.email,
+  //   members: []
+  // }
+
+  // const [initFormValues, setInitFormValues] = useState(initialValues)
 
   function a11yProps(index) {
     return {

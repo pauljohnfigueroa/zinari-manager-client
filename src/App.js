@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { BrowserRouter, Routes, Navigate, Route } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { CssBaseline, ThemeProvider } from '@mui/material'
@@ -14,32 +14,16 @@ import Projects from './pages/projects/Projects'
 import Appraisals from './pages/appraisals/Appraisals'
 import Roles from 'pages/admin/roles/Roles'
 import Users from 'pages/admin/users/Users'
+import useGetPermissions from 'hooks/useGetPermissions'
 
 function App() {
   // get the theme mode from the global state
   const mode = useSelector(state => state.auth.mode)
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
-  const user = useSelector(state => state.auth.user)
-  const token = useSelector(state => state.auth.token)
   const isAuth = Boolean(useSelector(state => state.auth.token))
 
-  const [authPermissions, setAuthPermissions] = useState([])
-
-  /* Fetch the current user's permissions 
-      then pass it to components as props. */
-  useEffect(() => {
-    const getPermissions = async () => {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/roles/${user.role}`, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      const role = await response.json()
-      //console.log('json', role.permissions)
-      setAuthPermissions(role[0].permissions)
-    }
-    // only if user.role exists
-    if (user?.role) getPermissions()
-  }, [user, token])
+  /* Check user's permissions */
+  const [authPermissions] = useGetPermissions(process.env.REACT_APP_SERVER_URL)
 
   return (
     <div className="App">
