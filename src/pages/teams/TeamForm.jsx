@@ -139,6 +139,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
         formLabel={formLabel}
         formState={formState}
         fullWidth={true}
+        maxWidth="sm"
         requiredFields="Please fill up all the required ( * ) fields."
       >
         <Formik

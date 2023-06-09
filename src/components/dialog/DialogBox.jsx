@@ -3,9 +3,17 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
-const DialogBox = ({ children, formLabel, formState, fullWidth, handleClose, requiredFields }) => {
+const DialogBox = ({
+  children,
+  formLabel,
+  formState,
+  fullWidth = false,
+  maxWidth = 'xl',
+  handleClose,
+  requiredFields
+}) => {
   return (
-    <Dialog fullWidth={fullWidth} open={formState} onClose={handleClose}>
+    <Dialog fullWidth={fullWidth} maxWidth={maxWidth} open={formState} onClose={handleClose}>
       <DialogTitle>{formLabel}</DialogTitle>
       <DialogContent>
         <DialogContentText>{requiredFields}</DialogContentText>

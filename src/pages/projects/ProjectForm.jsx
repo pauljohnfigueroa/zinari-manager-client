@@ -145,6 +145,7 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
         formLabel={formLabel}
         formState={formState}
         fullWidth={true}
+        maxWidth="sm"
         requiredFields="Please fill up all the required ( * ) fields."
       >
         <Formik

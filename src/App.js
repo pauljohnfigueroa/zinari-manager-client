@@ -14,7 +14,7 @@ import Projects from './pages/projects/Projects'
 import Appraisals from './pages/appraisals/Appraisals'
 import Roles from 'pages/admin/roles/Roles'
 import Users from 'pages/admin/users/Users'
-import useGetPermissions from 'hooks/useGetPermissions'
+import useRolePermissions from 'hooks/useRolePermissions'
 
 function App() {
   // get the theme mode from the global state
@@ -25,7 +25,7 @@ function App() {
   const isAuth = Boolean(useSelector(state => state.auth.token))
 
   /* Get user's permissions */
-  const [authPermissions] = useGetPermissions(process.env.REACT_APP_SERVER_URL)
+  const [authPermissions] = useRolePermissions(process.env.REACT_APP_SERVER_URL)
 
   return (
     <div className="App">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-const useGetPermissions = url => {
+const useRolePermissions = url => {
   const user = useSelector(state => state.auth.user)
   const token = useSelector(state => state.auth.token)
   const [authPermissions, setAuthPermissions] = useState([])
@@ -24,4 +24,4 @@ const useGetPermissions = url => {
   return [authPermissions]
 }
 
-export default useGetPermissions
+export default useRolePermissions
