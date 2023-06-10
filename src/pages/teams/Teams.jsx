@@ -19,91 +19,91 @@ import TeamForm from './TeamForm'
 import { useTheme } from '@emotion/react'
 
 import { tokens } from '../../theme.js'
-import FlexBetween from 'components/FlexBetween.jsx'
+// import FlexBetween from 'components/FlexBetween.jsx'
 
 const Teams = () => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
+	const theme = useTheme()
+	const colors = tokens(theme.palette.mode)
 
-  const dispatch = useDispatch()
-  const user = useSelector(state => state.auth.user)
-  const token = useSelector(state => state.auth.token)
-  const formState = useSelector(state => state.team.formState)
-  const checkedIds = useSelector(state => state.datagrid.checkedIds)
+	const dispatch = useDispatch()
+	const user = useSelector(state => state.auth.user)
+	const token = useSelector(state => state.auth.token)
+	const formState = useSelector(state => state.team.formState)
+	const checkedIds = useSelector(state => state.datagrid.checkedIds)
 
-  // Create/Update Form
-  const initialValues = {
-    _id: null,
-    name: '',
-    description: '',
-    leader: user.email,
-    members: []
-  }
-  const [initFormValues, setInitFormValues] = useState(initialValues)
+	// Create/Update Form
+	const initialValues = {
+		_id: null,
+		name: '',
+		description: '',
+		leader: user.email,
+		members: []
+	}
+	const [initFormValues, setInitFormValues] = useState(initialValues)
 
-  /* OPEN FORM */
-  const openAddTeamForm = () => {
-    setInitFormValues(initialValues)
-    dispatch(addTeamFormState({ formState: true }))
-  }
+	/* OPEN FORM */
+	const openAddTeamForm = () => {
+		setInitFormValues(initialValues)
+		dispatch(addTeamFormState({ formState: true }))
+	}
 
-  /* DELETE TeamS */
-  const handleDeleteTeams = async () => {
-    // Backend
-    console.log('checkedIds', checkedIds)
+	/* DELETE TeamS */
+	const handleDeleteTeams = async () => {
+		// Backend
+		console.log('checkedIds', checkedIds)
 
-    checkedIds.map(async id => {
-      await fetch(`${process.env.REACT_APP_SERVER_URL}/teams/${id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-    })
-    // Frontend
-    /* DISPATCH */
-    dispatch(deleteTeams({ checkedIds }))
-  }
+		checkedIds.map(async id => {
+			await fetch(`${process.env.REACT_APP_SERVER_URL}/teams/${id}`, {
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			})
+		})
+		// Frontend
+		/* DISPATCH */
+		dispatch(deleteTeams({ checkedIds }))
+	}
 
-  return (
-    <Box sx={{ p: '1rem 5%' }}>
-      {formState && (
-        <TeamForm
-          formLabel={initFormValues._id ? 'Update Team' : 'New Team'}
-          initFormValues={initFormValues}
-        />
-      )}
-      <Typography
-        sx={{
-          color: colors.primary.main,
-          fontSize: '2rem',
-          fontWeight: '700',
-          letterSpacing: '2px'
-        }}
-      >
-        Teams
-      </Typography>
-      <Box>
-        <Box m="10px 0 0 0">
-          <Stack spacing={2} direction="row">
-            <Button onClick={openAddTeamForm} variant="contained">
-              Add Team
-            </Button>
-            <Button
-              disabled={checkedIds.length ? false : true}
-              onClick={handleDeleteTeams}
-              variant="outlined"
-            >
-              Delete Selected
-            </Button>
-          </Stack>
-        </Box>
-        <Box m="10px 0 0 0">
-          <TeamsGridWidget initFormValues={initFormValues} setInitFormValues={setInitFormValues} />
-        </Box>
-      </Box>
-    </Box>
-  )
+	return (
+		<Box sx={{ p: '1rem 5%' }}>
+			{formState && (
+				<TeamForm
+					formLabel={initFormValues._id ? 'Update Team' : 'New Team'}
+					initFormValues={initFormValues}
+				/>
+			)}
+			<Typography
+				sx={{
+					color: colors.primary.main,
+					fontSize: '2rem',
+					fontWeight: '700',
+					letterSpacing: '2px'
+				}}
+			>
+				Teams
+			</Typography>
+			<Box>
+				<Box m="10px 0 0 0">
+					<Stack spacing={2} direction="row">
+						<Button onClick={openAddTeamForm} variant="contained">
+							Add Team
+						</Button>
+						<Button
+							disabled={checkedIds.length ? false : true}
+							onClick={handleDeleteTeams}
+							variant="outlined"
+						>
+							Delete Selected
+						</Button>
+					</Stack>
+				</Box>
+				<Box m="10px 0 0 0">
+					<TeamsGridWidget initFormValues={initFormValues} setInitFormValues={setInitFormValues} />
+				</Box>
+			</Box>
+		</Box>
+	)
 }
 
 export default Teams

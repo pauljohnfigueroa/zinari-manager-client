@@ -1,6 +1,6 @@
 /* The TaskForm.jsx component is used on both create and update Task.*/
-import { useEffect, useState, useCallback } from 'react'
-import { Formik, Form, Field } from 'formik'
+import { useEffect, useState } from 'react'
+import { Formik, Form } from 'formik'
 // import * as yup from 'yup'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -83,8 +83,9 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 				.then(async response => {
 					setTeams(await response.json())
 				})
-				.catch(error => {
-					console.log(error)
+				.catch(err => {
+					console.log(err)
+					setError(err)
 				})
 		}
 		getTeams()
