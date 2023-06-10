@@ -23,136 +23,138 @@ import { tokens } from '../theme.js'
 import dayjs from 'dayjs'
 
 const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
-  const [rowMessage, setRowMessage] = useState()
+	const theme = useTheme()
+	const colors = tokens(theme.palette.mode)
+	const [rowMessage, setRowMessage] = useState()
 
-  const dispatch = useDispatch()
-  const projects = useSelector(state => state.project.projects)
-  const formState = useSelector(state => state.project.formState)
-  const token = useSelector(state => state.auth.token)
+	const dispatch = useDispatch()
+	const projects = useSelector(state => state.project.projects)
+	const formState = useSelector(state => state.project.formState)
+	const token = useSelector(state => state.auth.token)
 
-  const handleRowClick = params => {
-    setRowMessage(`Show the details page for ${params.row.name}`)
-  }
+	const handleRowClick = params => {
+		setRowMessage(`Show the details page for ${params.row.name}`)
+	}
 
-  /* FETCH ProjectS */
-  useEffect(() => {
-    // Backend
-    const getProjects = async () => {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/projects`, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      const projects = await response.json()
+	/* FETCH Projects */
+	useEffect(() => {
+		// Backend
+		const getProjects = async () => {
+			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/projects`, {
+				method: 'GET',
+				headers: { Authorization: `Bearer ${token}` }
+			})
+			const projects = await response.json()
 
-      // Frontend
-      /* Dispatch */
-      dispatch(fetchProjects({ projects }))
-    }
-    getProjects()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+			// Frontend
+			/* Dispatch */
+			dispatch(fetchProjects({ projects }))
+		}
+		getProjects()
+	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* UPDATE Project FORM */
-  const showEditForm = row => {
-    dispatch(addProjectFormState({ formState: true }))
-    setInitFormValues(row)
-  }
+	/* UPDATE Project FORM */
+	const showEditForm = row => {
+		dispatch(addProjectFormState({ formState: true }))
+		setInitFormValues(row)
+	}
 
-  /* GRID COLUMNS */
-  const columns = [
-    {
-      field: '_id',
-      headerName: 'ID'
-    },
-    {
-      field: 'name',
-      headerName: 'Name'
-    },
-    {
-      field: 'description',
-      headerName: 'Description',
-      flex: 1
-    },
-    {
-      field: 'dueDate',
-      headerName: 'Due Date',
-      valueFormatter: params => dayjs(params?.value).format('LL')
-    },
-    {
-      field: 'teams',
-      headerName: 'Teams'
-    },
-    {
-      field: 'tasks',
-      headerName: 'Tasks'
-    },
-    {
-      field: 'manager',
-      headerName: 'Manager'
-    },
-    {
-      field: 'action',
-      headerName: 'Action',
-      renderCell: rowdata => {
-        return (
-          <Box>
-            <IconButton onClick={() => showEditForm(rowdata.row)}>
-              <ModeEditOutlineOutlinedIcon />
-            </IconButton>
-          </Box>
-        )
-      }
-    }
-  ]
+	//console.log('projects', projects)
 
-  return (
-    <Box height="60vh">
-      {formState && (
-        <ProjectForm
-          formLabel={initFormValues._id ? 'Update Project' : 'New Project'}
-          initFormValues={initFormValues}
-        />
-      )}
+	/* GRID COLUMNS */
+	const columns = [
+		{
+			field: '_id',
+			headerName: 'ID'
+		},
+		{
+			field: 'name',
+			headerName: 'Name'
+		},
+		{
+			field: 'description',
+			headerName: 'Description',
+			flex: 1
+		},
+		{
+			field: 'dueDate',
+			headerName: 'Due Date',
+			valueFormatter: params => dayjs(params?.value).format('LL')
+		},
+		{
+			field: 'teams',
+			headerName: 'Teams'
+		},
+		{
+			field: 'tasks',
+			headerName: 'Tasks'
+		},
+		{
+			field: 'manager',
+			headerName: 'Manager'
+		},
+		{
+			field: 'action',
+			headerName: 'Action',
+			renderCell: rowdata => {
+				return (
+					<Box>
+						<IconButton onClick={() => showEditForm(rowdata.row)}>
+							<ModeEditOutlineOutlinedIcon />
+						</IconButton>
+					</Box>
+				)
+			}
+		}
+	]
 
-      {/* DATAGRID */}
-      <DataGrid
-        initialState={{
-          columns: {
-            columnVisibilityModel: {
-              // Hide columns listed here, the other columns will remain visible
-              _id: false,
-              tasks: false
-            }
-          }
-        }}
-        getRowId={row => row._id}
-        sx={{
-          backgroundColor: colors.grey[800],
-          '& .MuiDataGrid-row:hover': {
-            color: colors.grey[400],
-            backgroundColor: colors.primary.main,
-            cursor: 'pointer'
-          }
-        }}
-        components={{
-          Toolbar: GridToolbar,
-          LoadingOverlay: LinearProgress
-        }}
-        rows={projects ? projects : []}
-        columns={columns}
-        checkboxSelection
-        disableSelectionOnClick
-        disableRowSelectionOnClick
-        onRowSelectionModelChange={checkedIds => {
-          // Pass the checked row ids to a redux state
-          dispatch(setCheckedIds({ checkedIds }))
-        }}
-        onRowClick={handleRowClick}
-      />
-      {rowMessage && <Alert severity="info">{rowMessage}</Alert>}
-    </Box>
-  )
+	return (
+		<Box height="60vh">
+			{formState && (
+				<ProjectForm
+					formLabel={initFormValues._id ? 'Update Project' : 'New Project'}
+					initFormValues={initFormValues}
+				/>
+			)}
+
+			{/* DATAGRID */}
+			<DataGrid
+				initialState={{
+					columns: {
+						columnVisibilityModel: {
+							// Hide columns listed here, the other columns will remain visible
+							_id: false,
+							tasks: false
+						}
+					}
+				}}
+				getRowId={row => row._id}
+				sx={{
+					backgroundColor: colors.grey[800],
+					'& .MuiDataGrid-row:hover': {
+						color: colors.grey[400],
+						backgroundColor: colors.primary.main,
+						cursor: 'pointer'
+					}
+				}}
+				components={{
+					Toolbar: GridToolbar,
+					LoadingOverlay: LinearProgress
+				}}
+				rows={projects ? projects : []}
+				columns={columns}
+				checkboxSelection
+				disableSelectionOnClick
+				disableRowSelectionOnClick
+				onRowSelectionModelChange={checkedIds => {
+					// Pass the checked row ids to a redux state
+					dispatch(setCheckedIds({ checkedIds }))
+				}}
+				onRowClick={handleRowClick}
+			/>
+			{rowMessage && <Alert severity="info">{rowMessage}</Alert>}
+		</Box>
+	)
 }
 
 export default ProjectsGridWidget

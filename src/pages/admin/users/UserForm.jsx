@@ -62,7 +62,7 @@ const UserForm = ({ formLabel, initFormValues }) => {
 
 	const formState = useSelector(state => state.user.formState)
 	const token = useSelector(state => state.auth.token)
-	const user = useSelector(state => state.auth.user)
+	// const user = useSelector(state => state.auth.user)
 	const roles = useSelector(state => state.role.roles)
 	const dispatch = useDispatch()
 
@@ -75,13 +75,17 @@ const UserForm = ({ formLabel, initFormValues }) => {
 	/* Fetch Roles */
 	useEffect(() => {
 		const getRoles = async () => {
-			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/roles`, {
+			await fetch(`${process.env.REACT_APP_SERVER_URL}/roles`, {
 				method: 'GET',
 				headers: { Authorization: `Bearer ${token}` }
 			})
-			const roles = await response.json()
-
-			dispatch(fetchRoles({ roles }))
+				.then(async response => {
+					const roles = await response.json()
+					dispatch(fetchRoles({ roles }))
+				})
+				.catch(err => {
+					setError(err)
+				})
 		}
 		getRoles()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -117,7 +121,7 @@ const UserForm = ({ formLabel, initFormValues }) => {
 	}
 
 	const handleCreateUser = async values => {
-		console.log(values)
+		// console.log(values)
 		// return
 		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/auth/register`, {
 			method: 'POST',
@@ -137,7 +141,7 @@ const UserForm = ({ formLabel, initFormValues }) => {
 	const handleUpdateUser = async values => {
 		//console.log(values)
 
-		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/users/${values._id}`, {
+		await fetch(`${process.env.REACT_APP_SERVER_URL}/users/${values._id}`, {
 			method: 'PATCH',
 			headers: {
 				'Content-type': 'application/json',
@@ -193,7 +197,22 @@ const UserForm = ({ formLabel, initFormValues }) => {
 										label="First Name"
 										type="text"
 										variant="outlined"
-										sx={{ gridColumn: 'span 4' }}
+										sx={{ gridColumn: 'span 1' }}
+										onChange={handleChange}
+										onBlur={handleBlur}
+										required
+									/>
+									<TextField
+										autoComplete="off"
+										fullWidth
+										margin="dense"
+										name="middleName"
+										id="middleName"
+										value={values.middleName}
+										label="Middle Name"
+										type="text"
+										variant="outlined"
+										sx={{ gridColumn: 'span 1' }}
 										onChange={handleChange}
 										onBlur={handleBlur}
 										required
@@ -208,7 +227,7 @@ const UserForm = ({ formLabel, initFormValues }) => {
 										label="Last Name"
 										type="text"
 										variant="outlined"
-										sx={{ gridColumn: 'span 4' }}
+										sx={{ gridColumn: 'span 1' }}
 										onChange={handleChange}
 										onBlur={handleBlur}
 										required
@@ -223,39 +242,9 @@ const UserForm = ({ formLabel, initFormValues }) => {
 										label="Name Extension"
 										type="text"
 										variant="outlined"
-										sx={{ gridColumn: 'span 4' }}
+										sx={{ gridColumn: 'span 1' }}
 										onChange={handleChange}
 										onBlur={handleBlur}
-									/>
-									<TextField
-										autoComplete="off"
-										fullWidth
-										margin="dense"
-										name="email"
-										id="email"
-										value={values.email}
-										label="Email"
-										type="email"
-										variant="outlined"
-										sx={{ gridColumn: 'span 4' }}
-										onChange={handleChange}
-										onBlur={handleBlur}
-										required
-									/>
-									<TextField
-										autoComplete="off"
-										fullWidth
-										margin="dense"
-										name="phone"
-										id="phone"
-										value={values.phone}
-										label="Phone"
-										type="text"
-										variant="outlined"
-										sx={{ gridColumn: 'span 4' }}
-										onChange={handleChange}
-										onBlur={handleBlur}
-										required
 									/>
 									{!initFormValues._id && (
 										<TextField
@@ -274,8 +263,41 @@ const UserForm = ({ formLabel, initFormValues }) => {
 											required
 										/>
 									)}
+									{/* Email */}
+									<TextField
+										autoComplete="off"
+										fullWidth
+										margin="dense"
+										name="email"
+										id="email"
+										value={values.email}
+										label="Email"
+										type="email"
+										variant="outlined"
+										sx={{ gridColumn: 'span 2' }}
+										onChange={handleChange}
+										onBlur={handleBlur}
+										required
+									/>
+									{/* Phone */}
+									<TextField
+										autoComplete="off"
+										fullWidth
+										margin="dense"
+										name="phone"
+										id="phone"
+										value={values.phone}
+										label="Phone"
+										type="text"
+										variant="outlined"
+										sx={{ gridColumn: 'span 2' }}
+										onChange={handleChange}
+										onBlur={handleBlur}
+										required
+									/>
+
 									{/* User Roles */}
-									<FormControl sx={{ gridColumn: 'span 4' }}>
+									<FormControl sx={{ gridColumn: 'span 2' }}>
 										<InputLabel id="role-label">Select Role</InputLabel>
 										<Select
 											labelId="role-label"

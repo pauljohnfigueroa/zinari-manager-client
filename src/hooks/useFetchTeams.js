@@ -24,7 +24,7 @@ const useFetchTeams = url => {
 				})
 		}
 		getTeams()
-	}, [])
+	}, [token])
 	return [teams, error]
 }
 

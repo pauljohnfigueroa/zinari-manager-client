@@ -1,5 +1,5 @@
 /* The ProjectForm.jsx component is used on both create and update Project.*/
-// import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
 // import * as yup from 'yup'
 
@@ -55,14 +55,16 @@ const MenuProps = {
 const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 	const isNonMobile = useMediaQuery('(min-width: 600px)')
 	const theme = useTheme()
-	//const [error, setError] = useState()
+	const [error, setError] = useState()
 	// const [value, setValue] = useState()
 
 	const formState = useSelector(state => state.project.formState)
 	const token = useSelector(state => state.auth.token)
 	// const teams = useSelector(state => state.team.teams)
-	const [teams, error] = useFetchTeams()
+	const [teams] = useFetchTeams()
 	const dispatch = useDispatch()
+
+	//console.log('teams', teams)
 
 	// When we do record update, the date format will be in the saved ISO format similar to 2018-04-04T16:00:00.000Z
 	// To enable the Update form to load the current record's date,
@@ -78,7 +80,9 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
        'Van Henry',
     ]
   */
-	const teamNames = teams.map(row => row.name)
+	const teamNames = teams.map(row => [row._id, row.name])
+
+	//console.log('teamNames', teamNames)
 
 	function getStyles(name, teamName, theme) {
 		return {
@@ -96,7 +100,8 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 	}
 
 	const handleCreateProject = async values => {
-		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/projects`, {
+		console.log('values', values)
+		await fetch(`${process.env.REACT_APP_SERVER_URL}/projects`, {
 			method: 'POST',
 			headers: {
 				'Content-type': 'application/json',
@@ -104,10 +109,16 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 			},
 			body: JSON.stringify(values)
 		})
-		const newProject = await response.json()
-
-		dispatch(createProject({ project: newProject }))
-		dispatch(addProjectFormState({ addProjectFormState: false }))
+			.then(async response => {
+				const newProject = await response.json()
+				console.log('newProject', newProject)
+				dispatch(createProject({ project: newProject }))
+				dispatch(addProjectFormState({ addProjectFormState: false }))
+			})
+			.catch(err => {
+				setError(err)
+				console.log(err)
+			})
 	}
 
 	const handleUpdateProject = async values => {
@@ -215,19 +226,19 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 										renderValue={selected => (
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
 												{selected.map(value => (
-													<Chip key={value} label={value} />
+													<Chip key={value} label={value[1]} />
 												))}
 											</Box>
 										)}
 										MenuProps={MenuProps}
 									>
-										{teamNames.map(name => (
+										{teamNames.map(team => (
 											<MenuItem
-												key={name}
-												value={name}
-												style={getStyles(name, values.teams, theme)}
+												key={team[0]}
+												value={team}
+												style={getStyles(team[0], values.teams, theme)}
 											>
-												{name}
+												{team[1]}
 											</MenuItem>
 										))}
 									</Select>
