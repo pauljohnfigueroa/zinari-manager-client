@@ -1,5 +1,5 @@
 /* The TaskForm.jsx component is used on both create and update Task.*/
-import { useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Formik, Form, Field } from 'formik'
 // import * as yup from 'yup'
 
@@ -22,7 +22,8 @@ import DialogBox from 'components/dialog/DialogBox'
 
 const TaskForm = ({ formLabel, initFormValues }) => {
 	const isNonMobile = useMediaQuery('(min-width: 600px)')
-	const [error, setError] = useState()
+	const [error, setError] = useState([])
+	const [teams, setTeams] = useState([])
 
 	const formState = useSelector(state => state.task.formState)
 	const token = useSelector(state => state.auth.token)
@@ -70,6 +71,27 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 		dispatch(addTaskFormState({ addTaskFormState: false }))
 	}
 
+	/* fetch teams */
+	useEffect(() => {
+		const getTeams = async () => {
+			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams`, {
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			})
+				.then(async response => {
+					setTeams(await response.json())
+				})
+				.catch(error => {
+					console.log(error)
+				})
+		}
+		getTeams()
+	}, [])
+
+	console.log('teams', teams)
+
 	return (
 		<div>
 			{error && <div>{error}</div>}
@@ -98,9 +120,9 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 							<Box
 								display="grid"
 								gap="20px"
-								gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+								gridTemplateColumns="repeat(3, minmax(0, 1fr))"
 								sx={{
-									'& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
+									'& > div': { gridColumn: isNonMobile ? undefined : 'span 3' }
 								}}
 							>
 								{/* <Field type="hidden" id="email" name="email" value={values.email} /> */}
@@ -115,7 +137,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 									label="Title"
 									type="text"
 									variant="outlined"
-									sx={{ gridColumn: 'span 4' }}
+									sx={{ gridColumn: 'span 3' }}
 									onChange={handleChange}
 									onBlur={handleBlur}
 									required
@@ -130,64 +152,65 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 									label="Description"
 									type="text"
 									variant="outlined"
-									sx={{ gridColumn: 'span 4' }}
+									sx={{ gridColumn: 'span 3' }}
 									onChange={handleChange}
 									onBlur={handleBlur}
 									required
 								/>
-								{/* Team */}
-								<FormControl sx={{ gridColumn: 'span 2' }} required>
-									<InputLabel id="priority-label">Team</InputLabel>
-									<Select
-										labelId="priority-label"
-										name="priority"
-										id="priority"
-										value={values.priority}
-										label="Priority"
-										onChange={handleChange}
-										onBlur={handleBlur}
-									>
-										<MenuItem value="Team 1">Team 1</MenuItem>
-										<MenuItem value="Team 2">Team 2</MenuItem>
-										<MenuItem value="Team 3">Team 3</MenuItem>
-									</Select>
-								</FormControl>
 
-								{/* Team */}
-								<FormControl sx={{ gridColumn: 'span 2' }} required>
-									<InputLabel id="priority-label">Task Owner</InputLabel>
+								{/* Project */}
+								<FormControl sx={{ gridColumn: 'span 1' }} required>
+									<InputLabel id="project-label">Project</InputLabel>
 									<Select
-										labelId="priority-label"
-										name="priority"
-										id="priority"
-										value={values.priority}
-										label="Priority"
+										labelId="project-label"
+										name="project"
+										id="project"
+										value={values.project}
+										label="project"
 										onChange={handleChange}
 										onBlur={handleBlur}
 									>
-										<MenuItem value="USer 1">User 1</MenuItem>
+										<MenuItem value="User 1">User 1</MenuItem>
 										<MenuItem value="User 2">User 2</MenuItem>
 										<MenuItem value="User 3">User 3</MenuItem>
 									</Select>
 								</FormControl>
 
-								{/* Priority */}
-								<FormControl sx={{ gridColumn: 'span 2' }} required>
-									<InputLabel id="priority-label">Priority</InputLabel>
+								{/* Team */}
+								<FormControl sx={{ gridColumn: 'span 1' }} required>
+									<InputLabel id="team-label">Team</InputLabel>
 									<Select
-										labelId="priority-label"
-										name="priority"
-										id="priority"
-										value={values.priority}
-										label="Priority"
+										labelId="team-label"
+										name="team"
+										id="team"
+										value={values.team}
+										label="Team"
 										onChange={handleChange}
 										onBlur={handleBlur}
 									>
-										<MenuItem value="Low">Low</MenuItem>
-										<MenuItem value="Normal">Normal</MenuItem>
-										<MenuItem value="Urgent">Urgent</MenuItem>
+										{teams && teams.map(team => <MenuItem value={team._id}>{team.name}</MenuItem>)}
 									</Select>
 								</FormControl>
+
+								{/* Team */}
+								<FormControl sx={{ gridColumn: 'span 1' }} required>
+									<InputLabel id="owner-label">Task Owner</InputLabel>
+									<Select
+										labelId="owner-label"
+										name="owner"
+										id="owner"
+										value={values.owner}
+										label="Owner"
+										onChange={handleChange}
+										onBlur={handleBlur}
+									>
+										<MenuItem value="User 1">User 1</MenuItem>
+										<MenuItem value="User 2">User 2</MenuItem>
+										<MenuItem value="User 3">User 3</MenuItem>
+									</Select>
+								</FormControl>
+
+								{/* Perspective */}
 								<FormControl sx={{ gridColumn: 'span 2' }} required>
 									<InputLabel id="perspective-label">Perspective</InputLabel>
 									<Select
@@ -205,7 +228,27 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 										<MenuItem value="Learning And Growth">Learning and Growth</MenuItem>
 									</Select>
 								</FormControl>
-								<FormControl sx={{ gridColumn: 'span 2' }}>
+
+								{/* Priority */}
+								<FormControl sx={{ gridColumn: 'span 1' }} required>
+									<InputLabel id="priority-label">Priority</InputLabel>
+									<Select
+										labelId="priority-label"
+										name="priority"
+										id="priority"
+										value={values.priority}
+										label="Priority"
+										onChange={handleChange}
+										onBlur={handleBlur}
+									>
+										<MenuItem value="Low">Low</MenuItem>
+										<MenuItem value="Normal">Normal</MenuItem>
+										<MenuItem value="Urgent">Urgent</MenuItem>
+									</Select>
+								</FormControl>
+
+								{/*  Due date */}
+								<FormControl sx={{ gridColumn: 'span 1' }}>
 									<LocalizationProvider dateAdapter={AdapterDayjs}>
 										<FormikDatePicker
 											name="dueDate"
