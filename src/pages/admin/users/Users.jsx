@@ -25,110 +25,110 @@ import { tokens } from '../../../theme.js'
 import FlexBetween from '../../../components/FlexBetween.jsx'
 
 const Users = ({ authPermissions }) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
+	const theme = useTheme()
+	const colors = tokens(theme.palette.mode)
 
-  // const [due, setDue] = useState()
+	// const [due, setDue] = useState()
 
-  const dispatch = useDispatch()
-  const user = useSelector(state => state.auth.user)
-  const token = useSelector(state => state.auth.token)
-  const formState = useSelector(state => state.user.formState)
-  const checkedIds = useSelector(state => state.datagrid.checkedIds)
+	const dispatch = useDispatch()
+	const user = useSelector(state => state.auth.user)
+	const token = useSelector(state => state.auth.token)
+	const formState = useSelector(state => state.user.formState)
+	const checkedIds = useSelector(state => state.datagrid.checkedIds)
 
-  // Create/Update Form
-  const initialValues = {
-    _id: undefined,
-    createdBy: user.email,
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    role: ''
-  }
-  const [initFormValues, setInitFormValues] = useState(initialValues)
+	// Create/Update Form
+	const initialValues = {
+		_id: undefined,
+		createdBy: user.email,
+		firstName: '',
+		lastName: '',
+		email: '',
+		phone: '',
+		password: '',
+		role: ''
+	}
+	const [initFormValues, setInitFormValues] = useState(initialValues)
 
-  /* OPEN FORM */
-  const openAddUserForm = () => {
-    setInitFormValues(initialValues)
-    dispatch(addUserFormState({ formState: true }))
-  }
+	/* Open the form */
+	const openAddUserForm = () => {
+		setInitFormValues(initialValues)
+		dispatch(addUserFormState({ formState: true }))
+	}
 
-  /* DELETE TASKS */
-  const handleDeleteUsers = async () => {
-    // Backend
-    console.log('checkedIds', checkedIds)
+	/* Delete Task/s */
+	const handleDeleteUsers = async () => {
+		// Backend
+		console.log('checkedIds', checkedIds)
 
-    checkedIds.map(async id => {
-      await fetch(`${process.env.REACT_APP_SERVER_URL}/users/${id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-    })
-    /* DISPATCH */
-    dispatch(deleteUsers({ checkedIds }))
-  }
+		checkedIds.map(async id => {
+			await fetch(`${process.env.REACT_APP_SERVER_URL}/users/${id}`, {
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			})
+		})
 
-  return authPermissions.includes('view_users_dashboard') ? (
-    <Box sx={{ p: '1rem 5%' }}>
-      {formState && (
-        <UserForm
-          formLabel={initFormValues._id ? 'Update User' : 'New User'}
-          initFormValues={initFormValues}
-        />
-      )}
-      <Typography
-        sx={{
-          color: colors.primary.main,
-          fontSize: '2rem',
-          fontWeight: '700',
-          letterSpacing: '2px'
-        }}
-      >
-        Users
-      </Typography>
+		dispatch(deleteUsers({ checkedIds }))
+	}
 
-      <Box>
-        <Box m="10px 0 0 0">
-          <Stack spacing={2} direction="row">
-            {authPermissions.includes('create_user') ? (
-              <Button onClick={openAddUserForm} variant="contained">
-                Add User
-              </Button>
-            ) : (
-              <Button onClick={openAddUserForm} disabled variant="contained">
-                Add User
-              </Button>
-            )}
+	return authPermissions.includes('view_users_dashboard') ? (
+		<Box sx={{ p: '1rem 5%' }}>
+			{formState && (
+				<UserForm
+					formLabel={initFormValues._id ? 'Update User' : 'New User'}
+					initFormValues={initFormValues}
+				/>
+			)}
+			<Typography
+				sx={{
+					color: colors.primary.main,
+					fontSize: '2rem',
+					fontWeight: '700',
+					letterSpacing: '2px'
+				}}
+			>
+				Users
+			</Typography>
 
-            {authPermissions.includes('delete_users') ? (
-              <Button
-                disabled={checkedIds.length ? false : true}
-                onClick={handleDeleteUsers}
-                variant="outlined"
-              >
-                Delete Selected
-              </Button>
-            ) : (
-              <Button disabled onClick={handleDeleteUsers} variant="outlined">
-                Delete Selected
-              </Button>
-            )}
-          </Stack>
-        </Box>
-        <Box m="10px 0 0 0">
-          <UsersGridWidget initFormValues={initFormValues} setInitFormValues={setInitFormValues} />
-        </Box>
-      </Box>
-    </Box>
-  ) : (
-    <Box>
-      <Typography>You have no permission to view this page.</Typography>
-    </Box>
-  )
+			<Box>
+				<Box m="10px 0 0 0">
+					<Stack spacing={2} direction="row">
+						{authPermissions.includes('create_user') ? (
+							<Button onClick={openAddUserForm} variant="contained">
+								Add User
+							</Button>
+						) : (
+							<Button onClick={openAddUserForm} disabled variant="contained">
+								Add User
+							</Button>
+						)}
+
+						{authPermissions.includes('delete_users') ? (
+							<Button
+								disabled={checkedIds.length ? false : true}
+								onClick={handleDeleteUsers}
+								variant="outlined"
+							>
+								Delete Selected
+							</Button>
+						) : (
+							<Button disabled onClick={handleDeleteUsers} variant="outlined">
+								Delete Selected
+							</Button>
+						)}
+					</Stack>
+				</Box>
+				<Box m="10px 0 0 0">
+					<UsersGridWidget initFormValues={initFormValues} setInitFormValues={setInitFormValues} />
+				</Box>
+			</Box>
+		</Box>
+	) : (
+		<Box>
+			<Typography>You have no permission to view this page.</Typography>
+		</Box>
+	)
 }
 
 export default Users

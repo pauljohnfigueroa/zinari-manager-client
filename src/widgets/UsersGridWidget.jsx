@@ -1,9 +1,5 @@
-/* 
-The UsersGridWidget.jsx component is a datagrid where all users are listed.
+/* The UsersGridWidget.jsx component is a datagrid where all users are listed. */
 
-Components
-
-*/
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
@@ -28,9 +24,8 @@ const UsersGridWidget = ({ initFormValues, setInitFormValues }) => {
   const formState = useSelector(state => state.user.formState)
   const token = useSelector(state => state.auth.token)
 
-  /* FETCH TASKS */
+  /* Fetch tasks */
   useEffect(() => {
-    // Backend
     const getUsers = async () => {
       const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/users`, {
         method: 'GET',
@@ -38,20 +33,18 @@ const UsersGridWidget = ({ initFormValues, setInitFormValues }) => {
       })
       const users = await response.json()
 
-      // Frontend
-      /* Dispatch */
       dispatch(fetchUsers({ users }))
     }
     getUsers()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* UPDATE TASK FORM */
+  /* Update task */
   const showEditForm = row => {
     dispatch(addUserFormState({ formState: true }))
     setInitFormValues(row)
   }
 
-  /* GRID COLUMNS */
+  /* Grid columns */
   const columns = [
     {
       field: '_id',
