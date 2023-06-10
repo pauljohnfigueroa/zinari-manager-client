@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-const useFetchUsers = url => {
+const useFetchUsers = () => {
 	const [error, setError] = useState([])
 	const [users, setUsers] = useState([])
 	const token = useSelector(state => state.auth.token)
 
 	useEffect(() => {
 		const getUsers = async () => {
-			await fetch(`${url}/users`, {
+			await fetch(`${process.env.REACT_APP_SERVER_URL}/users`, {
 				method: 'GET',
 				headers: { Authorization: `Bearer ${token}` }
 			})

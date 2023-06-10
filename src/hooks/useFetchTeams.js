@@ -9,7 +9,7 @@ const useFetchTeams = url => {
 	/* fetch teams */
 	useEffect(() => {
 		const getTeams = async () => {
-			await fetch(`${url}/teams`, {
+			await fetch(`${process.env.REACT_APP_SERVER_URL}/teams`, {
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${token}`

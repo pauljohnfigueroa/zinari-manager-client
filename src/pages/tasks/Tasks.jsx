@@ -30,7 +30,7 @@ const Tasks = () => {
 	// const [due, setDue] = useState()
 
 	const dispatch = useDispatch()
-	const user = useSelector(state => state.auth.user)
+	// const user = useSelector(state => state.auth.user)
 	const token = useSelector(state => state.auth.token)
 	const formState = useSelector(state => state.task.formState)
 	const checkedIds = useSelector(state => state.datagrid.checkedIds)

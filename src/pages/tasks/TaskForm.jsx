@@ -1,5 +1,4 @@
 /* The TaskForm.jsx component is used on both create and update Task.*/
-import { useEffect, useState } from 'react'
 import { Formik, Form } from 'formik'
 // import * as yup from 'yup'
 
@@ -24,10 +23,8 @@ import useFetchTeams from 'hooks/useFetchTeams'
 
 const TaskForm = ({ formLabel, initFormValues }) => {
 	const isNonMobile = useMediaQuery('(min-width: 600px)')
-	// const [error, setError] = useState([])
-	// const [teams, setTeams] = useState([])
 
-	const [teams, error] = useFetchTeams(process.env.REACT_APP_SERVER_URL)
+	const [teams, error] = useFetchTeams()
 
 	const formState = useSelector(state => state.task.formState)
 	const token = useSelector(state => state.auth.token)
@@ -62,7 +59,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 	/* Update task handler */
 
 	const handleUpdateTask = async values => {
-		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/${values._id}`, {
+		await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/${values._id}`, {
 			method: 'PATCH',
 			headers: {
 				'Content-type': 'application/json',
@@ -74,28 +71,6 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 		dispatch(updateTask({ task: values }))
 		dispatch(addTaskFormState({ addTaskFormState: false }))
 	}
-
-	// /* fetch teams */
-	// useEffect(() => {
-	// 	const getTeams = async () => {
-	// 		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams`, {
-	// 			method: 'GET',
-	// 			headers: {
-	// 				Authorization: `Bearer ${token}`
-	// 			}
-	// 		})
-	// 			.then(async response => {
-	// 				setTeams(await response.json())
-	// 			})
-	// 			.catch(err => {
-	// 				console.log(err)
-	// 				setError(err)
-	// 			})
-	// 	}
-	// 	getTeams()
-	// }, [])
-
-	console.log('teams', teams)
 
 	return (
 		<div>

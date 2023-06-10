@@ -41,7 +41,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 	const user = useSelector(state => state.auth.user)
 	const token = useSelector(state => state.auth.token)
 
-	const [users, error] = useFetchUsers(process.env.REACT_APP_SERVER_URL)
+	const [users, error] = useFetchUsers()
 
 	const dispatch = useDispatch()
 
