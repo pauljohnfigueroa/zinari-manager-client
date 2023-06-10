@@ -82,7 +82,6 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 
 	/* Create a team handler*/
 	const handleCreateTeam = async values => {
-		// await registerUser(values.email, values.name, values.password, values.phone, values.roles)
 		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams`, {
 			method: 'POST',
 			headers: {

@@ -20,10 +20,14 @@ import FormikDatePicker from 'components/FormikDatePicker'
 
 import DialogBox from 'components/dialog/DialogBox'
 
+import useFetchTeams from 'hooks/useFetchTeams'
+
 const TaskForm = ({ formLabel, initFormValues }) => {
 	const isNonMobile = useMediaQuery('(min-width: 600px)')
-	const [error, setError] = useState([])
-	const [teams, setTeams] = useState([])
+	// const [error, setError] = useState([])
+	// const [teams, setTeams] = useState([])
+
+	const [teams, error] = useFetchTeams(process.env.REACT_APP_SERVER_URL)
 
 	const formState = useSelector(state => state.task.formState)
 	const token = useSelector(state => state.auth.token)
@@ -71,25 +75,25 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 		dispatch(addTaskFormState({ addTaskFormState: false }))
 	}
 
-	/* fetch teams */
-	useEffect(() => {
-		const getTeams = async () => {
-			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams`, {
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${token}`
-				}
-			})
-				.then(async response => {
-					setTeams(await response.json())
-				})
-				.catch(err => {
-					console.log(err)
-					setError(err)
-				})
-		}
-		getTeams()
-	}, [])
+	// /* fetch teams */
+	// useEffect(() => {
+	// 	const getTeams = async () => {
+	// 		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams`, {
+	// 			method: 'GET',
+	// 			headers: {
+	// 				Authorization: `Bearer ${token}`
+	// 			}
+	// 		})
+	// 			.then(async response => {
+	// 				setTeams(await response.json())
+	// 			})
+	// 			.catch(err => {
+	// 				console.log(err)
+	// 				setError(err)
+	// 			})
+	// 	}
+	// 	getTeams()
+	// }, [])
 
 	console.log('teams', teams)
 
