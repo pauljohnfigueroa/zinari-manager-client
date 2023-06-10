@@ -80,7 +80,7 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
        'Van Henry',
     ]
   */
-	const teamNames = teams.map(row => [row._id, row.name])
+	const teamNames = teams.map(team => [team._id, team.name])
 
 	//console.log('teamNames', teamNames)
 
@@ -226,7 +226,7 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 										renderValue={selected => (
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
 												{selected.map(value => (
-													<Chip key={value} label={value[1]} />
+													<Chip key={value[0]} label={value[1]} />
 												))}
 											</Box>
 										)}

@@ -58,9 +58,12 @@ const TeamForm = ({ formLabel, initFormValues }) => {
        'Van Henry',
     ]
   */
-	const memberNames = users.map(row =>
-		`${row.firstName} ${row.lastName} ${row.extName ? row.extName : ''}`.trim()
-	)
+	const memberNames = users.map(user => [
+		user._id,
+		`${user.firstName} ${user.lastName} ${user.extName ? user.extName : ''}`.trim()
+	])
+
+	//console.log('memberNames', memberNames)
 
 	function getStyles(name, personName, theme) {
 		return {
@@ -82,6 +85,8 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 
 	/* Create a team handler*/
 	const handleCreateTeam = async values => {
+		console.log('values', values)
+
 		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams`, {
 			method: 'POST',
 			headers: {
@@ -91,6 +96,8 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 			body: JSON.stringify({ ...values, leader: user._id })
 		})
 		const newTeam = await response.json()
+
+		console.log('newTeam', newTeam)
 
 		/* DISPATCH */
 		dispatch(createTeam({ team: newTeam }))
@@ -196,19 +203,19 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 										renderValue={selected => (
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
 												{selected.map(value => (
-													<Chip key={value} label={value} />
+													<Chip key={value[0]} label={value[1]} />
 												))}
 											</Box>
 										)}
 										MenuProps={MenuProps}
 									>
-										{memberNames.map(name => (
+										{memberNames.map(member => (
 											<MenuItem
-												key={name}
-												value={name}
-												style={getStyles(name, values.members, theme)}
+												key={member[0]} // [0] is _id, [1] is full name
+												value={member} // member is an Array()
+												style={getStyles(member[0], values.members, theme)}
 											>
-												{name}
+												{member[1]}
 											</MenuItem>
 										))}
 									</Select>
