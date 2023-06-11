@@ -50,17 +50,16 @@ const Tasks = () => {
 	}
 	const [initFormValues, setInitFormValues] = useState(initialValues)
 
-	/* OPEN FORM */
+	/* open form */
 	const openAddTaskForm = () => {
 		setInitFormValues(initialValues)
 		dispatch(addTaskFormState({ formState: true }))
 	}
 
-	/* DELETE TASKS */
+	/* delete tasks */
 	const handleDeleteTasks = async () => {
 		// Backend
-		console.log('checkedIds', checkedIds)
-
+		//console.log('checkedIds', checkedIds)
 		checkedIds.map(async id => {
 			await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/${id}`, {
 				method: 'DELETE',
@@ -69,8 +68,7 @@ const Tasks = () => {
 				}
 			})
 		})
-		// Frontend
-		/* DISPATCH */
+
 		dispatch(deleteTasks({ checkedIds }))
 	}
 

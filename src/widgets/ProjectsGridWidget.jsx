@@ -137,9 +137,9 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 						cursor: 'pointer'
 					}
 				}}
-				components={{
-					Toolbar: GridToolbar,
-					LoadingOverlay: LinearProgress
+				slots={{
+					toolbar: GridToolbar,
+					loadingOverlay: LinearProgress
 				}}
 				rows={projects ? projects : []}
 				columns={columns}
