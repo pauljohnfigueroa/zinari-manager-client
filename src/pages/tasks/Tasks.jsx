@@ -32,7 +32,7 @@ const Tasks = () => {
 	const dispatch = useDispatch()
 	// const user = useSelector(state => state.auth.user)
 	const token = useSelector(state => state.auth.token)
-	const formState = useSelector(state => state.task.formState)
+	const open = useSelector(state => state.task.open)
 	const checkedIds = useSelector(state => state.datagrid.checkedIds)
 
 	// Create/Update Form
@@ -53,7 +53,7 @@ const Tasks = () => {
 	/* open form */
 	const openAddTaskForm = () => {
 		setInitFormValues(initialValues)
-		dispatch(addTaskFormState({ formState: true }))
+		dispatch(addTaskFormState({ open: true }))
 	}
 
 	/* delete tasks */
@@ -74,7 +74,7 @@ const Tasks = () => {
 
 	return (
 		<Box sx={{ p: '1rem 5%' }}>
-			{formState && (
+			{open && (
 				<TaskForm
 					formLabel={initFormValues._id ? 'Update Task' : 'New Task'}
 					initFormValues={initFormValues}

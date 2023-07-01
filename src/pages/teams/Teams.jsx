@@ -28,7 +28,7 @@ const Teams = () => {
 	const dispatch = useDispatch()
 	const user = useSelector(state => state.auth.user)
 	const token = useSelector(state => state.auth.token)
-	const formState = useSelector(state => state.team.formState)
+	const open = useSelector(state => state.team.open)
 	const checkedIds = useSelector(state => state.datagrid.checkedIds)
 
 	// Create/Update Form
@@ -44,7 +44,7 @@ const Teams = () => {
 	/* OPEN FORM */
 	const openAddTeamForm = () => {
 		setInitFormValues(initialValues)
-		dispatch(addTeamFormState({ formState: true }))
+		dispatch(addTeamFormState({ open: true }))
 	}
 
 	/* DELETE TeamS */
@@ -67,7 +67,7 @@ const Teams = () => {
 
 	return (
 		<Box sx={{ p: '1rem 5%' }}>
-			{formState && (
+			{open && (
 				<TeamForm
 					formLabel={initFormValues._id ? 'Update Team' : 'New Team'}
 					initFormValues={initFormValues}

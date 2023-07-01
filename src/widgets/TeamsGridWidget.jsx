@@ -11,7 +11,7 @@ import { useTheme } from '@emotion/react'
 import { fetchTeams, addTeamFormState } from 'state/teamsSlice.js'
 import TeamForm from 'pages/teams/TeamForm.jsx'
 
-import { Box, IconButton, Chip, Avatar, Stack } from '@mui/material'
+import { Box, IconButton, Chip, Avatar, AvatarGroup, Stack } from '@mui/material'
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import LinearProgress from '@mui/material/LinearProgress'
@@ -26,7 +26,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 
 	const dispatch = useDispatch()
 	const teams = useSelector(state => state.team.teams)
-	const formState = useSelector(state => state.team.formState)
+	const open = useSelector(state => state.team.open)
 	const token = useSelector(state => state.auth.token)
 	const user = useSelector(state => state.auth.user)
 
@@ -53,7 +53,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 
 	/* UPDATE Team FORM */
 	const showEditForm = row => {
-		dispatch(addTeamFormState({ formState: true }))
+		dispatch(addTeamFormState({ open: true }))
 		setInitFormValues(row)
 	}
 
@@ -83,18 +83,11 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 			flex: 1,
 			renderCell: rowdata => (
 				/* Show names of Team Members as a <Chip /> */
-				<Stack direction="column" spacing={1} justifyContent="center" alignItems="center">
+				<AvatarGroup max={2} variant="circular">
 					{rowdata.row.members.map((item, index) => (
-						<Chip
-							key={index}
-							size="small"
-							avatar={<Avatar alt={item} src="/assets/paul.jpg" />}
-							label={item}
-							variant="outlined"
-							color="success"
-						/>
+						<Avatar alt={item} src="/assets/paul.jpg" sx={{ width: 24, height: 24 }} />
 					))}
-				</Stack>
+				</AvatarGroup>
 			)
 		},
 		{
@@ -115,7 +108,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 
 	return (
 		<Box height="60vh">
-			{formState && (
+			{open && (
 				<TeamForm
 					formLabel={initFormValues._id ? 'Update Team' : 'New Team'}
 					initFormValues={initFormValues}

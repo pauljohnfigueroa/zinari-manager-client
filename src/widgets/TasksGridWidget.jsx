@@ -25,12 +25,12 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 
 	const dispatch = useDispatch()
 	const tasks = useSelector(state => state.task.tasks)
-	const formState = useSelector(state => state.task.formState)
+	const open = useSelector(state => state.task.open)
 	const token = useSelector(state => state.auth.token)
 	const user = useSelector(state => state.auth.user)
-	/* FETCH TASKS */
+
+	/* fetch tasks */
 	useEffect(() => {
-		// Backend
 		const getTasks = async () => {
 			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/user`, {
 				method: 'POST',
@@ -42,20 +42,18 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 			})
 			const tasks = await response.json()
 
-			// Frontend
-			/* Dispatch */
 			dispatch(fetchTasks({ tasks }))
 		}
 		getTasks()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-	/* UPDATE TASK FORM */
+	/* Update task form */
 	const showEditForm = row => {
-		dispatch(addTaskFormState({ formState: true }))
+		dispatch(addTaskFormState({ open: true }))
 		setInitFormValues(row)
 	}
 
-	/* GRID COLUMNS */
+	/* grid columns */
 	const columns = [
 		{
 			field: '_id',
@@ -100,19 +98,19 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 	return (
 		<Box height="60vh">
 			{/* used by the edit button */}
-			{formState && (
+			{open && (
 				<TaskForm
 					formLabel={initFormValues._id ? 'Update Task' : 'New Task'}
 					initFormValues={initFormValues}
 				/>
 			)}
 
-			{/* DATAGRID */}
+			{/* datagrid */}
 			<DataGrid
 				initialState={{
 					columns: {
 						columnVisibilityModel: {
-							// Hide columns listed here, the other columns will remain visible
+							// Hide these columns by default, the other columns will remain visible
 							_id: false
 						}
 					}

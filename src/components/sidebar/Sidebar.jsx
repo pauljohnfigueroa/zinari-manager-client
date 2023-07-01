@@ -1,38 +1,9 @@
-import {
-	Box,
-	// Divider,
-	Drawer,
-	IconButton,
-	List,
-	// ListItem,
-	// ListItemButton,
-	// ListItemIcon,
-	// ListItemText,
-	Typography,
-	useTheme
-} from '@mui/material'
+import { Avatar, Box, Drawer, IconButton, List, Typography, Divider, useTheme } from '@mui/material'
 
-import {
-	ChevronLeft,
-	// ChevronRightOutlined,
-	// HomeOutlined,
-	Dashboard
-	// ShoppingCartOutlined,
-	// Groups2Outlined,
-	// ReceiptLongOutlined,
-	// PointOfSaleOutlined
-} from '@mui/icons-material'
+import { ChevronLeft, Dashboard } from '@mui/icons-material'
 
 import InboxIcon from '@mui/icons-material/MoveToInbox'
-// import ExpandLess from '@mui/icons-material/ExpandLess'
-// import ExpandMore from '@mui/icons-material/ExpandMore'
-// import Collapse from '@mui/material/Collapse'
-// import StarBorder from '@mui/icons-material/StarBorder'
-
-// import { useState, useEffect } from 'react'
-// import { useLocation, useNavigate } from 'react-router-dom'
 import FlexBetween from 'components/FlexBetween'
-// import profileImage from '../../assets/paul.jpg'
 
 import SidebarMenuItem from './SidebarMenuItem'
 
@@ -99,20 +70,7 @@ const Sidebar = ({
 	setIsSidebarOpen,
 	authPermissions
 }) => {
-	// const { pathname } = useLocation() // the current path
-	// const [activePath, setActivePath] = useState('')
-	// const [open, setOpen] = useState(true)
-	// const navigate = useNavigate()
 	const theme = useTheme() // from the ThemeProvider
-
-	// useEffect(() => {
-	// 	setActivePath(pathname.substring(1))
-	// }, [pathname])
-
-	// const handleToggleMenu = () => {
-	// 	setOpen(!open)
-	// }
-
 	return (
 		<Box component="nav">
 			{isSidebarOpen && (
@@ -140,6 +98,7 @@ const Sidebar = ({
 										Zinari
 									</Typography>
 								</Box>
+
 								{!isNonMobile && (
 									<IconButton
 										onClick={() => {
@@ -152,6 +111,19 @@ const Sidebar = ({
 							</FlexBetween>
 						</Box>
 
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								gap: 2,
+								alignItems: 'center',
+								margin: '20px 0 20px 0'
+							}}
+						>
+							<Avatar alt="Paul Figueroa" src="/assets/paul.jpg" sx={{ width: 64, height: 64 }} />
+							<Typography sx={{ fontSize: 14 }}>Paul Figueroa</Typography>
+						</Box>
+						<Divider />
 						<List>
 							{sidebarMenuItems.map(({ name, link, Icon, items }, index) => {
 								return (

@@ -30,7 +30,7 @@ const Projects = () => {
 	const dispatch = useDispatch()
 	const user = useSelector(state => state.auth.user)
 	const token = useSelector(state => state.auth.token)
-	const formState = useSelector(state => state.task.formState)
+	const open = useSelector(state => state.task.open)
 	const checkedIds = useSelector(state => state.datagrid.checkedIds)
 
 	// Create/Update Form
@@ -48,7 +48,7 @@ const Projects = () => {
 	/* OPEN FORM */
 	const openAddProjectForm = () => {
 		setInitFormValues(initialValues)
-		dispatch(addProjectFormState({ formState: true }))
+		dispatch(addProjectFormState({ open: true }))
 	}
 
 	/* DELETE Projects */
@@ -71,7 +71,7 @@ const Projects = () => {
 
 	return (
 		<Box sx={{ p: '1rem 5%' }}>
-			{formState && (
+			{open && (
 				<ProjectForm
 					formLabel={initFormValues._id ? 'Update Project' : 'New Project'}
 					initFormValues={initFormValues}

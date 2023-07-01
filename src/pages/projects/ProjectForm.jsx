@@ -58,7 +58,7 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 	const [error, setError] = useState()
 	// const [value, setValue] = useState()
 
-	const formState = useSelector(state => state.project.formState)
+	const open = useSelector(state => state.project.open)
 	const token = useSelector(state => state.auth.token)
 	// const teams = useSelector(state => state.team.teams)
 	const [teams] = useFetchTeams()
@@ -95,7 +95,7 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 
 	const handleClose = (event, reason) => {
 		if (reason !== 'backdropClick') {
-			dispatch(addProjectFormState({ formState: false }))
+			dispatch(addProjectFormState({ open: false }))
 		}
 	}
 
@@ -113,7 +113,7 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 				const newProject = await response.json()
 				console.log('newProject', newProject)
 				dispatch(createProject({ project: newProject }))
-				dispatch(addProjectFormState({ addProjectFormState: false }))
+				dispatch(addProjectFormState({ open: false }))
 			})
 			.catch(err => {
 				setError(err)
@@ -133,7 +133,7 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 		})
 
 		dispatch(updateProject({ project: values }))
-		dispatch(addProjectFormState({ addProjectFormState: false }))
+		dispatch(addProjectFormState({ open: false }))
 	}
 
 	return (
@@ -142,7 +142,7 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 			<DialogBox
 				handleClose={handleClose}
 				formLabel={formLabel}
-				formState={formState}
+				open={open}
 				fullWidth={true}
 				maxWidth="sm"
 				requiredFields="Please fill up all the required ( * ) fields."

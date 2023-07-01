@@ -26,7 +26,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 
 	const [teams, error] = useFetchTeams()
 
-	const formState = useSelector(state => state.task.formState)
+	const open = useSelector(state => state.task.open)
 	const token = useSelector(state => state.auth.token)
 	const user = useSelector(state => state.auth.user)
 	const dispatch = useDispatch()
@@ -35,7 +35,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 
 	const handleClose = (event, reason) => {
 		if (reason !== 'backdropClick') {
-			dispatch(addTaskFormState({ formState: false }))
+			dispatch(addTaskFormState({ open: false }))
 		}
 	}
 
@@ -53,7 +53,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 		const newTask = await response.json()
 
 		dispatch(createTask({ task: newTask }))
-		dispatch(addTaskFormState({ addTaskFormState: false }))
+		dispatch(addTaskFormState({ open: false }))
 	}
 
 	/* Update task handler */
@@ -69,7 +69,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 		})
 
 		dispatch(updateTask({ task: values }))
-		dispatch(addTaskFormState({ addTaskFormState: false }))
+		dispatch(addTaskFormState({ open: false }))
 	}
 
 	return (
@@ -78,7 +78,7 @@ const TaskForm = ({ formLabel, initFormValues }) => {
 			<DialogBox
 				handleClose={handleClose}
 				formLabel={formLabel}
-				formState={formState}
+				open={open}
 				fullWidth={true}
 				maxWidth="sm"
 				requiredFields="Please fill up all the required ( * ) fields."

@@ -1,9 +1,5 @@
-/* 
-The ProjectsGridWidget.jsx component is a datagrid where all Projects are listed.
+/* The ProjectsGridWidget.jsx component is a datagrid where all Projects are listed. */
 
-Components
-
-*/
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
@@ -29,7 +25,7 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 
 	const dispatch = useDispatch()
 	const projects = useSelector(state => state.project.projects)
-	const formState = useSelector(state => state.project.formState)
+	const open = useSelector(state => state.project.open)
 	const token = useSelector(state => state.auth.token)
 
 	const handleRowClick = params => {
@@ -55,7 +51,7 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 
 	/* UPDATE Project FORM */
 	const showEditForm = row => {
-		dispatch(addProjectFormState({ formState: true }))
+		dispatch(addProjectFormState({ open: true }))
 		setInitFormValues(row)
 	}
 
@@ -110,7 +106,7 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 
 	return (
 		<Box height="60vh">
-			{formState && (
+			{open && (
 				<ProjectForm
 					formLabel={initFormValues._id ? 'Update Project' : 'New Project'}
 					initFormValues={initFormValues}

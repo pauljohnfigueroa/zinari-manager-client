@@ -37,7 +37,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 	const isNonMobile = useMediaQuery('(min-width: 600px)')
 	const theme = useTheme()
 
-	const formState = useSelector(state => state.team.formState)
+	const open = useSelector(state => state.team.open)
 	const user = useSelector(state => state.auth.user)
 	const token = useSelector(state => state.auth.token)
 
@@ -79,7 +79,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 	const handleClose = (event, reason) => {
 		if (reason !== 'backdropClick') {
 			/* DISPATCH */
-			dispatch(addTeamFormState({ formState: false }))
+			dispatch(addTeamFormState({ open: false }))
 		}
 	}
 
@@ -101,7 +101,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 
 		/* DISPATCH */
 		dispatch(createTeam({ team: newTeam }))
-		dispatch(addTeamFormState({ addTeamFormState: false }))
+		dispatch(addTeamFormState({ open: false }))
 	}
 
 	/* Update a team handler*/
@@ -119,7 +119,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 
 		/* DISPATCH */
 		dispatch(updateTeam({ team: values }))
-		dispatch(addTeamFormState({ addTeamFormState: false }))
+		dispatch(addTeamFormState({ open: false }))
 	}
 
 	return (
@@ -128,7 +128,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 			<DialogBox
 				handleClose={handleClose}
 				formLabel={formLabel}
-				formState={formState}
+				open={open}
 				fullWidth={true}
 				maxWidth="sm"
 				requiredFields="Please fill up all the required ( * ) fields."
