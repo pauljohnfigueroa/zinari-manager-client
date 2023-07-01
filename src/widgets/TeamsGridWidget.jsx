@@ -17,7 +17,6 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import LinearProgress from '@mui/material/LinearProgress'
 
 import { setCheckedIds } from 'state/datagridSlice.js'
-
 import { tokens } from '../theme.js'
 
 const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
@@ -83,9 +82,26 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 			flex: 1,
 			renderCell: rowdata => (
 				/* Show names of Team Members as a <Chip /> */
-				<AvatarGroup max={2} variant="circular">
-					{rowdata.row.members.map((item, index) => (
-						<Avatar alt={item} src="/assets/paul.jpg" sx={{ width: 24, height: 24 }} />
+				<AvatarGroup
+					max={2}
+					variant="circular"
+					sx={{
+						'& .MuiAvatarGroup-avatar': {
+							width: 24,
+							height: 24,
+							fontSize: 12,
+							border: 'none'
+						}
+					}}
+				>
+					{rowdata.row.teamMembers.map(member => (
+						<Avatar
+							title={`${member.firstName} ${member.firstName}`}
+							alt={`${member.firstName} ${member.firstName}`}
+							src={`/assets/images/${member.photo}`}
+							sx={{ width: 24, height: 24 }}
+							onClick={() => alert(`${member.firstName} ${member.firstName}`)}
+						/>
 					))}
 				</AvatarGroup>
 			)

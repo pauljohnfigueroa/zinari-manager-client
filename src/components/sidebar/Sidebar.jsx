@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux'
 import { Avatar, Box, Drawer, IconButton, List, Typography, Divider, useTheme } from '@mui/material'
 
 import { ChevronLeft, Dashboard } from '@mui/icons-material'
@@ -71,6 +72,9 @@ const Sidebar = ({
 	authPermissions
 }) => {
 	const theme = useTheme() // from the ThemeProvider
+
+	const user = useSelector(state => state.auth.user)
+
 	return (
 		<Box component="nav">
 			{isSidebarOpen && (
@@ -120,8 +124,12 @@ const Sidebar = ({
 								margin: '20px 0 20px 0'
 							}}
 						>
-							<Avatar alt="Paul Figueroa" src="/assets/paul.jpg" sx={{ width: 64, height: 64 }} />
-							<Typography sx={{ fontSize: 14 }}>Paul Figueroa</Typography>
+							<Avatar
+								alt={`${user.firstName} ${user.lastName}`}
+								src={`/assets/images/${user.photo}`}
+								sx={{ width: 64, height: 64 }}
+							/>
+							<Typography sx={{ fontSize: 14 }}>{`${user.firstName} ${user.lastName}`}</Typography>
 						</Box>
 						<Divider />
 						<List>
