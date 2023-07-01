@@ -59,7 +59,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 	if (initFormValues.teamMembers) {
 		teamMembers = initFormValues.teamMembers.map(
 			teamMember =>
-				`${teamMember._id},${teamMember.firstName} ${teamMember.lastName},${teamMember.photo}`
+				`${teamMember._id}|${teamMember.firstName} ${teamMember.lastName}|${teamMember.photo}`
 		)
 		// update
 		initialFormValues = { ...initialFormValues, teamMembers }
@@ -79,7 +79,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 		]
   	*/
 	const memberNames = users.map(
-		user => `${user._id},${user.firstName} ${user.lastName},${user.photo}`
+		user => `${user._id}|${user.firstName} ${user.lastName}|${user.photo}`
 	)
 
 	function getStyles(name, personName, theme) {
@@ -222,12 +222,12 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 													value =>
 														value && (
 															<Chip
-																key={value.split(',')[0]} // _id
-																label={value.split(',')[1]} // full name
+																key={value.split('|')[0]} // _id
+																label={value.split('|')[1]} // full name
 																avatar={
 																	<Avatar
-																		alt={value.split(',')[1]} // full name
-																		src={`/assets/images/${value.split(',')[2]}`} // photo
+																		alt={value.split('|')[1]} // full name
+																		src={`/assets/images/${value.split('|')[2]}`} // photo
 																	/>
 																}
 															/>
@@ -240,16 +240,16 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 										{/* Drop down items */}
 										{memberNames.map((member, index) => (
 											<MenuItem
-												key={member.split(',')[0]} // [0] is _id, [1] is full name
+												key={member.split('|')[0]} // [0] is _id, [1] is full name
 												value={member} // member is an Array()
 												style={getStyles(member[0], values.members, theme)}
 											>
 												<Box sx={{ display: 'flex', alignItems: 'center' }}>
 													<Avatar
-														src={`/assets/images/${member.split(',')[2]}`}
+														src={`/assets/images/${member.split('|')[2]}`}
 														sx={{ height: 24, width: 24, margin: '0 4px' }}
 													/>
-													{member.split(',')[1]}
+													{member.split('|')[1]}
 												</Box>
 											</MenuItem>
 										))}

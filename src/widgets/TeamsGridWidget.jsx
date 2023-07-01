@@ -50,13 +50,13 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 		getTeams()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-	/* UPDATE Team FORM */
+	/* Update Team form */
 	const showEditForm = row => {
 		dispatch(addTeamFormState({ open: true }))
 		setInitFormValues(row)
 	}
 
-	/* GRID COLUMNS */
+	/* Grid columns */
 	const columns = [
 		{
 			field: '_id',
@@ -65,7 +65,8 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 
 		{
 			field: 'name',
-			headerName: 'Name'
+			headerName: 'Name',
+			flex: 1
 		},
 		{
 			field: 'description',
@@ -101,18 +102,18 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 						'& .MuiAvatarGroup-avatar': {
 							width: 24,
 							height: 24,
-							fontSize: 12,
+							fontSize: '.8rem',
 							border: 'none'
 						}
 					}}
 				>
 					{rowData.row.teamMembers.map(member => (
 						<Avatar
-							title={`${member.firstName} ${member.firstName}`}
-							alt={`${member.firstName} ${member.firstName}`}
+							title={`${member.firstName} ${member.lastName}`}
+							alt={`${member.firstName} ${member.lastName}`}
 							src={`/assets/images/${member.photo}`}
 							sx={{ width: 24, height: 24 }}
-							onClick={() => alert(`${member.firstName} ${member.firstName}`)}
+							onClick={() => alert(`${member.firstName} ${member.lastName}`)}
 						/>
 					))}
 				</AvatarGroup>
@@ -125,7 +126,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 			renderCell: rowData => {
 				return (
 					<Box>
-						<IconButton onClick={() => showEditForm(rowData.row)}>
+						<IconButton title="Edit" onClick={() => showEditForm(rowData.row)}>
 							<ModeEditOutlineOutlinedIcon />
 						</IconButton>
 					</Box>
