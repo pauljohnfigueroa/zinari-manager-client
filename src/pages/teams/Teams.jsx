@@ -47,7 +47,7 @@ const Teams = () => {
 		dispatch(addTeamFormState({ open: true }))
 	}
 
-	/* DELETE TeamS */
+	/* DELETE Teams */
 	const handleDeleteTeams = async () => {
 		// Backend
 		console.log('checkedIds', checkedIds)

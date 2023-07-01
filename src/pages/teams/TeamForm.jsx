@@ -51,12 +51,25 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 	const token = useSelector(state => state.auth.token)
 
 	const [users, error] = useFetchUsers()
-
 	const dispatch = useDispatch()
 
-	// Just to make the variable naming consistent with other forms
-	const initialFormValues = initFormValues
+	let initialFormValues = initFormValues
+	let teamMembersIds = []
 
+	if (initFormValues.teamMembers) {
+		const teamMembers = initFormValues.teamMembers.map(teamMember => [
+			teamMember._id,
+			`${teamMember.firstName} ${teamMember.lastName} ${
+				teamMember.extName ? teamMember.extName : ''
+			}`.trim(),
+			teamMember.photo
+		])
+		// update
+		initialFormValues = { ...initialFormValues, teamMembers }
+		teamMembersIds = initFormValues.teamMembers.map(teamMember => teamMember._id)
+	}
+
+	console.log('initialFormValues', initialFormValues)
 	/* ****** Chip ********* */
 
 	/* 
@@ -84,6 +97,8 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 		}
 	}
 
+	/* handleSelectChange */
+	const handleSelectChange = () => {}
 	/* ****** End Chip ********* */
 
 	const handleClose = (event, reason) => {
@@ -107,7 +122,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 		})
 		const newTeam = await response.json()
 
-		console.log('newTeam', newTeam)
+		// console.log('newTeam', newTeam)
 
 		/* DISPATCH */
 		dispatch(createTeam({ team: newTeam }))
@@ -204,26 +219,36 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 									<InputLabel id="members-label">Select Members</InputLabel>
 									<Select
 										labelId="members-label"
-										id="members"
-										name="members"
+										id={initialFormValues._id ? 'teamMembers' : 'members'}
+										name={initialFormValues._id ? 'teamMembers' : 'members'}
 										multiple
-										value={values.members}
+										value={initialFormValues._id ? values.teamMembers : values.members}
 										onChange={handleChange}
-										input={<OutlinedInput id="members-input" label="Members" />}
+										input={<OutlinedInput id="members-input" label="Select Members" />}
+										/* Selected Items */
 										renderValue={selected => (
+											// console.log('renderValue selected', selected)
+											// console.log('renderValue values.teamMembers', values.teamMembers)
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.4 }}>
 												{selected.map(value => (
-													<Chip key={value[0]} label={value[1]} />
+													<Chip
+														key={value[0]} // _id
+														label={value[1]} // full name
+														avatar={<Avatar alt={value[1]} src={`/assets/images/${value[2]}`} />} // photo
+													/>
 												))}
 											</Box>
 										)}
 										MenuProps={MenuProps}
 									>
-										{memberNames.map(member => (
+										{/* Drop down items */}
+										{memberNames.map((member, index) => (
 											<MenuItem
 												key={member[0]} // [0] is _id, [1] is full name
 												value={member} // member is an Array()
 												style={getStyles(member[0], values.members, theme)}
+												selected={teamMembersIds.includes(member[0]) ? true : false}
+												className={teamMembersIds.includes(member[0]) ? 'Mui-selected' : ''}
 											>
 												<Box sx={{ display: 'flex', alignItems: 'center' }}>
 													<Avatar
