@@ -10,7 +10,16 @@ import { createTeam, updateTeam, addTeamFormState } from '../../state/teamsSlice
 // import { fetchUsers } from '../../state/usersSlice'
 
 // MUI
-import { Box, useMediaQuery, InputLabel, MenuItem, Select, FormControl, Chip } from '@mui/material'
+import {
+	Box,
+	useMediaQuery,
+	InputLabel,
+	MenuItem,
+	Select,
+	FormControl,
+	Chip,
+	Avatar
+} from '@mui/material'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import DialogActions from '@mui/material/DialogActions'
@@ -60,7 +69,8 @@ const TeamForm = ({ formLabel, initFormValues }) => {
   */
 	const memberNames = users.map(user => [
 		user._id,
-		`${user.firstName} ${user.lastName} ${user.extName ? user.extName : ''}`.trim()
+		`${user.firstName} ${user.lastName} ${user.extName ? user.extName : ''}`.trim(),
+		user.photo
 	])
 
 	//console.log('memberNames', memberNames)
@@ -201,7 +211,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 										onChange={handleChange}
 										input={<OutlinedInput id="members-input" label="Members" />}
 										renderValue={selected => (
-											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.4 }}>
 												{selected.map(value => (
 													<Chip key={value[0]} label={value[1]} />
 												))}
@@ -215,7 +225,13 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 												value={member} // member is an Array()
 												style={getStyles(member[0], values.members, theme)}
 											>
-												{member[1]}
+												<Box sx={{ display: 'flex', alignItems: 'center' }}>
+													<Avatar
+														src={`/assets/images/${member[2]}`}
+														sx={{ height: 24, width: 24, margin: '0 4px' }}
+													/>
+													{member[1]}
+												</Box>
 											</MenuItem>
 										))}
 									</Select>

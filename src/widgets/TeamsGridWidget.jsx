@@ -73,14 +73,26 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 			flex: 2
 		},
 		{
-			field: 'leader',
-			headerName: 'Leader'
+			field: 'teamLeader',
+			headerName: 'Leader',
+			renderCell: rowData => (
+				/* Show names of Team Members as a <Chip /> */
+				<Avatar
+					title={`${rowData.row.teamLeader[0].firstName} ${rowData.row.teamLeader[0].lastName}`}
+					alt={`${rowData.row.teamLeader[0].firstName} ${rowData.row.teamLeader[0].lastName}`}
+					src={`/assets/images/${rowData.row.teamLeader[0].photo}`}
+					sx={{ width: 24, height: 24 }}
+					onClick={() =>
+						alert(`${rowData.row.teamLeader[0].firstName} ${rowData.row.teamLeader[0].lastName}`)
+					}
+				/>
+			)
 		},
 		{
 			field: 'members',
 			headerName: 'Members',
 			flex: 1,
-			renderCell: rowdata => (
+			renderCell: rowData => (
 				/* Show names of Team Members as a <Chip /> */
 				<AvatarGroup
 					max={2}
@@ -94,7 +106,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 						}
 					}}
 				>
-					{rowdata.row.teamMembers.map(member => (
+					{rowData.row.teamMembers.map(member => (
 						<Avatar
 							title={`${member.firstName} ${member.firstName}`}
 							alt={`${member.firstName} ${member.firstName}`}
@@ -110,10 +122,10 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 			field: 'action',
 			headerName: 'Action',
 			flex: 1,
-			renderCell: rowdata => {
+			renderCell: rowData => {
 				return (
 					<Box>
-						<IconButton onClick={() => showEditForm(rowdata.row)}>
+						<IconButton onClick={() => showEditForm(rowData.row)}>
 							<ModeEditOutlineOutlinedIcon />
 						</IconButton>
 					</Box>
