@@ -7,7 +7,6 @@ import { Formik, Form } from 'formik'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { createTeam, updateTeam, addTeamFormState } from '../../state/teamsSlice'
-// import { fetchUsers } from '../../state/usersSlice'
 
 // MUI
 import {
@@ -55,38 +54,33 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 
 	let initialFormValues = initFormValues
 	let teamMembersIds = []
+	let teamMembers
 
 	if (initFormValues.teamMembers) {
-		const teamMembers = initFormValues.teamMembers.map(teamMember => [
-			teamMember._id,
-			`${teamMember.firstName} ${teamMember.lastName} ${
-				teamMember.extName ? teamMember.extName : ''
-			}`.trim(),
-			teamMember.photo
-		])
+		teamMembers = initFormValues.teamMembers.map(
+			teamMember =>
+				`${teamMember._id},${teamMember.firstName} ${teamMember.lastName},${teamMember.photo}`
+		)
 		// update
 		initialFormValues = { ...initialFormValues, teamMembers }
 		teamMembersIds = initFormValues.teamMembers.map(teamMember => teamMember._id)
 	}
 
 	console.log('initialFormValues', initialFormValues)
+
 	/* ****** Chip ********* */
-
 	/* 
-    Convert the user object and get only the user's name 
-    Make sure that you format this correctly like the array below.
-    const memberNames = [
-       'Oliver Hansen',
-       'Van Henry',
-    ]
-  */
-	const memberNames = users.map(user => [
-		user._id,
-		`${user.firstName} ${user.lastName} ${user.extName ? user.extName : ''}`.trim(),
-		user.photo
-	])
-
-	//console.log('memberNames', memberNames)
+		Convert the user object and get only the user's name 
+		Make sure that you format this correctly like the array below.
+		
+		const memberNames = [
+			'Oliver Hansen', 	// Do not use arrays or any referenced types for the values.
+			'Van Henry', 		// string, number, or boolean only
+		]
+  	*/
+	const memberNames = users.map(
+		user => `${user._id},${user.firstName} ${user.lastName},${user.photo}`
+	)
 
 	function getStyles(name, personName, theme) {
 		return {
@@ -96,11 +90,9 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 					: theme.typography.fontWeightMedium
 		}
 	}
-
-	/* handleSelectChange */
-	const handleSelectChange = () => {}
 	/* ****** End Chip ********* */
 
+	/* Close dialog */
 	const handleClose = (event, reason) => {
 		if (reason !== 'backdropClick') {
 			/* DISPATCH */
@@ -121,8 +113,6 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 			body: JSON.stringify({ ...values, leader: user._id })
 		})
 		const newTeam = await response.json()
-
-		// console.log('newTeam', newTeam)
 
 		/* DISPATCH */
 		dispatch(createTeam({ team: newTeam }))
@@ -180,8 +170,6 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 									'& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
 								}}
 							>
-								{/* <Field type="hidden" id="leader" name="leader" value={values.email} /> */}
-
 								<TextField
 									fullWidth
 									autoFocus
@@ -230,13 +218,21 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 											// console.log('renderValue selected', selected)
 											// console.log('renderValue values.teamMembers', values.teamMembers)
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.4 }}>
-												{selected.map(value => (
-													<Chip
-														key={value[0]} // _id
-														label={value[1]} // full name
-														avatar={<Avatar alt={value[1]} src={`/assets/images/${value[2]}`} />} // photo
-													/>
-												))}
+												{selected.map(
+													value =>
+														value && (
+															<Chip
+																key={value.split(',')[0]} // _id
+																label={value.split(',')[1]} // full name
+																avatar={
+																	<Avatar
+																		alt={value.split(',')[1]} // full name
+																		src={`/assets/images/${value.split(',')[2]}`} // photo
+																	/>
+																}
+															/>
+														)
+												)}
 											</Box>
 										)}
 										MenuProps={MenuProps}
@@ -244,18 +240,16 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 										{/* Drop down items */}
 										{memberNames.map((member, index) => (
 											<MenuItem
-												key={member[0]} // [0] is _id, [1] is full name
+												key={member.split(',')[0]} // [0] is _id, [1] is full name
 												value={member} // member is an Array()
 												style={getStyles(member[0], values.members, theme)}
-												selected={teamMembersIds.includes(member[0]) ? true : false}
-												className={teamMembersIds.includes(member[0]) ? 'Mui-selected' : ''}
 											>
 												<Box sx={{ display: 'flex', alignItems: 'center' }}>
 													<Avatar
-														src={`/assets/images/${member[2]}`}
+														src={`/assets/images/${member.split(',')[2]}`}
 														sx={{ height: 24, width: 24, margin: '0 4px' }}
 													/>
-													{member[1]}
+													{member.split(',')[1]}
 												</Box>
 											</MenuItem>
 										))}
