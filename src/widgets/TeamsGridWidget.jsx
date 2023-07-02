@@ -43,6 +43,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 			})
 			const teams = await response.json()
 
+			console.log('useEffect fetchTeams teams', teams)
 			// Frontend
 			/* Dispatch */
 			dispatch(fetchTeams({ teams }))
@@ -109,6 +110,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 				>
 					{rowData.row.teamMembers.map(member => (
 						<Avatar
+							key={member._id}
 							title={`${member.firstName} ${member.lastName}`}
 							alt={`${member.firstName} ${member.lastName}`}
 							src={`/assets/images/${member.photo}`}

@@ -29,6 +29,7 @@ import { useTheme } from '@emotion/react'
 import DialogBox from 'components/dialog/DialogBox'
 import useFetchUsers from 'hooks/useFetchUsers'
 
+/* Mui Select MenuProps */
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
 const MenuProps = {
@@ -39,7 +40,7 @@ const MenuProps = {
 		}
 	}
 }
-/* *************** */
+/* End Mui Select */
 
 const TeamForm = ({ formLabel, initFormValues }) => {
 	const isNonMobile = useMediaQuery('(min-width: 600px)')
@@ -68,7 +69,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 
 	console.log('initialFormValues', initialFormValues)
 
-	/* ****** Chip ********* */
+	/* Mui Chip */
 	/* 
 		Convert the user object and get only the user's name 
 		Make sure that you format this correctly like the array below.
@@ -90,17 +91,16 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 					: theme.typography.fontWeightMedium
 		}
 	}
-	/* ****** End Chip ********* */
+	/* End Mui chip */
 
 	/* Close dialog */
 	const handleClose = (event, reason) => {
 		if (reason !== 'backdropClick') {
-			/* DISPATCH */
 			dispatch(addTeamFormState({ open: false }))
 		}
 	}
 
-	/* Create a team handler*/
+	/* Create Team handler*/
 	const handleCreateTeam = async values => {
 		console.log('values', values)
 
@@ -114,8 +114,9 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 		})
 		const newTeam = await response.json()
 
-		/* DISPATCH */
-		dispatch(createTeam({ team: newTeam }))
+		console.log('newTeam', newTeam[0])
+
+		dispatch(createTeam({ team: newTeam[0] }))
 		dispatch(addTeamFormState({ open: false }))
 	}
 
