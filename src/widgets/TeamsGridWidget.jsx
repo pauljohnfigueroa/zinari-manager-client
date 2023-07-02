@@ -44,6 +44,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 			const teams = await response.json()
 
 			console.log('useEffect fetchTeams teams', teams)
+
 			// Frontend
 			/* Dispatch */
 			dispatch(fetchTeams({ teams }))

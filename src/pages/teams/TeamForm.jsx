@@ -93,7 +93,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 	}
 	/* End Mui chip */
 
-	/* Close dialog */
+	/* Close form dialog */
 	const handleClose = (event, reason) => {
 		if (reason !== 'backdropClick') {
 			dispatch(addTeamFormState({ open: false }))
@@ -102,7 +102,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 
 	/* Create Team handler*/
 	const handleCreateTeam = async values => {
-		console.log('values', values)
+		//console.log('values', values)
 
 		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams`, {
 			method: 'POST',
@@ -113,18 +113,20 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 			body: JSON.stringify({ ...values, leader: user._id })
 		})
 		const newTeam = await response.json()
-
-		console.log('newTeam', newTeam[0])
-
+		/* 
+		The response from the above fetch() returns an array with one object.
+		The object is formatted in the backend to conform to the Team's datagrid shape.
+		We access the object using the index [0] 
+		*/
 		dispatch(createTeam({ team: newTeam[0] }))
 		dispatch(addTeamFormState({ open: false }))
 	}
 
-	/* Update a team handler*/
+	/* Update team handler */
 	const handleUpdateTeam = async values => {
 		console.log(values)
 		// Update item from the database - Backend
-		await fetch(`${process.env.REACT_APP_SERVER_URL}/teams/${values._id}`, {
+		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams/${values._id}`, {
 			method: 'PATCH',
 			headers: {
 				'Content-type': 'application/json',
@@ -132,9 +134,9 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 			},
 			body: JSON.stringify(values)
 		})
+		const updatedTeam = await response.json()
 
-		/* DISPATCH */
-		dispatch(updateTeam({ team: values }))
+		dispatch(updateTeam({ team: updatedTeam[0] }))
 		dispatch(addTeamFormState({ open: false }))
 	}
 
