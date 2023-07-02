@@ -11,7 +11,7 @@ import { useTheme } from '@emotion/react'
 import { fetchTeams, addTeamFormState } from 'state/teamsSlice.js'
 import TeamForm from 'pages/teams/TeamForm.jsx'
 
-import { Box, IconButton, Chip, Avatar, AvatarGroup, Stack } from '@mui/material'
+import { Box, IconButton, Avatar, AvatarGroup } from '@mui/material'
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import LinearProgress from '@mui/material/LinearProgress'
@@ -29,9 +29,8 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 	const token = useSelector(state => state.auth.token)
 	const user = useSelector(state => state.auth.user)
 
-	/* FETCH Teams */
+	/* Fetch teams */
 	useEffect(() => {
-		// Backend
 		const getTeams = async () => {
 			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/users/teams`, {
 				method: 'POST',
@@ -42,11 +41,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 				body: JSON.stringify({ userId: user._id })
 			})
 			const teams = await response.json()
-
-			console.log('useEffect fetchTeams teams', teams)
-
-			// Frontend
-			/* Dispatch */
+			// console.log('useEffect fetchTeams teams', teams)
 			dispatch(fetchTeams({ teams }))
 		}
 		getTeams()
@@ -84,7 +79,13 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 					title={`${rowData.row.teamLeader[0].firstName} ${rowData.row.teamLeader[0].lastName}`}
 					alt={`${rowData.row.teamLeader[0].firstName} ${rowData.row.teamLeader[0].lastName}`}
 					src={`/assets/images/${rowData.row.teamLeader[0].photo}`}
-					sx={{ width: 24, height: 24 }}
+					sx={{
+						width: 24,
+						height: 24,
+						'&:hover': {
+							cursor: 'pointer'
+						}
+					}}
 					onClick={() =>
 						alert(`${rowData.row.teamLeader[0].firstName} ${rowData.row.teamLeader[0].lastName}`)
 					}
@@ -96,7 +97,7 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 			headerName: 'Members',
 			flex: 1,
 			renderCell: rowData => (
-				/* Show names of Team Members as a <Chip /> */
+				/* Show names of team members as a <Chip /> */
 				<AvatarGroup
 					max={2}
 					variant="circular"
@@ -115,7 +116,14 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 							title={`${member.firstName} ${member.lastName}`}
 							alt={`${member.firstName} ${member.lastName}`}
 							src={`/assets/images/${member.photo}`}
-							sx={{ width: 24, height: 24 }}
+							sx={{
+								width: 24,
+								height: 24,
+								'&:hover': {
+									border: '1px solid white',
+									cursor: 'pointer'
+								}
+							}}
 							onClick={() => alert(`${member.firstName} ${member.lastName}`)}
 						/>
 					))}
