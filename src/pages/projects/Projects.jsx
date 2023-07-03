@@ -43,6 +43,7 @@ const Projects = () => {
 		tasks: [],
 		dueDate: dayjs().add(0, 'day').format('L')
 	}
+
 	const [initFormValues, setInitFormValues] = useState(initialValues)
 
 	/* OPEN FORM */
@@ -51,11 +52,13 @@ const Projects = () => {
 		dispatch(addProjectFormState({ open: true }))
 	}
 
-	/* DELETE Projects */
+	/* Delete project/s */
 	const handleDeleteProjects = async () => {
-		// Backend
 		console.log('checkedIds', checkedIds)
 
+		/* 	Add code to check if a project has active tasks and teams. */
+		/* 	Deleting projects must only be allowed when there are no 
+			connected task or team to the project being deleted. */
 		checkedIds.map(async id => {
 			await fetch(`${process.env.REACT_APP_SERVER_URL}/projects/${id}`, {
 				method: 'DELETE',
@@ -64,8 +67,7 @@ const Projects = () => {
 				}
 			})
 		})
-		// Frontend
-		/* DISPATCH */
+
 		dispatch(deleteProjects({ checkedIds }))
 	}
 

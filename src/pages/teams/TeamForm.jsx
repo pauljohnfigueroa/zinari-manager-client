@@ -67,7 +67,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 		teamMembersIds = initFormValues.teamMembers.map(teamMember => teamMember._id)
 	}
 
-	console.log('initialFormValues', initialFormValues)
+	//console.log('initialFormValues', initialFormValues)
 
 	/* Mui Chip */
 	/* 

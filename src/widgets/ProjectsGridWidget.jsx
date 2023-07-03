@@ -49,15 +49,13 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 		getProjects()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-	/* UPDATE Project FORM */
+	/* Update project form */
 	const showEditForm = row => {
 		dispatch(addProjectFormState({ open: true }))
 		setInitFormValues(row)
 	}
 
-	//console.log('projects', projects)
-
-	/* GRID COLUMNS */
+	/* Mui Datagrid columns */
 	const columns = [
 		{
 			field: '_id',
@@ -118,9 +116,9 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 				initialState={{
 					columns: {
 						columnVisibilityModel: {
-							// Hide columns listed here, the other columns will remain visible
-							_id: false,
-							tasks: false
+							// hidden columns
+							_id: false
+							// tasks: false
 						}
 					}
 				}}

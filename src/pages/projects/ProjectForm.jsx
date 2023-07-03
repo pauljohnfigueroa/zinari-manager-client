@@ -24,15 +24,10 @@ import {
 
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-// import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
-// import DialogContent from '@mui/material/DialogContent'
-// import DialogContentText from '@mui/material/DialogContentText'
-// import DialogTitle from '@mui/material/DialogTitle'
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 
 import FormikDatePicker from 'components/FormikDatePicker'
 import DialogBox from 'components/dialog/DialogBox'
@@ -56,11 +51,9 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 	const isNonMobile = useMediaQuery('(min-width: 600px)')
 	const theme = useTheme()
 	const [error, setError] = useState()
-	// const [value, setValue] = useState()
 
 	const open = useSelector(state => state.project.open)
 	const token = useSelector(state => state.auth.token)
-	// const teams = useSelector(state => state.team.teams)
 	const [teams] = useFetchTeams()
 	const dispatch = useDispatch()
 
@@ -80,7 +73,7 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
        'Van Henry',
     ]
   */
-	const teamNames = teams.map(team => [team._id, team.name])
+	const teamNames = teams.map(team => `${team._id}|${team.name}`)
 
 	//console.log('teamNames', teamNames)
 
@@ -225,20 +218,21 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 										input={<OutlinedInput id="teams-input" label="Select Teams" />}
 										renderValue={selected => (
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-												{selected.map(value => (
-													<Chip key={value[0]} label={value[1]} />
-												))}
+												{selected.map(
+													value =>
+														value && <Chip key={value.split('|')[0]} label={value.split('|')[1]} />
+												)}
 											</Box>
 										)}
 										MenuProps={MenuProps}
 									>
 										{teamNames.map(team => (
 											<MenuItem
-												key={team[0]}
+												key={team.split('|')[0]}
 												value={team}
-												style={getStyles(team[0], values.teams, theme)}
+												style={getStyles(team.split('|')[0], values.teams, theme)}
 											>
-												{team[1]}
+												{team.split('|')[1]}
 											</MenuItem>
 										))}
 									</Select>

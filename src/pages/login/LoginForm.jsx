@@ -80,10 +80,12 @@ const LoginForm = () => {
 					>
 						<TextField
 							label="Email"
+							type="email"
 							onBlur={handleBlur}
 							onChange={handleChange}
 							value={values.email}
 							name="email"
+							inputProps={{ 'data-testid': 'email-input' }}
 							error={Boolean(touched.email) && Boolean(errors.email)}
 							helperText={touched.email && errors.email}
 							sx={{ gridColumn: 'span 4' }}
@@ -95,6 +97,7 @@ const LoginForm = () => {
 							onChange={handleChange}
 							value={values.password}
 							name="password"
+							inputProps={{ 'data-testid': 'password-input' }}
 							error={Boolean(touched.password) && Boolean(errors.password)}
 							helperText={touched.password && errors.password}
 							sx={{ gridColumn: 'span 4' }}
