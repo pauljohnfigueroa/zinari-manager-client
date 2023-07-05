@@ -105,7 +105,7 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 			.then(async response => {
 				const newProject = await response.json()
 				console.log('newProject', newProject)
-				dispatch(createProject({ project: newProject }))
+				dispatch(createProject({ project: newProject[0] }))
 				dispatch(addProjectFormState({ open: false }))
 			})
 			.catch(err => {

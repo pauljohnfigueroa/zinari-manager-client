@@ -27,23 +27,29 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 	const projects = useSelector(state => state.project.projects)
 	const open = useSelector(state => state.project.open)
 	const token = useSelector(state => state.auth.token)
+	const user = useSelector(state => state.auth.user)
 
 	const handleRowClick = params => {
 		setRowMessage(`Show the details page for ${params.row.name}`)
 	}
 
-	/* FETCH Projects */
+	/* fetch projects */
 	useEffect(() => {
 		// Backend
 		const getProjects = async () => {
-			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/projects`, {
-				method: 'GET',
-				headers: { Authorization: `Bearer ${token}` }
+			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/users/projects`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`
+				},
+				body: JSON.stringify({ userId: user._id })
 			})
+
 			const projects = await response.json()
 
-			// Frontend
-			/* Dispatch */
+			console.log('projects', projects)
+
 			dispatch(fetchProjects({ projects }))
 		}
 		getProjects()
@@ -76,12 +82,24 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 			valueFormatter: params => dayjs(params?.value).format('LL')
 		},
 		{
-			field: 'teams',
-			headerName: 'Teams'
+			field: 'projTeams',
+			headerName: 'Teams',
+			renderCell: rowData => {
+				if (rowData.row?.projTeams.length > 0) {
+					return (
+						<p key={rowData.row.projTeams[0]._id}>{rowData.row.projTeams.map(team => team.name)}</p>
+					)
+				}
+			}
 		},
 		{
-			field: 'manager',
-			headerName: 'Manager'
+			field: 'projManager',
+			headerName: 'Manager',
+			renderCell: rowData => {
+				if (rowData.row?.projManager.length > 0) {
+					return <p key={rowData.row.projManager[0]._id}>{rowData.row.projManager[0].firstName}</p>
+				}
+			}
 		},
 		{
 			field: 'action',
