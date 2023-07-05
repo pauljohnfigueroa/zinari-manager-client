@@ -89,6 +89,16 @@ const Projects = () => {
 			>
 				Projects
 			</Typography>
+			<Typography
+				sx={{
+					color: colors.primary[300],
+					fontSize: '0.9rem',
+					letterSpacing: '1px',
+					margin: '10px 0'
+				}}
+			>
+				The table below shows the projects that you manage.
+			</Typography>
 			<Box>
 				<Box m="10px 0 0 0">
 					<Stack spacing={2} direction="row">

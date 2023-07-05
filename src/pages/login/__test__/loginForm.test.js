@@ -29,7 +29,7 @@ const MockLoginFormComponent = () => {
 	)
 }
 
-const MockLoginForm = () => {
+const MockLoginForm = ({ user }) => {
 	return (
 		<Provider store={store}>
 			<MockLoginFormComponent />

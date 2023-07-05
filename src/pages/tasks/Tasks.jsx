@@ -90,7 +90,16 @@ const Tasks = () => {
 			>
 				Tasks
 			</Typography>
-
+			<Typography
+				sx={{
+					color: colors.primary[300],
+					fontSize: '0.9rem',
+					letterSpacing: '1px',
+					margin: '10px 0'
+				}}
+			>
+				The table below shows the tasks that belong to you.
+			</Typography>
 			<Box>
 				<Box m="10px 0 0 0">
 					<Stack spacing={2} direction="row">
