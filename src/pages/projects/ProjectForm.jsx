@@ -125,8 +125,8 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 	}
 
 	const handleUpdateProject = async values => {
-		// console.log(values)
-		await fetch(`${process.env.REACT_APP_SERVER_URL}/projects/${values._id}`, {
+		console.log('values', values)
+		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/projects/${values._id}`, {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json',
@@ -135,7 +135,11 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 			body: JSON.stringify(values)
 		})
 
-		dispatch(updateProject({ project: values }))
+		const updatedProject = await response.json()
+
+		console.log('updatedProject', updatedProject)
+
+		dispatch(updateProject({ project: updatedProject[0] }))
 		dispatch(addProjectFormState({ open: false }))
 	}
 
