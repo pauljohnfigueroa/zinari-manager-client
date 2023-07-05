@@ -59,10 +59,8 @@ const Navbar = () => {
 
 	const theme = useTheme()
 	const neutralLight = theme.palette.neutral.main
-	// const primaryLight = theme.palette.primary.light
 	const dark = theme.palette.neutral.dark
 	const background = theme.palette.background.default
-	// const alt = theme.palette.background.alt
 
 	const fullName = `${user.firstName} ${user.lastName}`
 
@@ -101,9 +99,11 @@ const Navbar = () => {
 							<LightMode sx={{ color: dark, fontSize: '25px' }} />
 						)}
 					</IconButton>
+					{/* Other icons */}
 					<Message sx={{ fontSize: '25px' }} />
 					<Notifications sx={{ fontSize: '25px' }} />
 					<Help sx={{ fontSize: '25px' }} />
+
 					{/* Avatar */}
 					<IconButton
 						onClick={handleClick}
@@ -158,9 +158,7 @@ const Navbar = () => {
 							<Avatar />
 							Profile
 						</MenuItem>
-
 						<Divider />
-
 						<MenuItem onClick={() => dispatch(setLogout())}>
 							<ListItemIcon>
 								<Logout fontSize="small" />

@@ -1,6 +1,6 @@
 /* The ProjectsGridWidget.jsx component is a datagrid where all Projects are listed. */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, forwardRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
@@ -12,16 +12,34 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import LinearProgress from '@mui/material/LinearProgress'
 import Alert from '@mui/material/Alert'
 
+import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
+import ListItemText from '@mui/material/ListItemText'
+import ListItem from '@mui/material/ListItem'
+import List from '@mui/material/List'
+import Divider from '@mui/material/Divider'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+// import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
+import CloseIcon from '@mui/icons-material/Close'
+import Slide from '@mui/material/Slide'
+
 import { setCheckedIds } from 'state/datagridSlice.js'
 
 import { tokens } from '../theme.js'
 
 import dayjs from 'dayjs'
 
+const Transition = forwardRef(function Transition(props, ref) {
+	return <Slide direction="up" ref={ref} {...props} />
+})
+
 const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 	const theme = useTheme()
 	const colors = tokens(theme.palette.mode)
 	const [rowMessage, setRowMessage] = useState()
+	const [projDetailDialog, setProjDetailDialog] = useState(false)
 
 	const dispatch = useDispatch()
 	const projects = useSelector(state => state.project.projects)
@@ -30,7 +48,12 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 	const user = useSelector(state => state.auth.user)
 
 	const handleRowClick = params => {
+		setProjDetailDialog(!projDetailDialog)
 		setRowMessage(`Show the details page for ${params.row.name}`)
+	}
+
+	const handleClose = () => {
+		setProjDetailDialog(false)
 	}
 
 	/* fetch projects */
@@ -160,7 +183,36 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 				}}
 				onRowClick={handleRowClick}
 			/>
-			{rowMessage && <Alert severity="info">{rowMessage}</Alert>}
+			{/* {rowMessage && <Alert severity="info">{rowMessage}</Alert>} */}
+			<Dialog
+				fullScreen
+				open={projDetailDialog}
+				onClose={handleClose}
+				TransitionComponent={Transition}
+			>
+				<AppBar sx={{ position: 'relative' }}>
+					<Toolbar>
+						<IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+							<CloseIcon />
+						</IconButton>
+						<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+							{rowMessage}
+						</Typography>
+						<Button autoFocus color="inherit" onClick={handleClose}>
+							save
+						</Button>
+					</Toolbar>
+				</AppBar>
+				<List>
+					<ListItem button>
+						<ListItemText primary="Phone ringtone" secondary="Titania" />
+					</ListItem>
+					<Divider />
+					<ListItem button>
+						<ListItemText primary="Default notification ringtone" secondary="Tethys" />
+					</ListItem>
+				</List>
+			</Dialog>
 		</Box>
 	)
 }
