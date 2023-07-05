@@ -36,11 +36,10 @@ const Projects = () => {
 	// Create/Update Form
 	const initialValues = {
 		_id: null,
-		email: user.email,
-		name: '',
+		manager: user._id,
+		title: '',
 		description: '',
 		teams: [],
-		tasks: [],
 		dueDate: dayjs().add(0, 'day').format('L')
 	}
 

@@ -162,16 +162,16 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 									'& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
 								}}
 							>
-								<Field type="hidden" id="email" name="email" value={values.email} />
+								<Field type="hidden" id="manager" name="manager" value={values.manager} />
 
 								<TextField
 									fullWidth
 									autoFocus
 									autoComplete="off"
 									margin="dense"
-									name="name"
-									id="name"
-									value={values.name}
+									name="title"
+									id="title"
+									value={values.title}
 									label="Name"
 									type="text"
 									variant="outlined"

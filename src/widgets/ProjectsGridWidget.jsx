@@ -62,8 +62,8 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 			headerName: 'ID'
 		},
 		{
-			field: 'name',
-			headerName: 'Name'
+			field: 'title',
+			headerName: 'Title'
 		},
 		{
 			field: 'description',
@@ -78,10 +78,6 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 		{
 			field: 'teams',
 			headerName: 'Teams'
-		},
-		{
-			field: 'tasks',
-			headerName: 'Tasks'
 		},
 		{
 			field: 'manager',
