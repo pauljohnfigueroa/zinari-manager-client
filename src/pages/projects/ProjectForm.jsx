@@ -62,7 +62,16 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 	// When we do record update, the date format will be in the saved ISO format similar to 2018-04-04T16:00:00.000Z
 	// To enable the Update form to load the current record's date,
 	// We first need to convert the ISO format date to dayjs format.
-	const initialFormValues = { ...initFormValues, dueDate: dayjs(initFormValues.dueDate) }
+	let initialFormValues = { ...initFormValues, dueDate: dayjs(initFormValues.dueDate) }
+	// let projectTeamsIds = []
+	let projTeams
+	// if we are updating a project
+	if (initFormValues.projTeams) {
+		projTeams = initFormValues?.projTeams.map(projTeam => `${projTeam._id}|${projTeam.name}`)
+		// update
+		initialFormValues = { ...initialFormValues, projTeams }
+		// projectTeamsIds = initFormValues.projectTeams.map(projectTeam => projectTeam._id)
+	}
 
 	/* Chip */
 	/* 
@@ -73,9 +82,10 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
        'Van Henry',
     ]
   */
+	console.log('teams', teams)
 	const teamNames = teams.map(team => `${team._id}|${team.name}`)
 
-	//console.log('teamNames', teamNames)
+	console.log('teamNames', teamNames)
 
 	function getStyles(name, teamName, theme) {
 		return {
@@ -210,13 +220,15 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 									<InputLabel id="teams-label">Select Teams</InputLabel>
 									<Select
 										labelId="teams-label"
-										id="teams"
-										name="teams"
+										id={initialFormValues._id ? 'projTeams' : 'teams'}
+										name={initialFormValues._id ? 'projTeams' : 'teams'}
 										multiple
-										value={values.teams}
+										value={initialFormValues._id ? values.projTeams : values.teams}
 										onChange={handleChange}
 										input={<OutlinedInput id="teams-input" label="Select Teams" />}
 										renderValue={selected => (
+											// console.log('renderValue selected', selected)
+											// console.log('renderValue values.projTeams', values.projTeams)
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
 												{selected.map(
 													value =>
@@ -230,7 +242,11 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 											<MenuItem
 												key={team.split('|')[0]}
 												value={team}
-												style={getStyles(team.split('|')[0], values.teams, theme)}
+												style={getStyles(
+													team[0],
+													initialFormValues._id ? values.projTeams : values.teams,
+													theme
+												)}
 											>
 												{team.split('|')[1]}
 											</MenuItem>

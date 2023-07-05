@@ -54,9 +54,10 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 	const dispatch = useDispatch()
 
 	let initialFormValues = initFormValues
-	let teamMembersIds = []
+	// let teamMembersIds = []
 	let teamMembers
 
+	// if we are updating a team
 	if (initFormValues.teamMembers) {
 		teamMembers = initFormValues.teamMembers.map(
 			teamMember =>
@@ -64,7 +65,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 		)
 		// update
 		initialFormValues = { ...initialFormValues, teamMembers }
-		teamMembersIds = initFormValues.teamMembers.map(teamMember => teamMember._id)
+		// teamMembersIds = initFormValues.teamMembers.map(teamMember => teamMember._id)
 	}
 
 	//console.log('initialFormValues', initialFormValues)
@@ -82,6 +83,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 	const memberNames = users.map(
 		user => `${user._id}|${user.firstName} ${user.lastName}|${user.photo}`
 	)
+	console.log('memberNames', memberNames)
 
 	function getStyles(name, personName, theme) {
 		return {
@@ -241,11 +243,15 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 										MenuProps={MenuProps}
 									>
 										{/* Drop down items */}
-										{memberNames.map((member, index) => (
+										{memberNames.map(member => (
 											<MenuItem
 												key={member.split('|')[0]} // [0] is _id, [1] is full name
 												value={member} // member is an Array()
-												style={getStyles(member[0], values.members, theme)}
+												style={getStyles(
+													member[0],
+													initialFormValues._id ? values.teamMembers : values.members,
+													theme
+												)}
 											>
 												<Box sx={{ display: 'flex', alignItems: 'center' }}>
 													<Avatar
