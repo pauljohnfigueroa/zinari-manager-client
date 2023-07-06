@@ -32,7 +32,7 @@ import { tokens } from '../theme.js'
 import dayjs from 'dayjs'
 
 const Transition = forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />
+	return <Slide direction="right" ref={ref} {...props} />
 })
 
 const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
@@ -49,7 +49,7 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 
 	const handleRowClick = params => {
 		setProjDetailDialog(!projDetailDialog)
-		setRowMessage(`Show the details page for ${params.row.name}`)
+		setRowMessage(`Project Title: ${params.row.title}`)
 	}
 
 	const handleClose = () => {
@@ -204,11 +204,11 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 					</Toolbar>
 				</AppBar>
 				<List>
-					<ListItem button>
+					<ListItem>
 						<ListItemText primary="Phone ringtone" secondary="Titania" />
 					</ListItem>
 					<Divider />
-					<ListItem button>
+					<ListItem>
 						<ListItemText primary="Default notification ringtone" secondary="Tethys" />
 					</ListItem>
 				</List>

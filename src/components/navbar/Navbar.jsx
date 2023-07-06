@@ -15,6 +15,16 @@ import {
 	ListItemIcon
 } from '@mui/material'
 
+/* Drawer */
+import Drawer from '@mui/material/Drawer'
+import Button from '@mui/material/Button'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemText from '@mui/material/ListItemText'
+import InboxIcon from '@mui/icons-material/MoveToInbox'
+import MailIcon from '@mui/icons-material/Mail'
+
 import {
 	Search,
 	Message,
@@ -37,6 +47,14 @@ const Navbar = () => {
 
 	const [anchorEl, setAnchorEl] = useState(null)
 
+	/* Drawer state */
+	const [drawerState, setDrawerState] = useState({
+		top: false,
+		left: false,
+		bottom: false,
+		right: false
+	})
+
 	// pull from global state
 	const user = useSelector(state => state.auth.user)
 	const isNonMobileScreens = useMediaQuery('(min-width: 600px)')
@@ -56,6 +74,45 @@ const Navbar = () => {
 	const handleClose = () => {
 		setAnchorEl(null)
 	}
+
+	/* Drawer */
+	const toggleDrawer = (anchor, open) => event => {
+		if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+			return
+		}
+		setDrawerState({ ...drawerState, [anchor]: open })
+	}
+	/* Drawer list */
+	const drawerList = anchor => (
+		<Box
+			sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+			role="presentation"
+			onClick={toggleDrawer(anchor, false)}
+			onKeyDown={toggleDrawer(anchor, false)}
+		>
+			<List>
+				{['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+					<ListItem key={text} disablePadding>
+						<ListItemButton>
+							<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+							<ListItemText primary={text} />
+						</ListItemButton>
+					</ListItem>
+				))}
+			</List>
+			<Divider />
+			<List>
+				{['All mail', 'Trash', 'Spam'].map((text, index) => (
+					<ListItem key={text} disablePadding>
+						<ListItemButton>
+							<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+							<ListItemText primary={text} />
+						</ListItemButton>
+					</ListItem>
+				))}
+			</List>
+		</Box>
+	)
 
 	const theme = useTheme()
 	const neutralLight = theme.palette.neutral.main
@@ -100,10 +157,15 @@ const Navbar = () => {
 						)}
 					</IconButton>
 					{/* Other icons */}
-					<Message sx={{ fontSize: '25px' }} />
-					<Notifications sx={{ fontSize: '25px' }} />
-					<Help sx={{ fontSize: '25px' }} />
-
+					<IconButton onClick={handleClick} size="small">
+						<Message sx={{ fontSize: '25px' }} />
+					</IconButton>
+					<IconButton onClick={toggleDrawer('right', true)} size="small">
+						<Notifications sx={{ fontSize: '25px' }} />
+					</IconButton>
+					<IconButton onClick={handleClick} size="small">
+						<Help sx={{ fontSize: '25px' }} />
+					</IconButton>
 					{/* Avatar */}
 					<IconButton
 						onClick={handleClick}
@@ -119,6 +181,13 @@ const Navbar = () => {
 							sx={{ width: 24, height: 24 }}
 						/>
 					</IconButton>
+
+					{/* Notifications drawer */}
+					<Drawer anchor="right" open={drawerState['right']} onClose={toggleDrawer('right', false)}>
+						{drawerList('right')}
+					</Drawer>
+
+					{/* Avatar pop up menu */}
 					<Menu
 						anchorEl={anchorEl}
 						id="account-menu"
