@@ -47,7 +47,7 @@ const MenuProps = {
 	}
 }
 
-const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
+const ProjectForm = ({ initFormValues }) => {
 	const isNonMobile = useMediaQuery('(min-width: 600px)')
 	const theme = useTheme()
 	const [error, setError] = useState()
@@ -146,136 +146,136 @@ const ProjectForm = ({ formLabel, initFormValues, due, setDue }) => {
 	return (
 		<div>
 			{error && <div>{error}</div>}
-			<DialogBox
+			{/* <DialogBox
 				handleClose={handleClose}
 				formLabel={formLabel}
 				open={open}
 				fullWidth={true}
 				maxWidth="sm"
 				requiredFields="Please fill up all the required ( * ) fields."
+			> */}
+			<Formik
+				onSubmit={
+					initialFormValues._id
+						? (values, actions) => {
+								handleUpdateProject(values)
+						  }
+						: (values, actions) => {
+								handleCreateProject(values)
+						  }
+				}
+				initialValues={initialFormValues}
 			>
-				<Formik
-					onSubmit={
-						initialFormValues._id
-							? (values, actions) => {
-									handleUpdateProject(values)
-							  }
-							: (values, actions) => {
-									handleCreateProject(values)
-							  }
-					}
-					initialValues={initialFormValues}
-				>
-					{({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
-						<Form>
-							<Box
-								display="grid"
-								gap="20px"
-								gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-								sx={{
-									'& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
-								}}
-							>
-								<Field type="hidden" id="manager" name="manager" value={values.manager} />
+				{({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
+					<Form>
+						<Box
+							display="grid"
+							gap="20px"
+							gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+							sx={{
+								'& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
+							}}
+						>
+							<Field type="hidden" id="manager" name="manager" value={values.manager} />
 
-								<TextField
-									fullWidth
-									autoFocus
-									autoComplete="off"
-									margin="dense"
-									name="title"
-									id="title"
-									value={values.title}
-									label="Name"
-									type="text"
-									variant="outlined"
-									sx={{ gridColumn: 'span 4' }}
+							<TextField
+								fullWidth
+								autoFocus
+								autoComplete="off"
+								margin="dense"
+								name="title"
+								id="title"
+								value={values.title}
+								label="Name"
+								type="text"
+								variant="outlined"
+								sx={{ gridColumn: 'span 4' }}
+								onChange={handleChange}
+								onBlur={handleBlur}
+								required
+							/>
+							<TextField
+								autoComplete="off"
+								fullWidth
+								margin="dense"
+								name="description"
+								id="description"
+								value={values.description}
+								label="Description"
+								type="text"
+								variant="outlined"
+								sx={{ gridColumn: 'span 4' }}
+								onChange={handleChange}
+								onBlur={handleBlur}
+								required
+							/>
+							{/* Due Date */}
+							<FormControl sx={{ gridColumn: 'span 2' }}>
+								<LocalizationProvider dateAdapter={AdapterDayjs}>
+									<FormikDatePicker
+										name="dueDate"
+										id="dueDate"
+										renderInput={params => <TextField {...params} label="Due Date" />}
+									/>
+								</LocalizationProvider>
+							</FormControl>
+							{/* Select Teams */}
+							<FormControl sx={{ gridColumn: 'span 4' }}>
+								<InputLabel id="teams-label">Select Teams</InputLabel>
+								<Select
+									labelId="teams-label"
+									id={initialFormValues._id ? 'projTeams' : 'teams'}
+									name={initialFormValues._id ? 'projTeams' : 'teams'}
+									multiple
+									value={initialFormValues._id ? values.projTeams : values.teams}
 									onChange={handleChange}
-									onBlur={handleBlur}
-									required
-								/>
-								<TextField
-									autoComplete="off"
-									fullWidth
-									margin="dense"
-									name="description"
-									id="description"
-									value={values.description}
-									label="Description"
-									type="text"
-									variant="outlined"
-									sx={{ gridColumn: 'span 4' }}
-									onChange={handleChange}
-									onBlur={handleBlur}
-									required
-								/>
-								{/* Due Date */}
-								<FormControl sx={{ gridColumn: 'span 2' }}>
-									<LocalizationProvider dateAdapter={AdapterDayjs}>
-										<FormikDatePicker
-											name="dueDate"
-											id="dueDate"
-											renderInput={params => <TextField {...params} label="Due Date" />}
-										/>
-									</LocalizationProvider>
-								</FormControl>
-								{/* Select Teams */}
-								<FormControl sx={{ gridColumn: 'span 4' }}>
-									<InputLabel id="teams-label">Select Teams</InputLabel>
-									<Select
-										labelId="teams-label"
-										id={initialFormValues._id ? 'projTeams' : 'teams'}
-										name={initialFormValues._id ? 'projTeams' : 'teams'}
-										multiple
-										value={initialFormValues._id ? values.projTeams : values.teams}
-										onChange={handleChange}
-										input={<OutlinedInput id="teams-input" label="Select Teams" />}
-										renderValue={selected => (
-											// console.log('renderValue selected', selected)
-											// console.log('renderValue values.projTeams', values.projTeams)
-											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-												{selected.map(
-													value =>
-														value && <Chip key={value.split('|')[0]} label={value.split('|')[1]} />
-												)}
-											</Box>
-										)}
-										MenuProps={MenuProps}
-									>
-										{teamNames.map(team => (
-											<MenuItem
-												key={team.split('|')[0]}
-												value={team}
-												style={getStyles(
-													team[0],
-													initialFormValues._id ? values.projTeams : values.teams,
-													theme
-												)}
-											>
-												{team.split('|')[1]}
-											</MenuItem>
-										))}
-									</Select>
-								</FormControl>
-							</Box>
-
-							<DialogActions>
-								<Button sx={{ minWidth: 100 }} onClick={handleClose} variant="outlined">
-									Cancel
-								</Button>
-								<Button
-									type="submit"
-									sx={{ minWidth: 100 }}
-									variant="contained"
-									// onClick={values._id ? () => setFormValues(values) : undefined}
+									input={<OutlinedInput id="teams-input" label="Select Teams" />}
+									renderValue={selected => (
+										// console.log('renderValue selected', selected)
+										// console.log('renderValue values.projTeams', values.projTeams)
+										<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+											{selected.map(
+												value =>
+													value && <Chip key={value.split('|')[0]} label={value.split('|')[1]} />
+											)}
+										</Box>
+									)}
+									MenuProps={MenuProps}
 								>
-									{values._id ? 'Update' : 'Save'}
-								</Button>
-							</DialogActions>
-						</Form>
-					)}
-				</Formik>
-			</DialogBox>
+									{teamNames.map(team => (
+										<MenuItem
+											key={team.split('|')[0]}
+											value={team}
+											style={getStyles(
+												team[0],
+												initialFormValues._id ? values.projTeams : values.teams,
+												theme
+											)}
+										>
+											{team.split('|')[1]}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+						</Box>
+
+						<DialogActions>
+							<Button sx={{ minWidth: 100 }} onClick={handleClose} variant="outlined">
+								Cancel
+							</Button>
+							<Button
+								type="submit"
+								sx={{ minWidth: 100 }}
+								variant="contained"
+								// onClick={values._id ? () => setFormValues(values) : undefined}
+							>
+								{values._id ? 'Update' : 'Save'}
+							</Button>
+						</DialogActions>
+					</Form>
+				)}
+			</Formik>
+			{/* </DialogBox> */}
 		</div>
 	)
 }

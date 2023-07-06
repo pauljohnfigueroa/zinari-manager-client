@@ -25,6 +25,12 @@ import Typography from '@mui/material/Typography'
 import CloseIcon from '@mui/icons-material/Close'
 import Slide from '@mui/material/Slide'
 
+/* Drawer */
+import ProjectsDrawer from 'pages/projects/ProjectsDrawer.jsx'
+
+/* Dialog */
+import DialogBox from 'components/dialog/DialogBox'
+
 import { setCheckedIds } from 'state/datagridSlice.js'
 
 import { tokens } from '../theme.js'
@@ -47,9 +53,16 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 	const token = useSelector(state => state.auth.token)
 	const user = useSelector(state => state.auth.user)
 
-	const handleRowClick = params => {
+	/* Update project form */
+	const showEditForm = row => {
+		dispatch(addProjectFormState({ open: true }))
+		setInitFormValues(row)
+	}
+
+	const handleRowClick = row => {
+		setInitFormValues(row)
 		setProjDetailDialog(!projDetailDialog)
-		setRowMessage(`Project Title: ${params.row.title}`)
+		setRowMessage(`Project Title: ${row.title}`)
 	}
 
 	const handleClose = () => {
@@ -77,12 +90,6 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 		}
 		getProjects()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-	/* Update project form */
-	const showEditForm = row => {
-		dispatch(addProjectFormState({ open: true }))
-		setInitFormValues(row)
-	}
 
 	/* Mui Datagrid columns */
 	const columns = [
@@ -130,7 +137,8 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 			renderCell: rowdata => {
 				return (
 					<Box>
-						<IconButton onClick={() => showEditForm(rowdata.row)}>
+						{/* <IconButton onClick={() => showEditForm(rowdata.row)}> */}
+						<IconButton onClick={() => handleRowClick(rowdata.row)}>
 							<ModeEditOutlineOutlinedIcon />
 						</IconButton>
 					</Box>
@@ -142,10 +150,19 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 	return (
 		<Box height="60vh">
 			{open && (
-				<ProjectForm
+				<DialogBox
+					handleClose={handleClose}
 					formLabel={initFormValues._id ? 'Update Project' : 'New Project'}
-					initFormValues={initFormValues}
-				/>
+					open={open}
+					fullWidth={true}
+					maxWidth="sm"
+					requiredFields="Please fill up all the required ( * ) fields."
+				>
+					<ProjectForm
+						// formLabel={initFormValues._id ? 'Update Project' : 'New Project'}
+						initFormValues={initFormValues}
+					/>
+				</DialogBox>
 			)}
 
 			{/* DATAGRID */}
@@ -181,38 +198,15 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 					// Pass the checked row ids to a redux state
 					dispatch(setCheckedIds({ checkedIds }))
 				}}
-				onRowClick={handleRowClick}
+				// onRowClick={() => handleRowClick(rowdata.row)}
 			/>
-			{/* {rowMessage && <Alert severity="info">{rowMessage}</Alert>} */}
-			<Dialog
-				fullScreen
-				open={projDetailDialog}
-				onClose={handleClose}
-				TransitionComponent={Transition}
-			>
-				<AppBar sx={{ position: 'relative' }}>
-					<Toolbar>
-						<IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-							<CloseIcon />
-						</IconButton>
-						<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-							{rowMessage}
-						</Typography>
-						<Button autoFocus color="inherit" onClick={handleClose}>
-							save
-						</Button>
-					</Toolbar>
-				</AppBar>
-				<List>
-					<ListItem>
-						<ListItemText primary="Phone ringtone" secondary="Titania" />
-					</ListItem>
-					<Divider />
-					<ListItem>
-						<ListItemText primary="Default notification ringtone" secondary="Tethys" />
-					</ListItem>
-				</List>
-			</Dialog>
+			{/* Drawer */}
+			<ProjectsDrawer
+				projDetailDialog={projDetailDialog}
+				setProjDetailDialog={setProjDetailDialog}
+				rowMessage={rowMessage}
+				initFormValues={initFormValues}
+			/>
 		</Box>
 	)
 }
