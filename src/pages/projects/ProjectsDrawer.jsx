@@ -90,15 +90,28 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, rowMessage, ini
 						<Grid item xs={12} md={6} order={{ xs: 1, md: 2 }}>
 							<Box
 								sx={{
-									backgroundColor: '#aaaaaa',
-									height: 100
+									border: '1px solid #666',
+									height: '100%',
+									padding: 2
 								}}
 							>
-								Summary
+								<Typography sx={{ fontSize: 18 }}>Summary</Typography>
+
+								<Box>
+									<Typography sx={{ fontSize: 14 }}>% of Project Completed: 52.33%</Typography>
+									<Typography sx={{ fontSize: 14 }}>Total completed tasks: 56</Typography>
+									<Typography sx={{ fontSize: 14 }}>Total number of tasks: 107</Typography>
+								</Box>
 							</Box>
 						</Grid>
 						<Grid item xs={12} md={6} order={{ xs: 2, md: 1 }}>
-							<Box>
+							<Box
+								sx={{
+									border: '1px solid #666',
+									height: '100%',
+									padding: 2
+								}}
+							>
 								<ProjectForm initFormValues={initFormValues} />
 							</Box>
 						</Grid>
@@ -135,12 +148,18 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, rowMessage, ini
 													<List
 														sx={{ width: '100%', paddingRight: 1, bgcolor: 'background.paper' }}
 													>
-														<ListItem alignItems="flex-start">
+														<ListItem
+															sx={{
+																alignItems: 'flex-start'
+															}}
+														>
 															{/* Put content here */}
+
 															<Card
 																sx={{
 																	display: 'flex',
 																	minHeight: 100,
+																	height: '100%',
 																	width: '100%',
 																	alignItems: 'center'
 																}}
