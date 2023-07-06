@@ -17,7 +17,6 @@ import {
 
 /* Drawer */
 import Drawer from '@mui/material/Drawer'
-import Button from '@mui/material/Button'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
@@ -45,6 +44,7 @@ const Navbar = () => {
 	const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false)
 	const dispatch = useDispatch()
 
+	/* Pop up menu */
 	const [anchorEl, setAnchorEl] = useState(null)
 
 	/* Drawer state */
