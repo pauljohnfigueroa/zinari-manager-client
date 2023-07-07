@@ -1,29 +1,17 @@
 /* The ProjectsGridWidget.jsx component is a datagrid where all Projects are listed. */
 
-import { useEffect, useState, forwardRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
-import { fetchProjects, addProjectFormState } from 'state/projectsSlice.js'
+import { fetchProjects } from 'state/projectsSlice.js'
 import ProjectForm from 'pages/projects/ProjectForm.jsx'
 import { Box, IconButton } from '@mui/material'
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import LinearProgress from '@mui/material/LinearProgress'
-import Alert from '@mui/material/Alert'
 
-import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-import ListItemText from '@mui/material/ListItemText'
-import ListItem from '@mui/material/ListItem'
-import List from '@mui/material/List'
-import Divider from '@mui/material/Divider'
-import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-// import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import CloseIcon from '@mui/icons-material/Close'
-import Slide from '@mui/material/Slide'
+// import Slide from '@mui/material/Slide'
 
 /* Drawer */
 import ProjectsDrawer from 'pages/projects/ProjectsDrawer.jsx'
@@ -32,14 +20,12 @@ import ProjectsDrawer from 'pages/projects/ProjectsDrawer.jsx'
 import DialogBox from 'components/dialog/DialogBox'
 
 import { setCheckedIds } from 'state/datagridSlice.js'
-
 import { tokens } from '../theme.js'
-
 import dayjs from 'dayjs'
 
-const Transition = forwardRef(function Transition(props, ref) {
-	return <Slide direction="right" ref={ref} {...props} />
-})
+// const Transition = forwardRef(function Transition(props, ref) {
+// 	return <Slide direction="right" ref={ref} {...props} />
+// })
 
 const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 	const theme = useTheme()
@@ -54,10 +40,10 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 	const user = useSelector(state => state.auth.user)
 
 	/* Update project form */
-	const showEditForm = row => {
-		dispatch(addProjectFormState({ open: true }))
-		setInitFormValues(row)
-	}
+	// const showEditForm = row => {
+	// 	dispatch(addProjectFormState({ open: true }))
+	// 	setInitFormValues(row)
+	// }
 
 	const handleRowClick = row => {
 		setInitFormValues(row)
