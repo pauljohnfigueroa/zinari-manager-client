@@ -43,6 +43,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 
 	/* local states */
 	const [teams, setTeams] = useState([])
+	const [teamMembers, setTeamMembers] = useState([])
 
 	const handleChange = panel => (event, isExpanded) => {
 		setExpanded(isExpanded ? panel : false)
@@ -53,7 +54,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 	}
 	/* Fetch teams */
 	useEffect(() => {
-		console.log('initFormValues._id', initFormValues._id)
+		// console.log('initFormValues._id', initFormValues._id)
 		const getProjTeams = async () => {
 			const response = await fetch(
 				`${process.env.REACT_APP_SERVER_URL}/projects/${initFormValues._id}/teams`,
@@ -71,6 +72,29 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		getProjTeams()
 		console.log('projectsDrawer useEffect was called')
 	}, [])
+
+	useEffect(() => {
+		const getTeamMembers = async () => {
+			console.log('teams', teams)
+			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/projects/teams/members`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`
+				},
+				body: JSON.stringify({ teams })
+			})
+			const projTeam = await response.json()
+
+			console.log('projTeam', projTeam)
+
+			setTeamMembers(projTeam)
+		}
+		getTeamMembers()
+		console.log('projectsDrawer getTeamMembers useEffect was called')
+	}, [teams, setTeamMembers])
+
+	console.log('teamMembers state', teamMembers)
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
@@ -154,9 +178,13 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 									Teams
 								</Typography>
 
-								{teams.map(team => {
+								{teamMembers.map(team => {
 									return (
-										<Accordion expanded={expanded === team._id} onChange={handleChange(team._id)}>
+										<Accordion
+											key={team._id}
+											expanded={expanded === team._id}
+											onChange={handleChange(team._id)}
+										>
 											<AccordionSummary
 												expandIcon={<ExpandMoreIcon />}
 												aria-controls="compliance-content"
@@ -176,9 +204,10 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 														<Typography variant="h6" sx={{ paddingBottom: 2 }}>
 															Leader
 														</Typography>
+
 														<Avatar
-															alt={`${user.firstName} ${user.lastName}`}
-															src={`/assets/images/${user.photo}`}
+															alt={`${team.teamLeader[0].firstName} ${team.teamLeader[0].lastName}`}
+															src={`/assets/images/${team.teamLeader[0].photo}`}
 															sx={{ width: 32, height: 32 }}
 														/>
 													</Box>
@@ -201,7 +230,13 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																}
 															}}
 														>
-															<Avatar
+															{team.teamMembers.map(member => (
+																<Avatar
+																	alt={`${member.firstName} ${member.lastName}`}
+																	src={`/assets/images/${member.photo}`}
+																/>
+															))}
+															{/* <Avatar
 																alt={`${user.firstName} ${user.lastName}`}
 																src={`/assets/images/skyler-white.png`}
 															/>
@@ -224,7 +259,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 															<Avatar
 																alt={`${user.firstName} ${user.lastName}`}
 																src={`/assets/images/hank-shrader.png`}
-															/>
+															/> */}
 														</AvatarGroup>
 													</Box>
 												</Box>

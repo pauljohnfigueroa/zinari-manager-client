@@ -126,7 +126,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 
 	/* Update team handler */
 	const handleUpdateTeam = async values => {
-		console.log(values)
+		//console.log(values)
 		// Update item from the database - Backend
 		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams/${values._id}`, {
 			method: 'PATCH',

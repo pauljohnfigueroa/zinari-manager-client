@@ -82,10 +82,10 @@ const ProjectForm = ({ initFormValues }) => {
        'Van Henry',
     ]
   */
-	console.log('teams', teams)
+	//console.log('teams', teams)
 	const teamNames = teams.map(team => `${team._id}|${team.name}`)
 
-	console.log('teamNames', teamNames)
+	//console.log('teamNames', teamNames)
 
 	function getStyles(name, teamName, theme) {
 		return {
@@ -103,7 +103,7 @@ const ProjectForm = ({ initFormValues }) => {
 	}
 
 	const handleCreateProject = async values => {
-		console.log('values', values)
+		//console.log('values', values)
 		await fetch(`${process.env.REACT_APP_SERVER_URL}/projects`, {
 			method: 'POST',
 			headers: {
@@ -114,7 +114,7 @@ const ProjectForm = ({ initFormValues }) => {
 		})
 			.then(async response => {
 				const newProject = await response.json()
-				console.log('newProject', newProject)
+				//console.log('newProject', newProject)
 				dispatch(createProject({ project: newProject[0] }))
 				dispatch(addProjectFormState({ open: false }))
 			})
