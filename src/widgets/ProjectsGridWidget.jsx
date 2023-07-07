@@ -4,14 +4,13 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
-import { fetchProjects } from 'state/projectsSlice.js'
 import ProjectForm from 'pages/projects/ProjectForm.jsx'
 import { Box, IconButton } from '@mui/material'
-import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import LinearProgress from '@mui/material/LinearProgress'
+import EditNoteIcon from '@mui/icons-material/EditNote'
 
-// import Slide from '@mui/material/Slide'
+import { fetchProjects } from 'state/projectsSlice.js'
 
 /* Drawer */
 import ProjectsDrawer from 'pages/projects/ProjectsDrawer.jsx'
@@ -30,7 +29,7 @@ import dayjs from 'dayjs'
 const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 	const theme = useTheme()
 	const colors = tokens(theme.palette.mode)
-	const [rowMessage, setRowMessage] = useState()
+	// const [projData, setProjData] = useState()
 	const [projDetailDialog, setProjDetailDialog] = useState(false)
 
 	const dispatch = useDispatch()
@@ -48,7 +47,7 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 	const handleRowClick = row => {
 		setInitFormValues(row)
 		setProjDetailDialog(!projDetailDialog)
-		setRowMessage(`Project Title: ${row.title}`)
+		// setProjData(`Project Title: ${row}`)
 	}
 
 	const handleClose = () => {
@@ -67,14 +66,12 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 				},
 				body: JSON.stringify({ userId: user._id })
 			})
-
 			const projects = await response.json()
-
-			console.log('projects', projects)
 
 			dispatch(fetchProjects({ projects }))
 		}
 		getProjects()
+		console.log('ProjectGridWidget fetch projects useEffect was called.')
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	/* Mui Datagrid columns */
@@ -125,7 +122,7 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 					<Box>
 						{/* <IconButton onClick={() => showEditForm(rowdata.row)}> */}
 						<IconButton onClick={() => handleRowClick(rowdata.row)}>
-							<ModeEditOutlineOutlinedIcon />
+							<EditNoteIcon />
 						</IconButton>
 					</Box>
 				)
@@ -187,12 +184,13 @@ const ProjectsGridWidget = ({ initFormValues, setInitFormValues }) => {
 				// onRowClick={() => handleRowClick(rowdata.row)}
 			/>
 			{/* Drawer */}
-			<ProjectsDrawer
-				projDetailDialog={projDetailDialog}
-				setProjDetailDialog={setProjDetailDialog}
-				rowMessage={rowMessage}
-				initFormValues={initFormValues}
-			/>
+			{projDetailDialog && (
+				<ProjectsDrawer
+					projDetailDialog={projDetailDialog}
+					setProjDetailDialog={setProjDetailDialog}
+					initFormValues={initFormValues}
+				/>
+			)}
 		</Box>
 	)
 }
