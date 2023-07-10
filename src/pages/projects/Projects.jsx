@@ -16,7 +16,7 @@ import { addProjectFormState, deleteProjects } from '../../state/projectsSlice'
 import dayjs from 'dayjs'
 
 import ProjectsGridWidget from 'widgets/ProjectsGridWidget.jsx'
-import ProjectForm from './ProjectForm'
+import ProjectForm from '../../components/forms/ProjectForm'
 
 import { useTheme } from '@emotion/react'
 

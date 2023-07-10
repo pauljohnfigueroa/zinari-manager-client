@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
 import { fetchTeams, addTeamFormState } from 'state/teamsSlice.js'
-import TeamForm from 'pages/teams/TeamForm.jsx'
+import TeamForm from 'components/forms/TeamForm.jsx'
 
 import { Box, IconButton, Avatar, AvatarGroup } from '@mui/material'
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'

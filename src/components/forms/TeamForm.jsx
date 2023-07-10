@@ -1,9 +1,7 @@
 /* 
 The TeamForm.jsx component is used on both create and update Team.
 */
-// import { useEffect } from 'react'
 import { Formik, Form } from 'formik'
-// import * as yup from 'yup'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { createTeam, updateTeam, addTeamFormState } from '../../state/teamsSlice'
@@ -30,6 +28,7 @@ import DialogBox from 'components/dialog/DialogBox'
 import useFetchUsers from 'hooks/useFetchUsers'
 
 /* Mui Select MenuProps */
+// Repeated code
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
 const MenuProps = {
@@ -43,8 +42,8 @@ const MenuProps = {
 /* End Mui Select */
 
 const TeamForm = ({ formLabel, initFormValues }) => {
-	const isNonMobile = useMediaQuery('(min-width: 600px)')
 	const theme = useTheme()
+	const isNonMobile = useMediaQuery(theme.breakpoints.up('md'))
 
 	const open = useSelector(state => state.team.open)
 	const user = useSelector(state => state.auth.user)
@@ -54,7 +53,6 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 	const dispatch = useDispatch()
 
 	let initialFormValues = initFormValues
-	// let teamMembersIds = []
 	let teamMembers
 
 	// if we are updating a team
@@ -65,10 +63,7 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 		)
 		// update
 		initialFormValues = { ...initialFormValues, teamMembers }
-		// teamMembersIds = initFormValues.teamMembers.map(teamMember => teamMember._id)
 	}
-
-	//console.log('initialFormValues', initialFormValues)
 
 	/* Mui Chip */
 	/* 
@@ -83,8 +78,9 @@ const TeamForm = ({ formLabel, initFormValues }) => {
 	const memberNames = users.map(
 		user => `${user._id}|${user.firstName} ${user.lastName}|${user.photo}`
 	)
-	console.log('memberNames', memberNames)
+	//console.log('memberNames', memberNames)
 
+	// repeated code
 	function getStyles(name, personName, theme) {
 		return {
 			fontWeight:

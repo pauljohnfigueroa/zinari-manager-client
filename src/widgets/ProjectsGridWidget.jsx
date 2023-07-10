@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
-import ProjectForm from 'pages/projects/ProjectForm.jsx'
+import ProjectForm from 'components/forms/ProjectForm.jsx'
 import { Box, IconButton } from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import LinearProgress from '@mui/material/LinearProgress'

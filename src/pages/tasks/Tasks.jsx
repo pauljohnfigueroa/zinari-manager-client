@@ -16,7 +16,7 @@ import { addTaskFormState, deleteTasks } from '../../state/tasksSlice'
 import dayjs from 'dayjs'
 
 import TasksGridWidget from 'widgets/TasksGridWidget.jsx'
-import TaskForm from './TaskForm'
+import TaskForm from '../../components/forms/TaskForm'
 
 import { useTheme } from '@emotion/react'
 

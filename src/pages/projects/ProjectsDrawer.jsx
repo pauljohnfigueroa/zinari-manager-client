@@ -24,10 +24,10 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import ProjectForm from './ProjectForm'
+import ProjectForm from '../../components/forms/ProjectForm'
 
 import { tokens } from 'theme'
-import TaskForm from 'pages/tasks/TaskForm'
+import TaskForm from 'components/forms/TaskForm'
 
 import dayjs from 'dayjs'
 
@@ -38,18 +38,6 @@ const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction="right" ref={ref} {...props} />
 })
 
-/* Tasks form */
-const initialValues = {
-	_id: null,
-	title: '',
-	description: '',
-	project: '',
-	team: '',
-	priority: '',
-	owner: '',
-	perspective: '',
-	dueDate: dayjs().add(0, 'day')
-}
 const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues }) => {
 	const theme = useTheme()
 	const colors = tokens(theme.palette.mode)
@@ -64,17 +52,29 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 	/* local states */
 	const [teams, setTeams] = useState([])
 	const [teamMembers, setTeamMembers] = useState([])
+	const [currentTeam, setCurrentTeam] = useState([])
 
-	/* accordion state */
+	/* Accordion state */
 	const [expanded, setExpanded] = useState(false)
 
-	/* Task Form */
-	const [taskFormOpen, setTaskFormOpen] = useState(false)
+	/* Tasks form */
+	const initialValues = {
+		_id: null,
+		title: '',
+		description: '',
+		project: initFormValues._id, // set to the current project id
+		team: '',
+		priority: '',
+		owner: '',
+		perspective: '',
+		dueDate: dayjs().add(0, 'day')
+	}
 
 	/* Add Task to a Team */
 	const handleAddTask = teamId => {
 		console.log(teamId)
-		setTaskFormOpen(prev => !prev)
+		const teamDetails = teamMembers.filter(team => team._id === teamId)
+		setCurrentTeam(teamDetails[0])
 		dispatch(addTaskFormState({ open: true }))
 	}
 	/* Remote Team from the Project */
@@ -132,7 +132,9 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
-			{open && <TaskForm formLabel="Add Task" initFormValues={initialValues} />}
+			{open && (
+				<TaskForm formLabel="Add Task" initFormValues={initialValues} currentTeam={currentTeam} />
+			)}
 			<Dialog
 				fullScreen
 				open={projDetailDialog}

@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
 import { fetchTasks, addTaskFormState } from 'state/tasksSlice.js'
-import TaskForm from 'pages/tasks/TaskForm.jsx'
+import TaskForm from 'components/forms/TaskForm.jsx'
 import { Box, IconButton } from '@mui/material'
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'

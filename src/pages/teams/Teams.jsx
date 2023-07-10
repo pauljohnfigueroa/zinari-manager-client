@@ -14,7 +14,7 @@ import Button from '@mui/material/Button'
 import { addTeamFormState, deleteTeams } from '../../state/teamsSlice'
 
 import TeamsGridWidget from 'widgets/TeamsGridWidget.jsx'
-import TeamForm from './TeamForm'
+import TeamForm from '../../components/forms/TeamForm'
 
 import { useTheme } from '@emotion/react'
 
