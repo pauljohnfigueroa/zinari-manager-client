@@ -1,8 +1,8 @@
 import { useState, useEffect, forwardRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
-import { Avatar, AvatarGroup, Box, Card, CardContent, CardHeader, TextField } from '@mui/material'
+import { Avatar, AvatarGroup, Box, TextField, Divider } from '@mui/material'
 import Grid from '@mui/material/Grid'
 
 import Typography from '@mui/material/Typography'
@@ -27,34 +27,72 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ProjectForm from './ProjectForm'
 
 import { tokens } from 'theme'
+import TaskForm from 'pages/tasks/TaskForm'
+
+import dayjs from 'dayjs'
+
+import { addTaskFormState } from 'state/tasksSlice'
 
 /* Accordion */
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction="right" ref={ref} {...props} />
 })
 
+/* Tasks form */
+const initialValues = {
+	_id: null,
+	title: '',
+	description: '',
+	project: '',
+	team: '',
+	priority: '',
+	owner: '',
+	perspective: '',
+	dueDate: dayjs().add(0, 'day')
+}
 const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues }) => {
-	const user = useSelector(state => state.auth.user)
-	const token = useSelector(state => state.auth.token)
 	const theme = useTheme()
 	const colors = tokens(theme.palette.mode)
 
-	const [expanded, setExpanded] = useState(false)
+	const user = useSelector(state => state.auth.user)
+	const token = useSelector(state => state.auth.token)
+
+	/* Task Form */
+	const open = useSelector(state => state.task.open)
+	const dispatch = useDispatch()
 
 	/* local states */
 	const [teams, setTeams] = useState([])
 	const [teamMembers, setTeamMembers] = useState([])
 
+	/* accordion state */
+	const [expanded, setExpanded] = useState(false)
+
+	/* Task Form */
+	const [taskFormOpen, setTaskFormOpen] = useState(false)
+
+	/* Add Task to a Team */
+	const handleAddTask = teamId => {
+		console.log(teamId)
+		setTaskFormOpen(prev => !prev)
+		dispatch(addTaskFormState({ open: true }))
+	}
+	/* Remote Team from the Project */
+	const handleRemoveTeam = teamId => {
+		alert(teamId)
+	}
+
 	const handleChange = panel => (event, isExpanded) => {
 		setExpanded(isExpanded ? panel : false)
+		// we can perform data fetching here
 	}
 
 	const handleClose = () => {
 		setProjDetailDialog(false)
 	}
-	/* Fetch teams */
+
+	/* Fetch project teams */
 	useEffect(() => {
-		// console.log('initFormValues._id', initFormValues._id)
 		const getProjTeams = async () => {
 			const response = await fetch(
 				`${process.env.REACT_APP_SERVER_URL}/projects/${initFormValues._id}/teams`,
@@ -70,9 +108,10 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 			setTeams(projTeams[0].projTeams)
 		}
 		getProjTeams()
-		console.log('projectsDrawer useEffect was called')
-	}, [])
+		console.log('projectsDrawer getProjTeams useEffect()')
+	}, [initFormValues._id, token])
 
+	/* Fetch team members, this is dependent to the project teams.  */
 	useEffect(() => {
 		const getTeamMembers = async () => {
 			console.log('teams', teams)
@@ -85,19 +124,15 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 				body: JSON.stringify({ teams })
 			})
 			const projTeam = await response.json()
-
-			console.log('projTeam', projTeam)
-
 			setTeamMembers(projTeam)
 		}
 		getTeamMembers()
-		console.log('projectsDrawer getTeamMembers useEffect was called')
-	}, [teams, setTeamMembers])
-
-	console.log('teamMembers state', teamMembers)
+		console.log('projectsDrawer getTeamMembers useEffect()')
+	}, [teams, setTeamMembers, token])
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
+			{open && <TaskForm formLabel="Add Task" initFormValues={initialValues} />}
 			<Dialog
 				fullScreen
 				open={projDetailDialog}
@@ -110,7 +145,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 							<CloseIcon />
 						</IconButton>
 						<Typography sx={{ ml: 2, flex: 1 }} variant="h3" component="div">
-							{initFormValues._id}
+							{initFormValues.title}
 						</Typography>
 					</Toolbar>
 				</AppBar>
@@ -187,8 +222,8 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 										>
 											<AccordionSummary
 												expandIcon={<ExpandMoreIcon />}
-												aria-controls="compliance-content"
-												id="compliance-header"
+												aria-controls={team.name}
+												id={team._id}
 											>
 												<Typography variant="h4" sx={{ width: '50%', flexShrink: 0 }}>
 													{team.name}
@@ -196,73 +231,74 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 											</AccordionSummary>
 											<AccordionDetails>
 												{/* Team leader and members */}
-												<Box sx={{ display: 'flex', gap: 2 }}>
-													{/* Leader */}
-													<Box
-														sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-													>
-														<Typography variant="h6" sx={{ paddingBottom: 2 }}>
-															Leader
-														</Typography>
-
-														<Avatar
-															alt={`${team.teamLeader[0].firstName} ${team.teamLeader[0].lastName}`}
-															src={`/assets/images/${team.teamLeader[0].photo}`}
-															sx={{ width: 32, height: 32 }}
-														/>
-													</Box>
-													{/* Members */}
-													<Box
-														sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
-													>
-														<Typography variant="h6" sx={{ paddingBottom: 2 }}>
-															Members
-														</Typography>
-														<AvatarGroup
-															max={5}
-															variant="circular"
+												<Box
+													sx={{
+														display: 'flex',
+														justifyContent: 'space-between',
+														paddingBottom: 4
+													}}
+												>
+													<Box sx={{ display: 'flex', gap: 4 }}>
+														{/* Team Leader */}
+														<Box
 															sx={{
-																'& .MuiAvatarGroup-avatar': {
-																	width: 32,
-																	height: 32,
-																	fontSize: '.8rem',
-																	border: 'none'
-																}
+																display: 'flex',
+																flexDirection: 'column',
+																alignItems: 'center'
 															}}
 														>
-															{team.teamMembers.map(member => (
-																<Avatar
-																	alt={`${member.firstName} ${member.lastName}`}
-																	src={`/assets/images/${member.photo}`}
-																/>
-															))}
-															{/* <Avatar
-																alt={`${user.firstName} ${user.lastName}`}
-																src={`/assets/images/skyler-white.png`}
-															/>
+															<Typography variant="h6" sx={{ paddingBottom: 2 }}>
+																Leader
+															</Typography>
+
+															{/* Team leader avatar */}
 															<Avatar
-																alt={`${user.firstName} ${user.lastName}`}
-																src={`/assets/images/gus-fring.png`}
+																alt={`${team.teamLeader[0].firstName} ${team.teamLeader[0].lastName}`}
+																src={`/assets/images/${team.teamLeader[0].photo}`}
+																sx={{ width: 32, height: 32 }}
 															/>
-															<Avatar
-																alt={`${user.firstName} ${user.lastName}`}
-																src={`/assets/images/jesse-pinkman.png`}
-															/>
-															<Avatar
-																alt={`${user.firstName} ${user.lastName}`}
-																src={`/assets/images/marie-shrader.png`}
-															/>
-															<Avatar
-																alt={`${user.firstName} ${user.lastName}`}
-																src={`/assets/images/saul-goodman.png`}
-															/>
-															<Avatar
-																alt={`${user.firstName} ${user.lastName}`}
-																src={`/assets/images/hank-shrader.png`}
-															/> */}
-														</AvatarGroup>
+														</Box>
+														{/* Team Members */}
+														<Box
+															sx={{
+																display: 'flex',
+																flexDirection: 'column',
+																alignItems: 'start'
+															}}
+														>
+															<Typography variant="h6" sx={{ paddingBottom: 2 }}>
+																Members
+															</Typography>
+															{/* Team Members Avatar Group*/}
+															<AvatarGroup
+																max={5}
+																variant="circular"
+																sx={{
+																	'& .MuiAvatarGroup-avatar': {
+																		width: 32,
+																		height: 32,
+																		fontSize: '.8rem',
+																		border: 'none'
+																	}
+																}}
+															>
+																{team.teamMembers.map(member => (
+																	<Avatar
+																		key={member._id}
+																		alt={`${member.firstName} ${member.lastName}`}
+																		src={`/assets/images/${member.photo}`}
+																	/>
+																))}
+															</AvatarGroup>
+														</Box>
+													</Box>
+													{/* Accordion panel actions */}
+													<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+														<Button onClick={handleRemoveTeam}>Remove Team</Button>
+														<Button onClick={() => handleAddTask(team._id)}>Add Task</Button>
 													</Box>
 												</Box>
+												<Divider />
 												{/* Compliance Team Tasks*/}
 												<Box sx={{ paddingTop: 2 }}>
 													<Typography variant="h4">Tasks</Typography>
@@ -526,7 +562,6 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 										</Accordion>
 									)
 								})}
-
 								{/* Other Accordions */}
 							</Box>
 						</Grid>

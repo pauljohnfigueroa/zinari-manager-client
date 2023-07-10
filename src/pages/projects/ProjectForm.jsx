@@ -1,12 +1,10 @@
 /* The ProjectForm.jsx component is used on both create and update Project.*/
 import { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
-// import * as yup from 'yup'
 
 /* Redux */
 import { useSelector, useDispatch } from 'react-redux'
 import { createProject, updateProject, addProjectFormState } from '../../state/projectsSlice'
-// import { fetchTeams } from 'state/teamsSlice'
 
 import dayjs from 'dayjs'
 
@@ -30,7 +28,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 
 import FormikDatePicker from 'components/FormikDatePicker'
-import DialogBox from 'components/dialog/DialogBox'
 
 import { useTheme } from '@emotion/react'
 import useFetchTeams from 'hooks/useFetchTeams'
@@ -52,25 +49,21 @@ const ProjectForm = ({ initFormValues }) => {
 	const theme = useTheme()
 	const [error, setError] = useState()
 
-	const open = useSelector(state => state.project.open)
 	const token = useSelector(state => state.auth.token)
 	const [teams] = useFetchTeams()
 	const dispatch = useDispatch()
-
-	//console.log('teams', teams)
 
 	// When we do record update, the date format will be in the saved ISO format similar to 2018-04-04T16:00:00.000Z
 	// To enable the Update form to load the current record's date,
 	// We first need to convert the ISO format date to dayjs format.
 	let initialFormValues = { ...initFormValues, dueDate: dayjs(initFormValues.dueDate) }
-	// let projectTeamsIds = []
 	let projTeams
+
 	// if we are updating a project
 	if (initFormValues.projTeams) {
 		projTeams = initFormValues?.projTeams.map(projTeam => `${projTeam._id}|${projTeam.name}`)
 		// update
 		initialFormValues = { ...initialFormValues, projTeams }
-		// projectTeamsIds = initFormValues.projectTeams.map(projectTeam => projectTeam._id)
 	}
 
 	/* Chip */
@@ -82,10 +75,7 @@ const ProjectForm = ({ initFormValues }) => {
        'Van Henry',
     ]
   */
-	//console.log('teams', teams)
 	const teamNames = teams.map(team => `${team._id}|${team.name}`)
-
-	//console.log('teamNames', teamNames)
 
 	function getStyles(name, teamName, theme) {
 		return {
@@ -146,14 +136,6 @@ const ProjectForm = ({ initFormValues }) => {
 	return (
 		<div>
 			{error && <div>{error}</div>}
-			{/* <DialogBox
-				handleClose={handleClose}
-				formLabel={formLabel}
-				open={open}
-				fullWidth={true}
-				maxWidth="sm"
-				requiredFields="Please fill up all the required ( * ) fields."
-			> */}
 			<Formik
 				onSubmit={
 					initialFormValues._id
@@ -231,8 +213,6 @@ const ProjectForm = ({ initFormValues }) => {
 									onChange={handleChange}
 									input={<OutlinedInput id="teams-input" label="Select Teams" />}
 									renderValue={selected => (
-										// console.log('renderValue selected', selected)
-										// console.log('renderValue values.projTeams', values.projTeams)
 										<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
 											{selected.map(
 												value =>
@@ -263,19 +243,13 @@ const ProjectForm = ({ initFormValues }) => {
 							<Button sx={{ minWidth: 100 }} onClick={handleClose} variant="outlined">
 								Cancel
 							</Button>
-							<Button
-								type="submit"
-								sx={{ minWidth: 100 }}
-								variant="contained"
-								// onClick={values._id ? () => setFormValues(values) : undefined}
-							>
+							<Button type="submit" sx={{ minWidth: 100 }} variant="contained">
 								{values._id ? 'Update' : 'Save'}
 							</Button>
 						</DialogActions>
 					</Form>
 				)}
 			</Formik>
-			{/* </DialogBox> */}
 		</div>
 	)
 }
