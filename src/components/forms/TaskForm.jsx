@@ -243,24 +243,19 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 										value={values.owner}
 										onChange={handleChange}
 										input={<OutlinedInput id="members-input" label="Select Owner" />}
-										/* Selected Items */
+										/* Selected Owner */
 										renderValue={selected => (
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.4 }}>
-												{selected.map(
-													value =>
-														value && (
-															<Chip
-																key={value.split('|')[0]} // _id
-																label={value.split('|')[1]} // full name
-																avatar={
-																	<Avatar
-																		alt={value.split('|')[1]} // full name
-																		src={`/assets/images/${value.split('|')[2]}`} // photo
-																	/>
-																}
-															/>
-														)
-												)}
+												<Chip
+													key={selected.split('|')[0]} // _id
+													label={selected.split('|')[1]} // full name
+													avatar={
+														<Avatar
+															alt={selected.split('|')[1]} // full name
+															src={`/assets/images/${selected.split('|')[2]}`} // photo
+														/>
+													}
+												/>
 											</Box>
 										)}
 										MenuProps={MenuProps}
