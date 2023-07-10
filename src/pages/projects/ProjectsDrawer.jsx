@@ -53,6 +53,8 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 	const [teams, setTeams] = useState([])
 	const [teamMembers, setTeamMembers] = useState([])
 	const [currentTeam, setCurrentTeam] = useState([])
+	const [tasks, setTasks] = useState([])
+	const [panelTeamId, setPanelTeamId] = useState(null)
 
 	/* Accordion state */
 	const [expanded, setExpanded] = useState(false)
@@ -82,9 +84,10 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		alert(teamId)
 	}
 
-	const handleChange = panel => (event, isExpanded) => {
-		setExpanded(isExpanded ? panel : false)
-		// we can perform data fetching here
+	const handleAccordionPanelChange = teamId => async (event, isExpanded) => {
+		setExpanded(isExpanded ? teamId : false)
+		setPanelTeamId(teamId)
+		console.log('handleAccordionPanelChange was called')
 	}
 
 	const handleClose = () => {
@@ -108,7 +111,6 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 			setTeams(projTeams[0].projTeams)
 		}
 		getProjTeams()
-		console.log('projectsDrawer getProjTeams useEffect()')
 	}, [initFormValues._id, token])
 
 	/* Fetch team members, this is dependent to the project teams.  */
@@ -127,8 +129,44 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 			setTeamMembers(projTeam)
 		}
 		getTeamMembers()
-		console.log('projectsDrawer getTeamMembers useEffect()')
 	}, [teams, setTeamMembers, token])
+
+	useEffect(() => {
+		const getTeamTasks = async () => {
+			if (panelTeamId) {
+				try {
+					const response = await fetch(
+						`${process.env.REACT_APP_SERVER_URL}/tasks/${panelTeamId}/tasks`,
+						{
+							method: 'GET',
+							headers: {
+								'Content-Type': 'application/json',
+								Authorization: `Bearer ${token}`
+							}
+						}
+					)
+					const teamTasks = await response.json()
+
+					if (tasks.length > 0) {
+						let exists = false
+						tasks.map(item => {
+							if (item.team === panelTeamId) {
+								exists = true
+							}
+						})
+						if (!exists) {
+							setTasks([...tasks, { team: panelTeamId, teamTasks }])
+						}
+					} else {
+						setTasks([{ team: panelTeamId, teamTasks }])
+					}
+				} catch (error) {
+					console.log(error)
+				}
+			}
+		}
+		getTeamTasks()
+	}, [panelTeamId])
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
@@ -220,7 +258,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 										<Accordion
 											key={team._id}
 											expanded={expanded === team._id}
-											onChange={handleChange(team._id)}
+											onChange={handleAccordionPanelChange(team._id)}
 										>
 											<AccordionSummary
 												expandIcon={<ExpandMoreIcon />}
@@ -304,261 +342,275 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 												{/* Compliance Team Tasks*/}
 												<Box sx={{ paddingTop: 2 }}>
 													<Typography variant="h4">Tasks</Typography>
-													<Accordion>
-														<AccordionSummary
-															expandIcon={<ExpandMoreIcon />}
-															aria-controls="panel1a-content"
-															id="panel1a-header"
-														>
-															<Typography>
-																Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-															</Typography>
-														</AccordionSummary>
-														<AccordionDetails>
-															{/* List */}
-															<List
-																sx={{ width: '100%', paddingRight: 1, bgcolor: 'background.paper' }}
-															>
-																<ListItem
-																	sx={{
-																		alignItems: 'flex-start'
-																	}}
-																>
-																	{/* Put content here */}
+													{/* Tasks */}
+													{tasks.map(teamTask => {
+														if (teamTask.team === team._id) {
+															return teamTask.teamTasks.map(task => {
+																return (
+																	<Accordion key={task._id}>
+																		<AccordionSummary
+																			expandIcon={<ExpandMoreIcon />}
+																			aria-controls={`${task.title}-content`}
+																			id={`${task.title}-header`}
+																		>
+																			<Typography>{task.title}</Typography>
+																		</AccordionSummary>
+																		<AccordionDetails>
+																			{/* Comments */}
+																			<List
+																				sx={{
+																					width: '100%',
+																					paddingRight: 1,
+																					bgcolor: 'background.paper'
+																				}}
+																			>
+																				<ListItem
+																					sx={{
+																						alignItems: 'flex-start'
+																					}}
+																				>
+																					{/* Put content here */}
 
-																	<Box
-																		sx={{
-																			display: 'flex',
-																			gap: 2,
-																			minHeight: 100,
-																			height: '100%',
-																			width: '100%',
-																			alignItems: 'center',
-																			padding: 1,
-																			backgroundColor: colors.grey[900],
-																			borderRadius: '4px'
-																		}}
-																	>
-																		<Box
-																			sx={{
-																				display: 'flex',
-																				gap: 1,
-																				minWidth: '64px',
-																				flexDirection: 'column',
-																				alignItems: 'center',
-																				justifyContent: 'center'
-																			}}
-																		>
-																			<Avatar
-																				alt={`${user.firstName} ${user.lastName}`}
-																				src={`/assets/images/gus-fring.png`}
-																				sx={{ width: 48, height: 48 }}
-																			/>
-																			<Typography sx={{ fontSize: '10px', textAlign: 'center' }}>
-																				Gus Fring
-																			</Typography>
-																		</Box>
-																		<Box
-																			sx={{
-																				display: 'flex',
-																				flexDirection: 'column',
-																				width: '100%',
-																				alignItems: 'start',
-																				justifyContent: 'start'
-																			}}
-																		>
-																			<Typography
-																				sx={{ color: 'gray', fontSize: 12, paddingBottom: 1 }}
-																			>
-																				July 05, 2023
-																			</Typography>
-																			<Typography
-																				variant="body2"
-																				color="text.secondary"
-																				sx={{ textAlign: 'left' }}
-																			>
-																				Aenean turpis ante, porttitor sit amet dictum eget, mollis a
-																				elit. In non leo in tellus aliquam molestie pellentesque eu
-																				augue. Sed accumsan, ipsum viverra pretium maximus, purus
-																				diam scelerisque est, quis suscipit sem est at neque. Sed a
-																				lorem accumsan, mattis elit a, gravida nunc. Phasellus in
-																				lorem vel orci bibendum placerat. Maecenas et urna ut ante
-																				volutpat mattis. Proin volutpat ante lectus, placerat rutrum
-																				odio ullamcorper blandit. Nulla congue dui orci, quis mollis
-																				arcu eleifend non. Integer eget ex nec justo sagittis
-																				laoreet.
-																			</Typography>
-																		</Box>
-																	</Box>
-																</ListItem>
-																<ListItem
-																	sx={{
-																		alignItems: 'flex-start'
-																	}}
-																>
-																	{/* Put content here */}
+																					<Box
+																						sx={{
+																							display: 'flex',
+																							gap: 2,
+																							minHeight: 100,
+																							height: '100%',
+																							width: '100%',
+																							alignItems: 'center',
+																							padding: 1,
+																							backgroundColor: colors.grey[900],
+																							borderRadius: '4px'
+																						}}
+																					>
+																						<Box
+																							sx={{
+																								display: 'flex',
+																								gap: 1,
+																								minWidth: '64px',
+																								flexDirection: 'column',
+																								alignItems: 'center',
+																								justifyContent: 'center'
+																							}}
+																						>
+																							<Avatar
+																								alt={`${user.firstName} ${user.lastName}`}
+																								src={`/assets/images/gus-fring.png`}
+																								sx={{ width: 48, height: 48 }}
+																							/>
+																							<Typography
+																								sx={{ fontSize: '10px', textAlign: 'center' }}
+																							>
+																								Gus Fring
+																							</Typography>
+																						</Box>
+																						<Box
+																							sx={{
+																								display: 'flex',
+																								flexDirection: 'column',
+																								width: '100%',
+																								alignItems: 'start',
+																								justifyContent: 'start'
+																							}}
+																						>
+																							<Typography
+																								sx={{
+																									color: 'gray',
+																									fontSize: 12,
+																									paddingBottom: 1
+																								}}
+																							>
+																								July 05, 2023
+																							</Typography>
+																							<Typography
+																								variant="body2"
+																								color="text.secondary"
+																								sx={{ textAlign: 'left' }}
+																							>
+																								Aenean turpis ante, porttitor sit amet dictum eget,
+																								mollis a elit. In non leo in tellus aliquam molestie
+																								pellentesque eu augue. Sed accumsan, ipsum viverra
+																								pretium maximus, purus diam scelerisque est, quis
+																								suscipit sem est at neque. Sed a lorem accumsan,
+																								mattis elit a, gravida nunc. Phasellus in lorem vel
+																								orci bibendum placerat. Maecenas et urna ut ante
+																								volutpat mattis. Proin volutpat ante lectus,
+																								placerat rutrum odio ullamcorper blandit. Nulla
+																								congue dui orci, quis mollis arcu eleifend non.
+																								Integer eget ex nec justo sagittis laoreet.
+																							</Typography>
+																						</Box>
+																					</Box>
+																				</ListItem>
+																				<ListItem
+																					sx={{
+																						alignItems: 'flex-start'
+																					}}
+																				>
+																					{/* Put content here */}
 
-																	<Box
-																		sx={{
-																			display: 'flex',
-																			gap: 2,
-																			minHeight: 100,
-																			height: '100%',
-																			width: '100%',
-																			alignItems: 'center',
-																			padding: 1,
-																			backgroundColor: colors.grey[900],
-																			borderRadius: '4px'
-																		}}
-																	>
-																		<Box
-																			sx={{
-																				display: 'flex',
-																				gap: 1,
-																				minWidth: '64px',
-																				flexDirection: 'column',
-																				alignItems: 'center',
-																				justifyContent: 'center'
-																			}}
-																		>
-																			<Avatar
-																				alt={`${user.firstName} ${user.lastName}`}
-																				src={`/assets/images/skyler-white.png`}
-																				sx={{ width: 48, height: 48 }}
-																			/>
-																			<Typography sx={{ fontSize: '10px', textAlign: 'center' }}>
-																				Skyler White
-																			</Typography>
-																		</Box>
-																		<Box
-																			sx={{
-																				display: 'flex',
-																				flexDirection: 'column',
-																				width: '100%',
-																				alignItems: 'start',
-																				justifyContent: 'start'
-																			}}
-																		>
-																			<Typography
-																				sx={{ color: 'gray', fontSize: 12, paddingBottom: 1 }}
-																			>
-																				July 05, 2023
-																			</Typography>
-																			<Typography
-																				variant="body2"
-																				color="text.secondary"
-																				sx={{ textAlign: 'left' }}
-																			>
-																				Aenean turpis ante, porttitor sit amet dictum eget, mollis a
-																				elit. In non leo in tellus aliquam molestie pellentesque eu
-																				augue.
-																			</Typography>
-																		</Box>
-																	</Box>
-																</ListItem>
-																<ListItem
-																	sx={{
-																		alignItems: 'flex-start'
-																	}}
-																>
-																	{/* Put content here */}
+																					<Box
+																						sx={{
+																							display: 'flex',
+																							gap: 2,
+																							minHeight: 100,
+																							height: '100%',
+																							width: '100%',
+																							alignItems: 'center',
+																							padding: 1,
+																							backgroundColor: colors.grey[900],
+																							borderRadius: '4px'
+																						}}
+																					>
+																						<Box
+																							sx={{
+																								display: 'flex',
+																								gap: 1,
+																								minWidth: '64px',
+																								flexDirection: 'column',
+																								alignItems: 'center',
+																								justifyContent: 'center'
+																							}}
+																						>
+																							<Avatar
+																								alt={`${user.firstName} ${user.lastName}`}
+																								src={`/assets/images/skyler-white.png`}
+																								sx={{ width: 48, height: 48 }}
+																							/>
+																							<Typography
+																								sx={{ fontSize: '10px', textAlign: 'center' }}
+																							>
+																								Skyler White
+																							</Typography>
+																						</Box>
+																						<Box
+																							sx={{
+																								display: 'flex',
+																								flexDirection: 'column',
+																								width: '100%',
+																								alignItems: 'start',
+																								justifyContent: 'start'
+																							}}
+																						>
+																							<Typography
+																								sx={{
+																									color: 'gray',
+																									fontSize: 12,
+																									paddingBottom: 1
+																								}}
+																							>
+																								July 05, 2023
+																							</Typography>
+																							<Typography
+																								variant="body2"
+																								color="text.secondary"
+																								sx={{ textAlign: 'left' }}
+																							>
+																								Aenean turpis ante, porttitor sit amet dictum eget,
+																								mollis a elit. In non leo in tellus aliquam molestie
+																								pellentesque eu augue.
+																							</Typography>
+																						</Box>
+																					</Box>
+																				</ListItem>
+																				<ListItem
+																					sx={{
+																						alignItems: 'flex-start'
+																					}}
+																				>
+																					{/* Put content here */}
 
-																	<Box
-																		sx={{
-																			display: 'flex',
-																			gap: 2,
-																			minHeight: 100,
-																			height: '100%',
-																			width: '100%',
-																			alignItems: 'center',
-																			padding: 1,
-																			backgroundColor: colors.grey[900],
-																			borderRadius: '4px'
-																		}}
-																	>
-																		<Box
-																			sx={{
-																				display: 'flex',
-																				gap: 1,
-																				minWidth: '64px',
-																				flexDirection: 'column',
-																				alignItems: 'center',
-																				justifyContent: 'center'
-																			}}
-																		>
-																			<Avatar
-																				alt={`${user.firstName} ${user.lastName}`}
-																				src={`/assets/images/walter-white.png`}
-																				sx={{ width: 48, height: 48 }}
-																			/>
-																			<Typography sx={{ fontSize: '10px', textAlign: 'center' }}>
-																				Walter White
-																			</Typography>
-																		</Box>
-																		<Box
-																			sx={{
-																				display: 'flex',
-																				flexDirection: 'column',
-																				width: '100%',
-																				alignItems: 'start',
-																				justifyContent: 'start'
-																			}}
-																		>
-																			<Typography
-																				sx={{ color: 'gray', fontSize: 12, paddingBottom: 1 }}
-																			>
-																				July 05, 2023
-																			</Typography>
-																			<Typography
-																				variant="body2"
-																				color="text.secondary"
-																				sx={{ textAlign: 'left' }}
-																			>
-																				Proin volutpat ante lectus, placerat rutrum odio ullamcorper
-																				blandit. Nulla congue dui orci, quis mollis arcu eleifend
-																				non. Integer eget ex nec justo sagittis laoreet.
-																			</Typography>
-																		</Box>
-																	</Box>
-																</ListItem>
-																{/* Comment */}
-																<ListItem>
-																	<Box sx={{ width: '100%' }}>
-																		<TextField
-																			id="filled-multiline-flexible"
-																			label="Comment"
-																			placeholder="Type your comment here."
-																			multiline
-																			minRows={3}
-																			maxRows={3}
-																			variant="outlined"
-																			sx={{ width: '100%', paddingBottom: 1 }}
-																		/>
-																		<Box sx={{ display: 'flex', justifyContent: 'end' }}>
-																			<Button variant="filled">Post Comment</Button>
-																		</Box>
-																	</Box>
-																</ListItem>
-															</List>
-														</AccordionDetails>
-													</Accordion>
-													<Accordion>
-														<AccordionSummary
-															expandIcon={<ExpandMoreIcon />}
-															aria-controls="panel2a-content"
-															id="panel2a-header"
-														>
-															<Typography>
-																Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-															</Typography>
-														</AccordionSummary>
-														<AccordionDetails>
-															<Typography>
-																Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-																malesuada lacus ex, sit amet blandit leo lobortis eget.
-															</Typography>
-														</AccordionDetails>
-													</Accordion>
+																					<Box
+																						sx={{
+																							display: 'flex',
+																							gap: 2,
+																							minHeight: 100,
+																							height: '100%',
+																							width: '100%',
+																							alignItems: 'center',
+																							padding: 1,
+																							backgroundColor: colors.grey[900],
+																							borderRadius: '4px'
+																						}}
+																					>
+																						<Box
+																							sx={{
+																								display: 'flex',
+																								gap: 1,
+																								minWidth: '64px',
+																								flexDirection: 'column',
+																								alignItems: 'center',
+																								justifyContent: 'center'
+																							}}
+																						>
+																							<Avatar
+																								alt={`${user.firstName} ${user.lastName}`}
+																								src={`/assets/images/walter-white.png`}
+																								sx={{ width: 48, height: 48 }}
+																							/>
+																							<Typography
+																								sx={{ fontSize: '10px', textAlign: 'center' }}
+																							>
+																								Walter White
+																							</Typography>
+																						</Box>
+																						<Box
+																							sx={{
+																								display: 'flex',
+																								flexDirection: 'column',
+																								width: '100%',
+																								alignItems: 'start',
+																								justifyContent: 'start'
+																							}}
+																						>
+																							<Typography
+																								sx={{
+																									color: 'gray',
+																									fontSize: 12,
+																									paddingBottom: 1
+																								}}
+																							>
+																								July 05, 2023
+																							</Typography>
+																							<Typography
+																								variant="body2"
+																								color="text.secondary"
+																								sx={{ textAlign: 'left' }}
+																							>
+																								Proin volutpat ante lectus, placerat rutrum odio
+																								ullamcorper blandit. Nulla congue dui orci, quis
+																								mollis arcu eleifend non. Integer eget ex nec justo
+																								sagittis laoreet.
+																							</Typography>
+																						</Box>
+																					</Box>
+																				</ListItem>
+																				{/* Comment */}
+																				<ListItem>
+																					<Box sx={{ width: '100%' }}>
+																						<TextField
+																							id="filled-multiline-flexible"
+																							label="Comment"
+																							placeholder="Type your comment here."
+																							multiline
+																							minRows={3}
+																							maxRows={3}
+																							variant="outlined"
+																							sx={{ width: '100%', paddingBottom: 1 }}
+																						/>
+																						<Box sx={{ display: 'flex', justifyContent: 'end' }}>
+																							<Button variant="filled">Post Comment</Button>
+																						</Box>
+																					</Box>
+																				</ListItem>
+																			</List>
+																		</AccordionDetails>
+																	</Accordion>
+																)
+															})
+														}
+													})}
 												</Box>
 											</AccordionDetails>
 										</Accordion>

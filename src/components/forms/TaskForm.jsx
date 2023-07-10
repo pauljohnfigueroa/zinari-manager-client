@@ -52,7 +52,12 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 	const user = useSelector(state => state.auth.user)
 	const dispatch = useDispatch()
 
-	const initialFormValues = { ...initFormValues, dueDate: dayjs(initFormValues.dueDate) }
+	// update some initial values
+	const initialFormValues = {
+		...initFormValues,
+		team: currentTeam._id,
+		dueDate: dayjs(initFormValues.dueDate)
+	}
 
 	/* Mui Chip */
 	const memberNames = currentTeam.teamMembers.map(
@@ -81,6 +86,7 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 	/* Create task handler */
 
 	const handleCreateTask = async values => {
+		console.log('values', values)
 		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks`, {
 			method: 'POST',
 			headers: {
@@ -146,6 +152,7 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 							>
 								{/* <Field type="hidden" id="email" name="email" value={values.email} /> */}
 								<Field type="hidden" id="project" name="project" value={values.project} />
+								<Field type="hidden" id="team" name="team" value={values.team} />
 
 								<TextField
 									fullWidth
