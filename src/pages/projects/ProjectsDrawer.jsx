@@ -131,6 +131,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		getTeamMembers()
 	}, [teams, setTeamMembers, token])
 
+	/* Fetch team's tasks */
 	useEffect(() => {
 		const getTeamTasks = async () => {
 			if (panelTeamId) {
@@ -147,6 +148,8 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 					)
 					const teamTasks = await response.json()
 
+					// check if the Team accordion panel was already viewed before
+					// if so, do not re-add the team's tasks
 					if (tasks.length > 0) {
 						let exists = false
 						tasks.map(item => {
