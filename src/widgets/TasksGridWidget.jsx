@@ -59,11 +59,11 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 			field: '_id',
 			headerName: 'ID'
 		},
-		{
-			field: 'owner',
-			headerName: 'Owner',
-			flex: 1
-		},
+		// {
+		// 	field: 'owner',
+		// 	headerName: 'Owner',
+		// 	flex: 1
+		// },
 		{
 			field: 'title',
 			headerName: 'Title',
@@ -75,8 +75,28 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 			flex: 1
 		},
 		{
-			field: 'category',
-			headerName: 'Category',
+			field: 'project',
+			headerName: 'Project',
+			flex: 1
+		},
+		{
+			field: 'team',
+			headerName: 'Team',
+			flex: 1
+		},
+		{
+			field: 'perspective',
+			headerName: 'Perspective',
+			flex: 1
+		},
+		{
+			field: 'status',
+			headerName: 'Status',
+			flex: 1
+		},
+		{
+			field: 'dueDate',
+			headerName: 'Due Date',
 			flex: 1
 		},
 		{

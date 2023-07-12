@@ -2,7 +2,7 @@ import { useState, useEffect, forwardRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
-import { Avatar, AvatarGroup, Box, TextField, Divider } from '@mui/material'
+import { Avatar, AvatarGroup, Box, TextField, Divider, Stack } from '@mui/material'
 import Grid from '@mui/material/Grid'
 
 import Typography from '@mui/material/Typography'
@@ -74,7 +74,6 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 
 	/* Add Task to a Team */
 	const handleAddTask = teamId => {
-		console.log(teamId)
 		const teamDetails = teamMembers.filter(team => team._id === teamId)
 		setCurrentTeam(teamDetails[0])
 		dispatch(addTaskFormState({ open: true }))
@@ -84,7 +83,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		alert(teamId)
 	}
 
-	const handleAccordionPanelChange = teamId => async (event, isExpanded) => {
+	const handleAccordionPanelChange = teamId => (event, isExpanded) => {
 		setExpanded(isExpanded ? teamId : false)
 		setPanelTeamId(teamId)
 		console.log('handleAccordionPanelChange was called')
@@ -156,7 +155,9 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 							if (item.team === panelTeamId) {
 								exists = true
 							}
+							return item
 						})
+						console.log(exists)
 						if (!exists) {
 							setTasks([...tasks, { team: panelTeamId, teamTasks }])
 						}
@@ -169,7 +170,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 			}
 		}
 		getTeamTasks()
-	}, [panelTeamId])
+	}, [panelTeamId, token, tasks])
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
@@ -341,6 +342,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 														<Button onClick={() => handleAddTask(team._id)}>Add Task</Button>
 													</Box>
 												</Box>
+
 												<Divider />
 												{/* Compliance Team Tasks*/}
 												<Box sx={{ paddingTop: 2 }}>
@@ -359,6 +361,15 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																			<Typography>{task.title}</Typography>
 																		</AccordionSummary>
 																		<AccordionDetails>
+																			<Stack direction="row" spacing={2} marginBottom={2}>
+																				<Button variant="contained">Delete this Task</Button>
+																				<Button
+																					variant="contained"
+																					bgcolor={colors.greenAccent[600]}
+																				>
+																					Mark as Complete
+																				</Button>
+																			</Stack>
 																			{/* Comments */}
 																			<List
 																				sx={{
@@ -603,7 +614,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																							sx={{ width: '100%', paddingBottom: 1 }}
 																						/>
 																						<Box sx={{ display: 'flex', justifyContent: 'end' }}>
-																							<Button variant="filled">Post Comment</Button>
+																							<Button variant="contained">Post Comment</Button>
 																						</Box>
 																					</Box>
 																				</ListItem>
@@ -613,6 +624,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																)
 															})
 														}
+														return null
 													})}
 												</Box>
 											</AccordionDetails>
