@@ -362,11 +362,10 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																		</AccordionSummary>
 																		<AccordionDetails>
 																			<Stack direction="row" spacing={2} marginBottom={2}>
-																				<Button variant="contained">Delete this Task</Button>
-																				<Button
-																					variant="contained"
-																					bgcolor={colors.greenAccent[600]}
-																				>
+																				<Button variant="contained" color="error">
+																					Delete this Task
+																				</Button>
+																				<Button variant="contained" color="success">
 																					Mark as Complete
 																				</Button>
 																			</Stack>

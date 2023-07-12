@@ -68,8 +68,8 @@ const Sidebar = ({
 	isNonMobile,
 	drawerWidth,
 	isSidebarOpen,
-	setIsSidebarOpen,
-	authPermissions
+	setIsSidebarOpen
+	// authPermissions
 }) => {
 	const theme = useTheme() // from the ThemeProvider
 
