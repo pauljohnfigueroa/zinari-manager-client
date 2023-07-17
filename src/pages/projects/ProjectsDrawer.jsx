@@ -33,6 +33,8 @@ import dayjs from 'dayjs'
 
 import { addTaskFormState } from 'state/tasksSlice'
 
+import ProjectsSummaryWidget from 'widgets/ProjectsSummaryWidget'
+
 /* Accordion */
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction="right" ref={ref} {...props} />
@@ -83,6 +85,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		alert(teamId)
 	}
 
+	// HOF
 	const handleAccordionPanelChange = teamId => (event, isExpanded) => {
 		setExpanded(isExpanded ? teamId : false)
 		setPanelTeamId(teamId)
@@ -177,6 +180,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 			{open && (
 				<TaskForm formLabel="Add Task" initFormValues={initialValues} currentTeam={currentTeam} />
 			)}
+			{/* Drawer */}
 			<Dialog
 				fullScreen
 				open={projDetailDialog}
@@ -195,49 +199,14 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 				</AppBar>
 
 				{/* Team and Task Container */}
+
 				<Box sx={{ padding: 4 }}>
 					<Grid container spacing={1}>
+						{/* Project Summary */}
 						<Grid item xs={12} md={6} order={{ xs: 1, md: 2 }}>
-							<Box
-								sx={{
-									border: `1px solid ${colors.grey[600]}`,
-									height: '100%',
-									padding: 2
-								}}
-							>
-								<Typography variant="h3" sx={{ paddingBottom: 1 }}>
-									Summary
-								</Typography>
-
-								<Box>
-									<Typography variant="h5" sx={{ paddingBottom: 1 }}>
-										% of Project Completed: 52.33%
-									</Typography>
-									<Typography variant="h5" sx={{ paddingBottom: 1 }}>
-										Total completed tasks: 56
-									</Typography>
-									<Typography variant="h5" sx={{ paddingBottom: 1 }}>
-										Total number of tasks: 107
-									</Typography>
-
-									<Typography variant="h3" sx={{ paddingBottom: 1 }}>
-										Teams
-									</Typography>
-									<Typography variant="h5" sx={{ paddingBottom: 1 }}>
-										Compliance Team: 52.33%
-									</Typography>
-									<Typography variant="h5" sx={{ paddingBottom: 1 }}>
-										Collection Team: 67.89%
-									</Typography>
-									<Typography variant="h5" sx={{ paddingBottom: 1 }}>
-										Marketing Team: 87.34%
-									</Typography>
-									<Typography variant="h5" sx={{ paddingBottom: 1 }}>
-										Foreclosure Team: 32.34%
-									</Typography>
-								</Box>
-							</Box>
+							<ProjectsSummaryWidget title="Summary" />
 						</Grid>
+
 						<Grid item xs={12} md={6} order={{ xs: 2, md: 1 }}>
 							<Box
 								sx={{
@@ -348,6 +317,8 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 												<Box sx={{ paddingTop: 2 }}>
 													<Typography variant="h4">Tasks</Typography>
 													{/* Tasks */}
+													{/* Try using array.find() instead of map() here */}
+
 													{tasks.map(teamTask => {
 														if (teamTask.team === team._id) {
 															return teamTask.teamTasks.map(task => {
