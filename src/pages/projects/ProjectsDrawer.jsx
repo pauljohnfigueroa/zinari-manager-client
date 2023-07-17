@@ -57,9 +57,11 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 	const [currentTeam, setCurrentTeam] = useState([])
 	const [tasks, setTasks] = useState([])
 	const [panelTeamId, setPanelTeamId] = useState(null)
+	const [panelTaskId, setPanelTaskId] = useState(null)
 
 	/* Accordion state */
-	const [expanded, setExpanded] = useState(false)
+	const [teamPanelExpanded, setTeamPanelExpanded] = useState(false)
+	const [taskPanelExpanded, setTaskPanelExpanded] = useState(false)
 
 	/* Tasks form */
 	const initialValues = {
@@ -87,9 +89,15 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 
 	// HOF
 	const handleAccordionPanelChange = teamId => (event, isExpanded) => {
-		setExpanded(isExpanded ? teamId : false)
+		setTeamPanelExpanded(isExpanded ? teamId : false)
 		setPanelTeamId(teamId)
 		console.log('handleAccordionPanelChange was called')
+	}
+
+	const handleAccordionTaskPanelChange = taskId => (event, isExpanded) => {
+		setTaskPanelExpanded(isExpanded ? taskId : false)
+		setPanelTaskId(taskId)
+		console.log('handleAccordionTaskPanelChange was called')
 	}
 
 	const handleClose = () => {
@@ -175,6 +183,11 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		getTeamTasks()
 	}, [panelTeamId, token, tasks])
 
+	/* Fetch Task comments */
+	useEffect(() => {
+		console.log(`Fetch task useEffect was called. ${panelTaskId}`)
+	}, [panelTaskId])
+
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			{open && (
@@ -204,10 +217,19 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 					<Grid container spacing={1}>
 						{/* Project Summary */}
 						<Grid item xs={12} md={6} order={{ xs: 1, md: 2 }}>
-							<ProjectsSummaryWidget title="Summary" />
+							<Box
+								sx={{
+									border: `1px solid ${colors.grey[600]}`,
+									height: '100%',
+									padding: 2
+								}}
+							>
+								<ProjectsSummaryWidget title="Summary" />
+							</Box>
 						</Grid>
 
 						<Grid item xs={12} md={6} order={{ xs: 2, md: 1 }}>
+							{/* Project Form */}
 							<Box
 								sx={{
 									border: `1px solid ${colors.grey[600]}`,
@@ -219,7 +241,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 							</Box>
 						</Grid>
 
-						{/* Teams */}
+						{/* Teams Accordion */}
 						<Grid item xs={12} md={12} order={{ xs: 3, md: 3 }}>
 							<Box>
 								<Typography variant="h3" sx={{ paddingBottom: 1 }}>
@@ -230,7 +252,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 									return (
 										<Accordion
 											key={team._id}
-											expanded={expanded === team._id}
+											expanded={teamPanelExpanded === team._id}
 											onChange={handleAccordionPanelChange(team._id)}
 										>
 											<AccordionSummary
@@ -323,7 +345,11 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 														if (teamTask.team === team._id) {
 															return teamTask.teamTasks.map(task => {
 																return (
-																	<Accordion key={task._id}>
+																	<Accordion
+																		key={task._id}
+																		expanded={taskPanelExpanded === task._id}
+																		onChange={handleAccordionTaskPanelChange(task._id)}
+																	>
 																		<AccordionSummary
 																			expandIcon={<ExpandMoreIcon />}
 																			aria-controls={`${task.title}-content`}
@@ -332,6 +358,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																			<Typography>{task.title}</Typography>
 																		</AccordionSummary>
 																		<AccordionDetails>
+																			{/* Buttons */}
 																			<Stack direction="row" spacing={2} marginBottom={2}>
 																				<Button variant="contained" color="error">
 																					Delete this Task
@@ -340,6 +367,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																					Mark as Complete
 																				</Button>
 																			</Stack>
+
 																			{/* Comments */}
 																			<List
 																				sx={{
@@ -594,6 +622,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																)
 															})
 														}
+														// if this team
 														return null
 													})}
 												</Box>

@@ -9,13 +9,7 @@ const ProjectsSummaryWidget = ({ title }) => {
 	const theme = useTheme()
 	const colors = tokens(theme.palette.mode)
 	return (
-		<Box
-			sx={{
-				border: `1px solid ${colors.grey[600]}`,
-				height: '100%',
-				padding: 2
-			}}
-		>
+		<>
 			<Typography variant="h3" sx={{ paddingBottom: 1 }}>
 				{title}
 			</Typography>
@@ -47,7 +41,7 @@ const ProjectsSummaryWidget = ({ title }) => {
 					Foreclosure Team: 32.34%
 				</Typography>
 			</Box>
-		</Box>
+		</>
 	)
 }
 
