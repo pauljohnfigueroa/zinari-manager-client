@@ -59,6 +59,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 	const [taskComments, setTaskComments] = useState([])
 	const [panelTeamId, setPanelTeamId] = useState(null)
 	const [panelTaskId, setPanelTaskId] = useState(null)
+	const [commentMessage, setCommentMessage] = useState('')
 
 	/* Accordion state */
 	const [teamPanelExpanded, setTeamPanelExpanded] = useState(false)
@@ -88,6 +89,29 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		alert(teamId)
 	}
 
+	const handleCommentMessage = e => {
+		setCommentMessage(e.target.value)
+	}
+
+	const handlePostComment = async taskId => {
+		console.log('handlePostComment taskId', taskId)
+		try {
+			await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/comment`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`
+				},
+				body: JSON.stringify({ userId: user, taskId, comment: commentMessage })
+			})
+			// dispatch here
+		} catch (error) {
+			console.log(error)
+		}
+
+		setCommentMessage('') // do not use null here
+	}
+
 	// HOF
 	const handleAccordionPanelChange = teamId => (event, isExpanded) => {
 		setTeamPanelExpanded(isExpanded ? teamId : false)
@@ -104,6 +128,8 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 	const handleClose = () => {
 		setProjDetailDialog(false)
 	}
+
+	console.log(commentMessage)
 
 	/* Fetch project teams */
 	useEffect(() => {
@@ -144,11 +170,12 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 
 	/* Fetch team's tasks */
 	useEffect(() => {
+		// we have to add the project Id
 		const getTeamTasks = async () => {
 			if (panelTeamId) {
 				try {
 					const response = await fetch(
-						`${process.env.REACT_APP_SERVER_URL}/tasks/${panelTeamId}/tasks`,
+						`${process.env.REACT_APP_SERVER_URL}/tasks/${initFormValues._id}/${panelTeamId}/tasks`,
 						{
 							method: 'GET',
 							headers: {
@@ -507,13 +534,20 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																							label="Comment"
 																							placeholder="Type your comment here."
 																							multiline
+																							value={commentMessage}
 																							minRows={3}
 																							maxRows={3}
 																							variant="outlined"
 																							sx={{ width: '100%', paddingBottom: 1 }}
+																							onChange={handleCommentMessage}
 																						/>
 																						<Box sx={{ display: 'flex', justifyContent: 'end' }}>
-																							<Button variant="contained">Post Comment</Button>
+																							<Button
+																								variant="contained"
+																								onClick={() => handlePostComment(task._id)}
+																							>
+																								Post Comment
+																							</Button>
 																						</Box>
 																					</Box>
 																				</ListItem>
