@@ -35,6 +35,10 @@ import { addTaskFormState } from 'state/tasksSlice'
 
 import ProjectsSummaryWidget from 'widgets/ProjectsSummaryWidget'
 
+/* Pagination */
+import Pagination from '@mui/material/Pagination'
+import CommentListItem from 'components/list/CommentListItem'
+
 /* Accordion */
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction="right" ref={ref} {...props} />
@@ -84,7 +88,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		setCurrentTeam(teamDetails[0])
 		dispatch(addTaskFormState({ open: true }))
 	}
-	/* Remote Team from the Project */
+	/* Remove Team from the Project */
 	const handleRemoveTeam = teamId => {
 		alert(teamId)
 	}
@@ -93,22 +97,24 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		setCommentMessage(e.target.value)
 	}
 
+	/* Post a comment */
 	const handlePostComment = async taskId => {
-		console.log('handlePostComment taskId', taskId)
 		try {
-			await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/comment`, {
+			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/comment`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${token}`
 				},
-				body: JSON.stringify({ userId: user, taskId, comment: commentMessage })
+				body: JSON.stringify({ userId: user._id, taskId, comment: commentMessage })
 			})
 			// dispatch here
+			const comments = await response.json()
+
+			setTaskComments([{ taskId: taskId, comments }])
 		} catch (error) {
 			console.log(error)
 		}
-
 		setCommentMessage('') // do not use null here
 	}
 
@@ -407,7 +413,6 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 												<Box sx={{ paddingTop: 2 }}>
 													<Typography variant="h4">Tasks</Typography>
 													{/* Tasks */}
-													{/* Try using array.find() instead of map() here */}
 
 													{tasks.map(teamTask => {
 														if (teamTask.teamId === team._id) {
@@ -446,86 +451,87 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																			>
 																				{taskComments.map(item => {
 																					if (item.taskId === task._id) {
-																						return item.comments.map(item => (
-																							<ListItem
-																								key={item._id}
-																								sx={{
-																									alignItems: 'flex-start'
-																								}}
-																							>
-																								{/* Put content here */}
-
-																								<Box
-																									sx={{
-																										display: 'flex',
-																										gap: 2,
-																										minHeight: 100,
-																										height: '100%',
-																										width: '100%',
-																										alignItems: 'center',
-																										padding: 1,
-																										backgroundColor: colors.grey[900],
-																										borderRadius: '4px'
-																										// border: '1px solid red'
-																									}}
-																								>
-																									{/* avatar */}
-																									<Box
-																										sx={{
-																											display: 'flex',
-																											gap: 1,
-																											minWidth: '64px',
-																											flexDirection: 'column',
-																											alignItems: 'center',
-																											justifyContent: 'center'
-																											// border: '1px solid red'
-																										}}
-																									>
-																										<Avatar
-																											alt={`${user.firstName} ${user.lastName}`}
-																											src={`/assets/images/gus-fring.png`}
-																											sx={{ width: 48, height: 48 }}
-																										/>
-																										<Typography
-																											sx={{ fontSize: '10px', textAlign: 'center' }}
-																										>
-																											Gus Fring
-																										</Typography>
-																									</Box>
-																									<Box
-																										sx={{
-																											display: 'flex',
-																											flexDirection: 'column',
-																											width: '100%',
-																											alignItems: 'start',
-																											justifyContent: 'start'
-																										}}
-																									>
-																										<Typography
-																											sx={{
-																												color: 'gray',
-																												fontSize: 12,
-																												paddingBottom: 1
-																											}}
-																										>
-																											July 05, 2023
-																										</Typography>
-																										<Typography
-																											variant="body2"
-																											color="text.secondary"
-																											sx={{ textAlign: 'left' }}
-																										>
-																											{/* the comment */}
-																											{item.comment}
-																										</Typography>
-																									</Box>
-																								</Box>
-																							</ListItem>
+																						return item.comments.map(comment => (
+																							<CommentListItem comment={comment} />
+																							// <ListItem
+																							// 	key={comment._id}
+																							// 	sx={{
+																							// 		alignItems: 'flex-start'
+																							// 	}}
+																							// >
+																							// 	<Box
+																							// 		sx={{
+																							// 			display: 'flex',
+																							// 			gap: 2,
+																							// 			minHeight: 100,
+																							// 			height: '100%',
+																							// 			width: '100%',
+																							// 			alignItems: 'center',
+																							// 			padding: 1,
+																							// 			backgroundColor: colors.grey[900],
+																							// 			borderRadius: '4px'
+																							// 			// border: '1px solid red'
+																							// 		}}
+																							// 	>
+																							// 		{/* avatar */}
+																							// 		<Box
+																							// 			sx={{
+																							// 				display: 'flex',
+																							// 				gap: 1,
+																							// 				minWidth: '64px',
+																							// 				flexDirection: 'column',
+																							// 				alignItems: 'center',
+																							// 				justifyContent: 'center'
+																							// 				// border: '1px solid red'
+																							// 			}}
+																							// 		>
+																							// 			<Avatar
+																							// 				alt={`${user.firstName} ${user.lastName}`}
+																							// 				src={`/assets/images/gus-fring.png`}
+																							// 				sx={{ width: 48, height: 48 }}
+																							// 			/>
+																							// 			<Typography
+																							// 				sx={{ fontSize: '10px', textAlign: 'center' }}
+																							// 			>
+																							// 				Gus Fring
+																							// 			</Typography>
+																							// 		</Box>
+																							// 		<Box
+																							// 			sx={{
+																							// 				display: 'flex',
+																							// 				flexDirection: 'column',
+																							// 				width: '100%',
+																							// 				alignItems: 'start',
+																							// 				justifyContent: 'start'
+																							// 			}}
+																							// 		>
+																							// 			<Typography
+																							// 				sx={{
+																							// 					color: 'gray',
+																							// 					fontSize: 12,
+																							// 					paddingBottom: 1
+																							// 				}}
+																							// 			>
+																							// 				July 05, 2023
+																							// 			</Typography>
+																							// 			<Typography
+																							// 				variant="body2"
+																							// 				color="text.secondary"
+																							// 				sx={{ textAlign: 'left' }}
+																							// 			>
+																							// 				{/* the comment */}
+																							// 				{comment.comment}
+																							// 			</Typography>
+																							// 		</Box>
+																							// 	</Box>
+																							// </ListItem>
 																						))
 																					}
 																					return null
 																				})}
-
+																				<Stack spacing={2} paddingY={2}>
+																					<Pagination count={10} />
+																				</Stack>
 																				{/* Post a Comment*/}
 																				<ListItem>
 																					<Box sx={{ width: '100%' }}>
