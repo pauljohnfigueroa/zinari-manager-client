@@ -8,7 +8,7 @@ import { tokens } from 'theme'
 const CommentListItem = ({ comment }) => {
 	const theme = useTheme()
 	const colors = tokens(theme.palette.mode)
-
+	console.log('comment in list item', comment)
 	return (
 		<ListItem
 			key={comment._id} // prop

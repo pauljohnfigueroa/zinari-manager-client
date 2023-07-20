@@ -110,15 +110,15 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 			})
 			// dispatch here
 			const comments = await response.json()
-
-			setTaskComments([{ taskId: taskId, comments }])
+			if (comments.length > 0) {
+				setTaskComments([{ taskId: taskId, comments }])
+			}
 		} catch (error) {
 			console.log(error)
 		}
 		setCommentMessage('') // do not use null here
 	}
 
-	// HOF
 	const handleAccordionPanelChange = teamId => (event, isExpanded) => {
 		setTeamPanelExpanded(isExpanded ? teamId : false)
 		setPanelTeamId(teamId)
@@ -233,6 +233,12 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 						}
 					)
 					const comments = await response.json()
+
+					// if there is an error, set the comment to a empty array
+					if (comments.error) {
+						console.log(comments.error)
+						comments = []
+					}
 
 					// check if the Team accordion panel was already viewed before
 					// if so, do not re-add the team's tasks
@@ -459,15 +465,17 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																				}}
 																			>
 																				{/* Task Comments  */}
-																				{taskComments.map(item => {
-																					if (item.taskId === task._id) {
-																						return item.comments.map(comment => (
-																							/* Comment List Items */
-																							<CommentListItem comment={comment} />
-																						))
-																					}
-																					return null
-																				})}
+																				{taskComments.length > 0
+																					? taskComments.map(item => {
+																							if (item.taskId === task._id) {
+																								return item.comments.map(comment => (
+																									/* Comment List Items */
+																									<CommentListItem comment={comment} />
+																								))
+																							}
+																							return null
+																					  })
+																					: ''}
 																				{/* Comments pagination */}
 																				<Stack spacing={2} paddingY={2}>
 																					<Pagination count={10} />
