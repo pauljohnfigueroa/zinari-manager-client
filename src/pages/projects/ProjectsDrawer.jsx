@@ -413,9 +413,9 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 												{/* Task header*/}
 												<Box sx={{ paddingTop: 2 }}>
 													<Typography variant="h4">
-														{tasks.map(teamTask => {
-															if (teamTask.teamId === team._id) {
-																return teamTask.teamTasks.length > 0
+														{tasks.map(item => {
+															if (item.teamId === team._id) {
+																return item.teamTasks.length > 0
 																	? 'Tasks'
 																	: 'The is currently no task here.'
 															}
@@ -423,9 +423,9 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 													</Typography>
 
 													{/* Tasks */}
-													{tasks.map(teamTask => {
-														if (teamTask.teamId === team._id) {
-															return teamTask.teamTasks.map(task => {
+													{tasks.map(item => {
+														if (item.teamId === team._id) {
+															return item.teamTasks.map(task => {
 																return (
 																	<Accordion
 																		key={task._id}

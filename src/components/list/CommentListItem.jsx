@@ -8,6 +8,7 @@ import { tokens } from 'theme'
 const CommentListItem = ({ comment }) => {
 	const theme = useTheme()
 	const colors = tokens(theme.palette.mode)
+
 	return (
 		<ListItem
 			key={comment._id} // prop
@@ -41,7 +42,7 @@ const CommentListItem = ({ comment }) => {
 				>
 					<Avatar
 						alt={`${comment.user}`} // prop
-						src={comment.avatar} // prop
+						src={`/assets/images/${comment.photo}`} // prop
 						sx={{ width: 48, height: 48 }}
 					/>
 					<Typography sx={{ fontSize: '10px', textAlign: 'center' }}>
