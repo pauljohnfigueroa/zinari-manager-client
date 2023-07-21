@@ -4,7 +4,7 @@ The TasksGridWidget.jsx component is a datagrid where all tasks are listed.
 Components
 
 */
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
@@ -29,6 +29,8 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 	const token = useSelector(state => state.auth.token)
 	const user = useSelector(state => state.auth.user)
 
+	const [currentTeam, setCurrentTeam] = useState([])
+
 	/* fetch tasks */
 	useEffect(() => {
 		const getTasks = async () => {
@@ -41,16 +43,27 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 				body: JSON.stringify({ userId: user._id })
 			})
 			const tasks = await response.json()
-
 			dispatch(fetchTasks({ tasks }))
 		}
 		getTasks()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+	// console.log('TaskForm initFormValues.team', initFormValues.team)
+
 	/* Update task form */
-	const showEditForm = row => {
-		dispatch(addTaskFormState({ open: true }))
+	const showEditForm = async row => {
+		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams/${row.team}/members`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`
+			}
+		})
+		const teamMembers = await response.json()
+		console.log('teamMembers', teamMembers)
+		setCurrentTeam(teamMembers)
 		setInitFormValues(row)
+		dispatch(addTaskFormState({ open: true }))
 	}
 
 	/* grid columns */
@@ -103,10 +116,10 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 			field: 'action',
 			headerName: 'Action',
 			flex: 1,
-			renderCell: rowdata => {
+			renderCell: rowData => {
 				return (
 					<Box>
-						<IconButton onClick={() => showEditForm(rowdata.row)}>
+						<IconButton onClick={() => showEditForm(rowData.row)}>
 							<ModeEditOutlineOutlinedIcon />
 						</IconButton>
 					</Box>
@@ -122,6 +135,7 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 				<TaskForm
 					formLabel={initFormValues._id ? 'Update Task' : 'New Task'}
 					initFormValues={initFormValues}
+					currentTeam={currentTeam}
 				/>
 			)}
 

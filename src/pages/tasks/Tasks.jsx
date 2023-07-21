@@ -23,6 +23,20 @@ import { useTheme } from '@emotion/react'
 import { tokens } from '../../theme.js'
 // import FlexBetween from 'components/FlexBetween.jsx'
 
+// Create/Update Form
+const initialValues = {
+	_id: null,
+	// email: user.email,
+	title: '',
+	description: '',
+	project: '',
+	team: '',
+	priority: '',
+	owner: '',
+	perspective: '',
+	dueDate: dayjs().add(0, 'day')
+}
+
 const Tasks = () => {
 	const theme = useTheme()
 	const colors = tokens(theme.palette.mode)
@@ -34,20 +48,6 @@ const Tasks = () => {
 	const token = useSelector(state => state.auth.token)
 	const open = useSelector(state => state.task.open)
 	const checkedIds = useSelector(state => state.datagrid.checkedIds)
-
-	// Create/Update Form
-	const initialValues = {
-		_id: null,
-		// email: user.email,
-		title: '',
-		description: '',
-		project: '',
-		team: '',
-		priority: '',
-		owner: '',
-		perspective: '',
-		dueDate: dayjs().add(0, 'day')
-	}
 	const [initFormValues, setInitFormValues] = useState(initialValues)
 
 	/* open form */
@@ -68,7 +68,6 @@ const Tasks = () => {
 				}
 			})
 		})
-
 		dispatch(deleteTasks({ checkedIds }))
 	}
 

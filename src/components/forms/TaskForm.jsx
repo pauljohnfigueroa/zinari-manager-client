@@ -22,10 +22,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 
 import FormikDatePicker from 'components/FormikDatePicker'
-
 import DialogBox from 'components/dialog/DialogBox'
-
-import useFetchTeams from 'hooks/useFetchTeams'
 
 /* Mui Select MenuProps */
 // Repeated code
@@ -45,7 +42,7 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 	const theme = useTheme()
 	const isNonMobile = useMediaQuery(theme.breakpoints.up('md'))
 
-	const [teams, error] = useFetchTeams()
+	// const [currentTeam, setCurrentTeam] = useState([])
 
 	const open = useSelector(state => state.task.open)
 	const token = useSelector(state => state.auth.token)
@@ -55,15 +52,21 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 	// update some initial values
 	const initialFormValues = {
 		...initFormValues,
-		team: currentTeam._id,
+		team: initFormValues.team,
 		dueDate: dayjs(initFormValues.dueDate)
 	}
 
+	console.log('currentTeam', currentTeam)
 	/* Mui Chip */
-	const memberNames = currentTeam.teamMembers.map(
-		teamMember =>
-			`${teamMember._id}|${teamMember.firstName} ${teamMember.lastName}|${teamMember.photo}`
-	)
+
+	const memberNames =
+		currentTeam?.members?.length > 0
+			? currentTeam.members.map(
+					// member => `${member._id}|${member.firstName} ${member.lastName}|${member.photo}`
+					member => `| ${member.firstName} ${member.lastName}|${member.photo}`
+			  )
+			: []
+
 	console.log('memberNames', memberNames)
 
 	// repeated code
@@ -119,7 +122,6 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 
 	return (
 		<div>
-			{error && <div>{error}</div>}
 			<DialogBox
 				handleClose={handleClose}
 				formLabel={formLabel}
@@ -185,40 +187,6 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 									onBlur={handleBlur}
 									required
 								/>
-
-								{/* Project */}
-								{/* <FormControl sx={{ gridColumn: 'span 1' }} required>
-									<InputLabel id="project-label">Project</InputLabel>
-									<Select
-										labelId="project-label"
-										name="project"
-										id="project"
-										value={values.project}
-										label="project"
-										onChange={handleChange}
-										onBlur={handleBlur}
-									>
-										<MenuItem value="User 1">User 1</MenuItem>
-										<MenuItem value="User 2">User 2</MenuItem>
-										<MenuItem value="User 3">User 3</MenuItem>
-									</Select>
-								</FormControl> */}
-
-								{/* Team */}
-								{/* <FormControl sx={{ gridColumn: 'span 1' }} required>
-									<InputLabel id="team-label">Team</InputLabel>
-									<Select
-										labelId="team-label"
-										name="team"
-										id="team"
-										value={values.team}
-										label="Team"
-										onChange={handleChange}
-										onBlur={handleBlur}
-									>
-										{teams && teams.map(team => <MenuItem value={team._id}>{team.name}</MenuItem>)}
-									</Select>
-								</FormControl> */}
 
 								{/* Perspective */}
 								<FormControl sx={{ gridColumn: 'span 2' }} required>
