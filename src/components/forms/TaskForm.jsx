@@ -42,8 +42,6 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 	const theme = useTheme()
 	const isNonMobile = useMediaQuery(theme.breakpoints.up('md'))
 
-	// const [currentTeam, setCurrentTeam] = useState([])
-
 	const open = useSelector(state => state.task.open)
 	const token = useSelector(state => state.auth.token)
 	const user = useSelector(state => state.auth.user)
@@ -56,14 +54,12 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 		dueDate: dayjs(initFormValues.dueDate)
 	}
 
-	console.log('currentTeam', currentTeam)
 	/* Mui Chip */
-
 	const memberNames =
 		currentTeam?.members?.length > 0
 			? currentTeam.members.map(
 					// member => `${member._id}|${member.firstName} ${member.lastName}|${member.photo}`
-					member => `| ${member.firstName} ${member.lastName}|${member.photo}`
+					member => `${member._id}|${member.firstName} ${member.lastName}|${member.photo}`
 			  )
 			: []
 
