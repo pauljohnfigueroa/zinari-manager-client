@@ -109,9 +109,12 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 				body: JSON.stringify({ userId: user._id, taskId, comment: commentMessage })
 			})
 			// dispatch here
-			const comments = await response.json()
-			if (comments.length > 0) {
-				setTaskComments([{ taskId: taskId, comments }])
+			const fetchedComments = await response.json()
+			// console.log('fetchedComments', fetchedComments)
+			if (fetchedComments.length > 0) {
+				setTaskComments(prev => [
+					{ taskId: taskId, comments: [...prev[0].comments, ...fetchedComments] }
+				])
 			}
 		} catch (error) {
 			console.log(error)
@@ -467,8 +470,9 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																				{/* Task Comments  */}
 																				{taskComments.length > 0
 																					? taskComments.map(item => {
-																							if (item.taskId === task._id) {
-																								return item.comments.map(comment => (
+																							if (item?.taskId === task._id) {
+																								console.log('item?.comments', item?.comments)
+																								return item?.comments.map(comment => (
 																									/* Comment List Items */
 																									<CommentListItem comment={comment} />
 																								))
