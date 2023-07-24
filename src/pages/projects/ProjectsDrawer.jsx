@@ -88,12 +88,29 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		setCurrentTeam(teamDetails[0])
 		dispatch(addTaskFormState({ open: true }))
 	}
+
 	/* Remove Team from the Project */
 	const handleRemoveTeam = teamId => {
 		alert(teamId)
 	}
 
-	const handleCommentMessage = e => {
+	const handleMarkAsComplete = async taskId => {
+		try {
+			await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/${taskId}`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`
+				},
+				body: JSON.stringify({ status: 'complete' })
+			})
+			// update task state here
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	const handleCommentMessageChange = e => {
 		setCommentMessage(e.target.value)
 	}
 
@@ -110,11 +127,17 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 			})
 			// dispatch here
 			const fetchedComments = await response.json()
-			// console.log('fetchedComments', fetchedComments)
+
+			// add the latest comment to the state by utilizing the previous state
 			if (fetchedComments.length > 0) {
 				setTaskComments(prev => [
 					{ taskId: taskId, comments: [...prev[0].comments, ...fetchedComments] }
 				])
+				// This won't work as expected
+				// setTaskComments({
+				// 	taskId: taskId,
+				// 	comments: [...taskComments[0].comments, ...fetchedComments]
+				// })
 			}
 		} catch (error) {
 			console.log(error)
@@ -218,7 +241,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 			}
 		}
 		getTeamTasks()
-	}, [panelTeamId, token, tasks])
+	}, [panelTeamId, token, tasks, initFormValues._id])
 
 	/* Fetch Task comments */
 	useEffect(() => {
@@ -235,7 +258,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 							}
 						}
 					)
-					const comments = await response.json()
+					let comments = await response.json()
 
 					// if there is an error, set the comment to a empty array
 					if (comments.error) {
@@ -267,7 +290,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		}
 		getTaskComments()
 		console.log(`Fetch task useEffect was called. ${panelTaskId}`)
-	}, [panelTaskId, token])
+	}, [panelTaskId, token, taskComments])
 
 	console.log('taskComments', taskComments)
 	console.log('tasks', tasks)
@@ -428,6 +451,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																	? 'Tasks'
 																	: 'The is currently no task here.'
 															}
+															return null
 														})}
 													</Typography>
 
@@ -451,10 +475,11 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																		<AccordionDetails>
 																			{/* Action buttons */}
 																			<Stack direction="row" spacing={2} marginBottom={2}>
-																				<Button variant="contained" color="error">
-																					Delete this Task
-																				</Button>
-																				<Button variant="contained" color="success">
+																				<Button
+																					variant="contained"
+																					color="success"
+																					onClick={() => handleMarkAsComplete(task._id)}
+																				>
 																					Mark as Complete
 																				</Button>
 																			</Stack>
@@ -498,9 +523,17 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																							maxRows={3}
 																							variant="outlined"
 																							sx={{ width: '100%', paddingBottom: 1 }}
-																							onChange={handleCommentMessage}
+																							onChange={handleCommentMessageChange}
 																						/>
-																						<Box sx={{ display: 'flex', justifyContent: 'end' }}>
+																						<Box
+																							sx={{
+																								display: 'flex',
+																								justifyContent: 'space-between'
+																							}}
+																						>
+																							<Button variant="contained" color="error">
+																								Delete this Task
+																							</Button>
 																							<Button
 																								variant="contained"
 																								onClick={() => handlePostComment(task._id)}
