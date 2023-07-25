@@ -144,12 +144,16 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 							}}
 						>
 							<Box sx={{ display: 'flex' }}>
+								<Typography>Owner:</Typography>
+								<Typography>{initFormValues.owner}</Typography>
+							</Box>
+							<Box sx={{ display: 'flex' }}>
 								<Typography>Project:</Typography>
-								<Typography>{initFormValues.projectDetails.title}</Typography>
+								<Typography>{initFormValues.project}</Typography>
 							</Box>
 							<Box sx={{ display: 'flex' }}>
 								<Typography>Team:</Typography>
-								<Typography>{initFormValues.teamDetails.name}</Typography>
+								<Typography>{initFormValues.team}</Typography>
 							</Box>
 							<Box sx={{ display: 'flex' }}>
 								<Typography>Priority:</Typography>

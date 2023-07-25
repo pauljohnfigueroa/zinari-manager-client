@@ -54,6 +54,7 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 
 	// console.log('TaskForm initFormValues.team', initFormValues.team)
 
+	console.log('tasks', tasks)
 	/* Update task form */
 	const showEditForm = async row => {
 		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams/${row.team}/members`, {
@@ -143,13 +144,13 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 	return (
 		<Box height="60vh">
 			{/* used by the edit button */}
-			{open && (
+			{/* {open && (
 				<TaskForm
 					formLabel={initFormValues._id ? 'Update Task' : 'New Task'}
 					initFormValues={initFormValues}
 					currentTeam={currentTeam}
 				/>
-			)}
+			)} */}
 
 			{/* datagrid */}
 			<DataGrid
