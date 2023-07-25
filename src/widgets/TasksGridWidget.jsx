@@ -128,9 +128,9 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 			renderCell: rowData => {
 				return (
 					<Box>
-						<IconButton onClick={() => showEditForm(rowData.row)}>
+						{/* <IconButton onClick={() => showEditForm(rowData.row)}>
 							<ModeEditOutlineOutlinedIcon />
-						</IconButton>
+						</IconButton> */}
 						<IconButton onClick={() => showTaskDrawer(rowData.row)}>
 							<ModeEditOutlineOutlinedIcon />
 						</IconButton>

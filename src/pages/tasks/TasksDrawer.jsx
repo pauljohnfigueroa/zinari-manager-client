@@ -36,6 +36,7 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 	const token = useSelector(state => state.auth.token)
 	const [commentMessage, setCommentMessage] = useState('')
 	const [taskComments, setTaskComments] = useState([])
+	const [taskDetails, setTaskDetails] = useState([])
 
 	const handleClose = () => {
 		setOpenTaskDetailDialog(false)
@@ -75,10 +76,8 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 		}
 		setCommentMessage('') // do not use null here
 	}
-	console.log('initFormValues', initFormValues)
-	console.log('taskComments', taskComments)
 
-	/* Fetch Task comments */
+	/* Fetch task's comments */
 	useEffect(() => {
 		const getTaskComments = async () => {
 			try {
@@ -124,7 +123,7 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 			{/* Task header*/}
 			<Box
 				width="50%"
-				margin="auto"
+				marginX="auto"
 				sx={{
 					bgcolor: 'background.paper'
 				}}
@@ -146,11 +145,11 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 						>
 							<Box sx={{ display: 'flex' }}>
 								<Typography>Project:</Typography>
-								<Typography>{initFormValues.project}</Typography>
+								<Typography>{initFormValues.projectDetails.title}</Typography>
 							</Box>
 							<Box sx={{ display: 'flex' }}>
 								<Typography>Team:</Typography>
-								<Typography>{initFormValues.team}</Typography>
+								<Typography>{initFormValues.teamDetails.name}</Typography>
 							</Box>
 							<Box sx={{ display: 'flex' }}>
 								<Typography>Priority:</Typography>

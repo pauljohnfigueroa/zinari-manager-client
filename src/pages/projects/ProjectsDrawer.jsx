@@ -190,6 +190,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 			)
 			const projTeams = await response.json()
 			setTeams(projTeams[0].projTeams)
+			console.log('projTeams[0].projTeams', projTeams[0].projTeams)
 		}
 		getProjTeams()
 	}, [initFormValues._id, token])
@@ -255,6 +256,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		getTeamTasks()
 	}, [panelTeamId, token, tasks, initFormValues._id])
 
+	console.log('tasks', tasks)
 	/* Fetch Task comments */
 	useEffect(() => {
 		const getTaskComments = async () => {
