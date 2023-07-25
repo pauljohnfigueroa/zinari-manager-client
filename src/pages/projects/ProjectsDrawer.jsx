@@ -2,12 +2,17 @@ import { useState, useEffect, forwardRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
-import { Avatar, AvatarGroup, Box, TextField, Divider, Stack } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
+import AvatarGroup from '@mui/material/AvatarGroup'
+import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
+import Divider from '@mui/material/Divider'
+import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
-
 import Typography from '@mui/material/Typography'
 
 /* Drawer */
+import ButtonGroup from '@mui/material/ButtonGroup'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import ListItem from '@mui/material/ListItem'
@@ -24,20 +29,18 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import ProjectForm from '../../components/forms/ProjectForm'
-
-import { tokens } from 'theme'
-import TaskForm from 'components/forms/TaskForm'
-
-import dayjs from 'dayjs'
-
-import { addTaskFormState } from 'state/tasksSlice'
-
-import ProjectsSummaryWidget from 'widgets/ProjectsSummaryWidget'
-
 /* Pagination */
 import Pagination from '@mui/material/Pagination'
 import CommentListItem from 'components/list/CommentListItem'
+
+import ProjectForm from '../../components/forms/ProjectForm'
+import TaskForm from 'components/forms/TaskForm'
+import ProjectsSummaryWidget from 'widgets/ProjectsSummaryWidget'
+
+import { tokens } from 'theme'
+import { addTaskFormState } from 'state/tasksSlice'
+
+import dayjs from 'dayjs'
 
 /* Accordion */
 const Transition = forwardRef(function Transition(props, ref) {
@@ -89,12 +92,21 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		dispatch(addTaskFormState({ open: true }))
 	}
 
+	const handleEditTask = () => {
+		alert('handleEditTask')
+	}
+
 	/* Remove Team from the Project */
 	const handleRemoveTeam = teamId => {
 		alert(teamId)
 	}
 
-	const handleMarkAsComplete = async taskId => {
+	const handleUpdateTaskStatus = async (taskId, taskStatus) => {
+		let newTaskStatus = 'complete'
+		if (taskStatus === 'complete') {
+			newTaskStatus = 'open'
+		}
+
 		try {
 			await fetch(`${process.env.REACT_APP_SERVER_URL}/tasks/${taskId}`, {
 				method: 'PATCH',
@@ -102,7 +114,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${token}`
 				},
-				body: JSON.stringify({ status: 'complete' })
+				body: JSON.stringify({ status: newTaskStatus })
 			})
 			// update task state here
 		} catch (error) {
@@ -128,12 +140,12 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 			// dispatch here
 			const fetchedComments = await response.json()
 
-			// add the latest comment to the state by utilizing the previous state
+			// add the latest comment to the previous state
 			if (fetchedComments.length > 0) {
 				setTaskComments(prev => [
 					{ taskId: taskId, comments: [...prev[0].comments, ...fetchedComments] }
 				])
-				// This won't work as expected
+				// This will not work as expected
 				// setTaskComments({
 				// 	taskId: taskId,
 				// 	comments: [...taskComments[0].comments, ...fetchedComments]
@@ -161,7 +173,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		setProjDetailDialog(false)
 	}
 
-	console.log(commentMessage)
+	// console.log(commentMessage)
 
 	/* Fetch project teams */
 	useEffect(() => {
@@ -185,7 +197,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 	/* Fetch team members, this is dependent to the project teams.  */
 	useEffect(() => {
 		const getTeamMembers = async () => {
-			console.log('teams', teams)
+			// console.log('teams', teams)
 			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/projects/teams/members`, {
 				method: 'POST',
 				headers: {
@@ -228,7 +240,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 							}
 							return item
 						})
-						console.log(exists)
+						// console.log(exists)
 						if (!exists) {
 							setTasks([...tasks, { teamId: panelTeamId, teamTasks }])
 						}
@@ -262,7 +274,7 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 
 					// if there is an error, set the comment to a empty array
 					if (comments.error) {
-						console.log(comments.error)
+						// console.log(comments.error)
 						comments = []
 					}
 
@@ -292,8 +304,8 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 		console.log(`Fetch task useEffect was called. ${panelTaskId}`)
 	}, [panelTaskId, token, taskComments])
 
-	console.log('taskComments', taskComments)
-	console.log('tasks', tasks)
+	// console.log('taskComments', taskComments)
+	// console.log('tasks', tasks)
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
@@ -436,8 +448,13 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 													</Box>
 													{/* Accordion panel actions */}
 													<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-														<Button onClick={handleRemoveTeam}>Remove Team</Button>
-														<Button onClick={() => handleAddTask(team._id)}>Add Task</Button>
+														<ButtonGroup
+															variant="contained"
+															aria-label="outlined primary button group"
+														>
+															<Button onClick={handleRemoveTeam}>Edit </Button>
+															<Button onClick={handleRemoveTeam}>Delete </Button>
+														</ButtonGroup>
 													</Box>
 												</Box>
 
@@ -454,7 +471,21 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 															return null
 														})}
 													</Typography>
-
+													<Box
+														sx={{
+															display: 'flex',
+															alignItems: 'center',
+															justifyContent: 'right',
+															marginBottom: 2
+														}}
+													>
+														<ButtonGroup
+															variant="contained"
+															aria-label="outlined primary button group"
+														>
+															<Button onClick={() => handleAddTask(team._id)}>Add</Button>
+														</ButtonGroup>
+													</Box>
 													{/* Tasks */}
 													{tasks.map(item => {
 														if (item.teamId === team._id) {
@@ -470,18 +501,39 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																			aria-controls={`${task.title}-content`}
 																			id={`${task.title}-header`}
 																		>
-																			<Typography>{task.title}</Typography>
+																			{task.status === 'complete' ? (
+																				<Typography sx={{ color: 'green' }}>
+																					{task.title} (Complete)
+																				</Typography>
+																			) : (
+																				<Typography>{task.title}</Typography>
+																			)}
 																		</AccordionSummary>
 																		<AccordionDetails>
 																			{/* Action buttons */}
 																			<Stack direction="row" spacing={2} marginBottom={2}>
-																				<Button
+																				<ButtonGroup
 																					variant="contained"
-																					color="success"
-																					onClick={() => handleMarkAsComplete(task._id)}
+																					aria-label="outlined primary button group"
 																				>
-																					Mark as Complete
-																				</Button>
+																					<Button
+																						variant="contained"
+																						onClick={() =>
+																							handleUpdateTaskStatus(task._id, task.status)
+																						}
+																					>
+																						{task.status === 'complete'
+																							? 'Re-Open'
+																							: 'Mark as Complete'}
+																					</Button>
+
+																					<Button onClick={() => handleEditTask(team._id)}>
+																						Edit
+																					</Button>
+																					<Button variant="contained" color="error">
+																						Delete
+																					</Button>
+																				</ButtonGroup>
 																			</Stack>
 
 																			{/* Comments */}
@@ -496,7 +548,6 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																				{taskComments.length > 0
 																					? taskComments.map(item => {
 																							if (item?.taskId === task._id) {
-																								console.log('item?.comments', item?.comments)
 																								return item?.comments.map(comment => (
 																									/* Comment List Items */
 																									<CommentListItem comment={comment} />
@@ -531,9 +582,6 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																								justifyContent: 'space-between'
 																							}}
 																						>
-																							<Button variant="contained" color="error">
-																								Delete this Task
-																							</Button>
 																							<Button
 																								variant="contained"
 																								onClick={() => handlePostComment(task._id)}

@@ -262,11 +262,11 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 										onChange={handleChange}
 										onBlur={handleBlur}
 									>
-										<MenuItem value="low">Low</MenuItem>
-										<MenuItem value="normal">Normal</MenuItem>
-										<MenuItem value="high">High</MenuItem>
-										<MenuItem value="urgent">Urgent</MenuItem>
-										<MenuItem value="immediate">Immediate</MenuItem>
+										<MenuItem value="low">Low (Start within the next 2 or more days)</MenuItem>
+										<MenuItem value="normal">Normal (Start within the next day)</MenuItem>
+										<MenuItem value="high">High (Start within the day)</MenuItem>
+										<MenuItem value="urgent">Urgent (Start within the next 2 hours)</MenuItem>
+										<MenuItem value="immediate">Immediate (Start Now)</MenuItem>
 									</Select>
 								</FormControl>
 

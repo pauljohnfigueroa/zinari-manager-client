@@ -11,7 +11,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Box, Stack, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
 
-import { addTaskFormState, deleteTasks } from '../../state/tasksSlice'
+// import { addTaskFormState, deleteTasks } from '../../state/tasksSlice'
+import { deleteTasks } from '../../state/tasksSlice'
 
 import dayjs from 'dayjs'
 
@@ -51,10 +52,10 @@ const Tasks = () => {
 	const [initFormValues, setInitFormValues] = useState(initialValues)
 
 	/* open form */
-	const openAddTaskForm = () => {
-		setInitFormValues(initialValues)
-		dispatch(addTaskFormState({ open: true }))
-	}
+	// const openAddTaskForm = () => {
+	// 	setInitFormValues(initialValues)
+	// 	dispatch(addTaskFormState({ open: true }))
+	// }
 
 	/* delete tasks */
 	const handleDeleteTasks = async () => {
@@ -102,9 +103,9 @@ const Tasks = () => {
 			<Box>
 				<Box m="10px 0 0 0">
 					<Stack spacing={2} direction="row">
-						<Button onClick={openAddTaskForm} variant="contained">
+						{/* <Button onClick={openAddTaskForm} variant="contained">
 							Add Task
-						</Button>
+						</Button> */}
 						<Button
 							disabled={checkedIds.length ? false : true}
 							onClick={handleDeleteTasks}

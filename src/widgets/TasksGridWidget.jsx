@@ -15,6 +15,8 @@ import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutl
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import LinearProgress from '@mui/material/LinearProgress'
 
+import TasksDrawer from 'pages/tasks/TasksDrawer.jsx'
+
 import { setCheckedIds } from 'state/datagridSlice.js'
 
 import { tokens } from '../theme.js'
@@ -30,6 +32,8 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 	const user = useSelector(state => state.auth.user)
 
 	const [currentTeam, setCurrentTeam] = useState([])
+
+	const [openTaskDetailDialog, setOpenTaskDetailDialog] = useState(false)
 
 	/* fetch tasks */
 	useEffect(() => {
@@ -64,6 +68,11 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 		setCurrentTeam(teamMembers)
 		setInitFormValues(row)
 		dispatch(addTaskFormState({ open: true }))
+	}
+
+	const showTaskDrawer = row => {
+		setInitFormValues(row)
+		setOpenTaskDetailDialog(!openTaskDetailDialog)
 	}
 
 	/* grid columns */
@@ -122,6 +131,9 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 						<IconButton onClick={() => showEditForm(rowData.row)}>
 							<ModeEditOutlineOutlinedIcon />
 						</IconButton>
+						<IconButton onClick={() => showTaskDrawer(rowData.row)}>
+							<ModeEditOutlineOutlinedIcon />
+						</IconButton>
 					</Box>
 				)
 			}
@@ -171,6 +183,13 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 					dispatch(setCheckedIds({ checkedIds }))
 				}}
 			/>
+			{openTaskDetailDialog && (
+				<TasksDrawer
+					openTaskDetailDialog={openTaskDetailDialog}
+					setOpenTaskDetailDialog={setOpenTaskDetailDialog}
+					initFormValues={initFormValues}
+				/>
+			)}
 		</Box>
 	)
 }
