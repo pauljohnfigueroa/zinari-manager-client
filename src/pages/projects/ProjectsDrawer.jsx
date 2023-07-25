@@ -540,7 +540,6 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																			<List
 																				sx={{
 																					width: '100%',
-																					paddingRight: 1,
 																					bgcolor: 'background.paper'
 																				}}
 																			>
@@ -562,35 +561,37 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																				</Stack>
 
 																				{/* Post a Comment*/}
-																				<ListItem>
-																					<Box sx={{ width: '100%' }}>
-																						<TextField
-																							id="filled-multiline-flexible"
-																							label="Comment"
-																							placeholder="Type your comment here."
-																							multiline
-																							value={commentMessage}
-																							minRows={3}
-																							maxRows={3}
-																							variant="outlined"
-																							sx={{ width: '100%', paddingBottom: 1 }}
-																							onChange={handleCommentMessageChange}
-																						/>
-																						<Box
-																							sx={{
-																								display: 'flex',
-																								justifyContent: 'space-between'
-																							}}
-																						>
-																							<Button
-																								variant="contained"
-																								onClick={() => handlePostComment(task._id)}
+																				{task.status !== 'complete' && (
+																					<ListItem>
+																						<Box sx={{ width: '100%' }}>
+																							<TextField
+																								id="filled-multiline-flexible"
+																								label="Comment"
+																								placeholder="Type your comment here."
+																								multiline
+																								value={commentMessage}
+																								minRows={3}
+																								maxRows={3}
+																								variant="outlined"
+																								sx={{ width: '100%', paddingBottom: 1 }}
+																								onChange={handleCommentMessageChange}
+																							/>
+																							<Box
+																								sx={{
+																									display: 'flex',
+																									justifyContent: 'space-between'
+																								}}
 																							>
-																								Post Comment
-																							</Button>
+																								<Button
+																									variant="contained"
+																									onClick={() => handlePostComment(task._id)}
+																								>
+																									Post Comment
+																								</Button>
+																							</Box>
 																						</Box>
-																					</Box>
-																				</ListItem>
+																					</ListItem>
+																				)}
 																			</List>
 																		</AccordionDetails>
 																	</Accordion>

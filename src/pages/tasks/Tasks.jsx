@@ -11,7 +11,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Box, Stack, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
 
-// import { addTaskFormState, deleteTasks } from '../../state/tasksSlice'
 import { deleteTasks } from '../../state/tasksSlice'
 
 import dayjs from 'dayjs'
@@ -22,12 +21,10 @@ import TaskForm from '../../components/forms/TaskForm'
 import { useTheme } from '@emotion/react'
 
 import { tokens } from '../../theme.js'
-// import FlexBetween from 'components/FlexBetween.jsx'
 
 // Create/Update Form
 const initialValues = {
 	_id: null,
-	// email: user.email,
 	title: '',
 	description: '',
 	project: '',

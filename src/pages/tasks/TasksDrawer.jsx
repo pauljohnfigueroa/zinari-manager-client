@@ -23,8 +23,15 @@ import CloseIcon from '@mui/icons-material/Close'
 /* Pagination */
 import Pagination from '@mui/material/Pagination'
 import CommentListItem from 'components/list/CommentListItem'
+import { ButtonGroup } from '@mui/material'
+
+import { useTheme } from '@emotion/react'
+import { tokens } from '../../theme.js'
 
 const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormValues }) => {
+	const theme = useTheme()
+	const colors = tokens(theme.palette.mode)
+
 	const user = useSelector(state => state.auth.user)
 	const token = useSelector(state => state.auth.token)
 	const [commentMessage, setCommentMessage] = useState('')
@@ -102,40 +109,139 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 	}, [initFormValues._id, token])
 
 	return (
-		<>
-			<Dialog fullScreen open={openTaskDetailDialog}>
-				<AppBar sx={{ position: 'relative' }}>
-					<Toolbar>
-						<IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-							<CloseIcon />
-						</IconButton>
-						<Typography sx={{ ml: 2, flex: 1 }} variant="h3" component="div">
-							{initFormValues.title}
-						</Typography>
-					</Toolbar>
-				</AppBar>
+		<Dialog fullScreen open={openTaskDetailDialog}>
+			<AppBar sx={{ position: 'relative' }}>
+				<Toolbar>
+					<IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+						<CloseIcon />
+					</IconButton>
+					<Typography sx={{ ml: 2, flex: 1 }} variant="h3" component="div">
+						{initFormValues.title}
+					</Typography>
+				</Toolbar>
+			</AppBar>
 
-				{/* Task header*/}
-				<Box sx={{ paddingTop: 2 }}>
-					{/* Tasks */}
-					{/* Comments */}
-					<List
-						sx={{
-							width: '100%',
-							paddingRight: 1,
-							bgcolor: 'background.paper'
-						}}
-					>
-						{/* Task Comments  */}
-						{taskComments.length > 0
-							? taskComments.map(comment => <CommentListItem comment={comment} />)
-							: ''}
-						{/* Comments pagination */}
+			{/* Task header*/}
+			<Box
+				width="50%"
+				margin="auto"
+				sx={{
+					bgcolor: 'background.paper'
+				}}
+			>
+				{/* Task Details*/}
+				<Box
+					sx={{
+						//border: '1px dashed red',
+						padding: 1
+					}}
+				>
+					<Box sx={{ display: 'flex' }}>
+						<Box
+							sx={{
+								width: '60%',
+								margin: 1
+								//border: '1px dashed blue'
+							}}
+						>
+							<Box sx={{ display: 'flex' }}>
+								<Typography>Project:</Typography>
+								<Typography>{initFormValues.project}</Typography>
+							</Box>
+							<Box sx={{ display: 'flex' }}>
+								<Typography>Team:</Typography>
+								<Typography>{initFormValues.team}</Typography>
+							</Box>
+							<Box sx={{ display: 'flex' }}>
+								<Typography>Priority:</Typography>
+								<Typography>{initFormValues.priority}</Typography>
+							</Box>
+							<Box sx={{ display: 'flex' }}>
+								<Typography>Perspective:</Typography>
+								<Typography>{initFormValues.perspective}</Typography>
+							</Box>
+						</Box>
+						<Box
+							sx={{
+								width: '40%',
+								margin: 1
+								//border: '1px dashed orange'
+							}}
+						>
+							<Box sx={{ display: 'flex' }}>
+								<Typography>Status:</Typography>
+								<Typography>{initFormValues.status}</Typography>
+							</Box>
+							<Box sx={{ display: 'flex' }}>
+								<Typography>Due Date:</Typography>
+								<Typography>{initFormValues.dueDate}</Typography>
+							</Box>
+							<Box sx={{ display: 'flex' }}>
+								<Typography>Completed:</Typography>
+								<Typography>{initFormValues.dueDate}</Typography>
+							</Box>
+							<Box sx={{ display: 'flex' }}>
+								<Typography>Remarks:</Typography>
+								<Typography>OVERDUE</Typography>
+							</Box>
+						</Box>
+					</Box>
+					<Box sx={{ display: 'flex' }}>
+						<Box
+							sx={{
+								display: 'flex',
+								width: '60%',
+								flexDirection: 'column',
+								//border: '1px dashed green',
+								margin: 1
+							}}
+						>
+							<Typography>Instructions:</Typography>
+							<Typography>{initFormValues.description}</Typography>
+						</Box>
+						<Box
+							sx={{
+								display: 'flex',
+								width: '40%',
+								// border: '1px dashed violet',
+								margin: 1
+							}}
+						>
+							<ButtonGroup>
+								<Button>Mark for Review</Button>
+							</ButtonGroup>
+						</Box>
+					</Box>
+				</Box>
+
+				{/* Comments */}
+				<List
+					sx={{
+						width: '100%',
+						bgcolor: 'background.paper'
+					}}
+				>
+					<Typography sx={{ padding: 2 }}>Comments</Typography>
+					{/* Task Comments  */}
+
+					{taskComments.length > 0 && (
 						<Stack spacing={2} paddingY={2}>
 							<Pagination count={10} />
 						</Stack>
+					)}
+					{taskComments.length > 0
+						? taskComments.map(comment => <CommentListItem comment={comment} />)
+						: ''}
 
-						{/* Post a Comment*/}
+					{/* Comments pagination */}
+					{taskComments.length > 0 && (
+						<Stack spacing={2} paddingY={2}>
+							<Pagination count={10} />
+						</Stack>
+					)}
+
+					{/* Post a Comment*/}
+					{initFormValues.status !== 'complete' && (
 						<ListItem>
 							<Box sx={{ width: '100%' }}>
 								<TextField
@@ -162,10 +268,10 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 								</Box>
 							</Box>
 						</ListItem>
-					</List>
-				</Box>
-			</Dialog>
-		</>
+					)}
+				</List>
+			</Box>
+		</Dialog>
 	)
 }
 

@@ -19,9 +19,7 @@ import ProjectsGridWidget from 'widgets/ProjectsGridWidget.jsx'
 import ProjectForm from '../../components/forms/ProjectForm'
 
 import { useTheme } from '@emotion/react'
-
 import { tokens } from '../../theme.js'
-// import FlexBetween from 'components/FlexBetween.jsx'
 
 const Projects = () => {
 	const theme = useTheme()
