@@ -56,8 +56,8 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 
 	/* Mui Chip */
 	const memberNames =
-		currentTeam?.members?.length > 0
-			? currentTeam.members.map(
+		currentTeam?.teamMembers?.length > 0
+			? currentTeam.teamMembers.map(
 					// member => `${member._id}|${member.firstName} ${member.lastName}|${member.photo}`
 					member => `${member._id}|${member.firstName} ${member.lastName}|${member.photo}`
 			  )
@@ -92,7 +92,7 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 				'Content-type': 'application/json',
 				Authorization: `Bearer ${token}`
 			},
-			body: JSON.stringify({ ...values, userId: user._id })
+			body: JSON.stringify({ ...values, userId: user._id, team: currentTeam._id })
 		})
 		const newTask = await response.json()
 
@@ -148,7 +148,6 @@ const TaskForm = ({ formLabel, initFormValues, currentTeam }) => {
 									'& > div': { gridColumn: isNonMobile ? undefined : 'span 3' }
 								}}
 							>
-								{/* <Field type="hidden" id="email" name="email" value={values.email} /> */}
 								<Field type="hidden" id="project" name="project" value={values.project} />
 								<Field type="hidden" id="team" name="team" value={values.team} />
 
