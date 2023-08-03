@@ -233,7 +233,7 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 						</Stack>
 					)}
 					{taskComments.length > 0
-						? taskComments.map(comment => <CommentListItem comment={comment} />)
+						? taskComments.map(comment => <CommentListItem comment={comment} key={comment._id} />)
 						: ''}
 
 					{/* Comments pagination */}
