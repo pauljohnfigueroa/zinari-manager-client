@@ -32,13 +32,13 @@ const TeamsGridWidget = ({ initFormValues, setInitFormValues }) => {
 	/* Fetch teams */
 	useEffect(() => {
 		const getTeams = async () => {
-			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/users/teams`, {
-				method: 'POST',
+			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/users/${user._id}/teams`, {
+				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${token}`
-				},
-				body: JSON.stringify({ userId: user._id })
+				}
+				// body: JSON.stringify({ userId: user._id })
 			})
 			const teams = await response.json()
 			// console.log('useEffect fetchTeams teams', teams)

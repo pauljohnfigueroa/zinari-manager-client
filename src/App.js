@@ -42,20 +42,17 @@ function App() {
 							<Route path="/dashboard" element={isAuth ? <Dashboard /> : <Navigate to="/" />} />
 							<Route
 								path="/tasks"
-								// element={isAuth ? <Tasks authPermissions={authPermissions} /> : <Navigate to="/" />}
-								element={<Tasks />}
+								element={isAuth ? <Tasks authPermissions={authPermissions} /> : <Navigate to="/" />}
 							/>
 							<Route
 								path="/teams"
-								// element={isAuth ? <Teams authPermissions={authPermissions} /> : <Navigate to="/" />}
-								element={<Teams />}
+								element={isAuth ? <Teams authPermissions={authPermissions} /> : <Navigate to="/" />}
 							/>
 							<Route
 								path="/projects"
-								// element={
-								// 	isAuth ? <Projects authPermissions={authPermissions} /> : <Navigate to="/" />
-								// }
-								element={<Projects />}
+								element={
+									isAuth ? <Projects authPermissions={authPermissions} /> : <Navigate to="/" />
+								}
 							/>
 							<Route
 								path="/appraisals"

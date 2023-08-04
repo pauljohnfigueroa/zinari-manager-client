@@ -58,18 +58,17 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 				body: JSON.stringify({ userId: user._id, taskId, comment: commentMessage })
 			})
 			// dispatch here
-			const fetchedComments = await response.json()
-
+			const lastestComment = await response.json()
+			console.log('lastestComment', lastestComment)
 			// add the latest comment to the previous state
-			if (fetchedComments.length > 0) {
-				setTaskComments(prev => [
-					{ taskId: taskId, comments: [...prev[0].comments, ...fetchedComments] }
-				])
+			if (lastestComment.length > 0) {
+				setTaskComments(prev => [...prev, ...lastestComment])
 				// This will not work as expected
 				// setTaskComments({
 				// 	taskId: taskId,
 				// 	comments: [...taskComments[0].comments, ...fetchedComments]
 				// })
+				console.log('taskComments2', taskComments)
 			}
 		} catch (error) {
 			console.log(error)
@@ -99,6 +98,7 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 					comments = []
 				}
 				setTaskComments(comments)
+				console.log('taskComments', taskComments)
 			} catch (error) {
 				console.log(error)
 			}
@@ -229,7 +229,7 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 
 					{taskComments.length > 0 && (
 						<Stack spacing={2} paddingY={2}>
-							<Pagination count={10} />
+							<Pagination count={Math.ceil(taskComments.length / 5)} />
 						</Stack>
 					)}
 					{taskComments.length > 0
@@ -239,7 +239,7 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 					{/* Comments pagination */}
 					{taskComments.length > 0 && (
 						<Stack spacing={2} paddingY={2}>
-							<Pagination count={10} />
+							<Pagination count={Math.ceil(taskComments.length / 5)} />
 						</Stack>
 					)}
 
