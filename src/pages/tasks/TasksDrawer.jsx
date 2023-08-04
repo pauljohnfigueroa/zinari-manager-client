@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
 import List from '@mui/material/List'
-import Avatar from '@mui/material/Avatar'
-import AvatarGroup from '@mui/material/AvatarGroup'
+// import Avatar from '@mui/material/Avatar'
+// import AvatarGroup from '@mui/material/AvatarGroup'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
-import Divider from '@mui/material/Divider'
+// import Divider from '@mui/material/Divider'
 import Stack from '@mui/material/Stack'
-import Grid from '@mui/material/Grid'
+// import Grid from '@mui/material/Grid'
 
 /* Drawer */
 import Dialog from '@mui/material/Dialog'
@@ -25,18 +25,17 @@ import Pagination from '@mui/material/Pagination'
 import CommentListItem from 'components/list/CommentListItem'
 import { ButtonGroup } from '@mui/material'
 
-import { useTheme } from '@emotion/react'
-import { tokens } from '../../theme.js'
+// import { useTheme } from '@emotion/react'
+// import { tokens } from '../../theme.js'
 
 const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormValues }) => {
-	const theme = useTheme()
-	const colors = tokens(theme.palette.mode)
+	// const theme = useTheme()
+	// const colors = tokens(theme.palette.mode)
 
 	const user = useSelector(state => state.auth.user)
 	const token = useSelector(state => state.auth.token)
 	const [commentMessage, setCommentMessage] = useState('')
 	const [taskComments, setTaskComments] = useState([])
-	const [taskDetails, setTaskDetails] = useState([])
 
 	const handleClose = () => {
 		setOpenTaskDetailDialog(false)
@@ -59,20 +58,14 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 			})
 			// dispatch here
 			const lastestComment = await response.json()
-			console.log('lastestComment', lastestComment)
 			// add the latest comment to the previous state
 			if (lastestComment.length > 0) {
 				setTaskComments(prev => [...prev, ...lastestComment])
-				// This will not work as expected
-				// setTaskComments({
-				// 	taskId: taskId,
-				// 	comments: [...taskComments[0].comments, ...fetchedComments]
-				// })
-				console.log('taskComments2', taskComments)
 			}
 		} catch (error) {
 			console.log(error)
 		}
+		// clear comment box
 		setCommentMessage('') // do not use null here
 	}
 
@@ -94,11 +87,9 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 
 				// if there is an error, set the comment to a empty array
 				if (comments.error) {
-					// console.log(comments.error)
 					comments = []
 				}
 				setTaskComments(comments)
-				console.log('taskComments', taskComments)
 			} catch (error) {
 				console.log(error)
 			}
