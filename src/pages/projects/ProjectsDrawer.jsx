@@ -44,7 +44,13 @@ import dayjs from 'dayjs'
 
 /* Accordion */
 const Transition = forwardRef(function Transition(props, ref) {
-	return <Slide direction="right" ref={ref} {...props} />
+	return (
+		<Slide
+			direction="right"
+			ref={ref}
+			{...props}
+		/>
+	)
 })
 
 const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues }) => {
@@ -312,7 +318,11 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			{open && (
-				<TaskForm formLabel="Add Task" initFormValues={initialValues} currentTeam={currentTeam} />
+				<TaskForm
+					formLabel="Add Task"
+					initFormValues={initialValues}
+					currentTeam={currentTeam}
+				/>
 			)}
 			{/* Drawer */}
 			<Dialog
@@ -323,10 +333,19 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 			>
 				<AppBar sx={{ position: 'relative' }}>
 					<Toolbar>
-						<IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+						<IconButton
+							edge="start"
+							color="inherit"
+							onClick={handleClose}
+							aria-label="close"
+						>
 							<CloseIcon />
 						</IconButton>
-						<Typography sx={{ ml: 2, flex: 1 }} variant="h3" component="div">
+						<Typography
+							sx={{ ml: 2, flex: 1 }}
+							variant="h3"
+							component="div"
+						>
 							{initFormValues.title}
 						</Typography>
 					</Toolbar>
@@ -335,9 +354,17 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 				{/* Team and Task Container */}
 
 				<Box sx={{ padding: 4 }}>
-					<Grid container spacing={1}>
+					<Grid
+						container
+						spacing={1}
+					>
 						{/* Project Summary */}
-						<Grid item xs={12} md={6} order={{ xs: 1, md: 2 }}>
+						<Grid
+							item
+							xs={12}
+							md={6}
+							order={{ xs: 1, md: 2 }}
+						>
 							<Box
 								sx={{
 									border: `1px solid ${colors.grey[600]}`,
@@ -349,7 +376,12 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 							</Box>
 						</Grid>
 
-						<Grid item xs={12} md={6} order={{ xs: 2, md: 1 }}>
+						<Grid
+							item
+							xs={12}
+							md={6}
+							order={{ xs: 2, md: 1 }}
+						>
 							{/* Project Form */}
 							<Box
 								sx={{
@@ -363,9 +395,17 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 						</Grid>
 
 						{/* Teams Accordion */}
-						<Grid item xs={12} md={12} order={{ xs: 3, md: 3 }}>
+						<Grid
+							item
+							xs={12}
+							md={12}
+							order={{ xs: 3, md: 3 }}
+						>
 							<Box>
-								<Typography variant="h3" sx={{ paddingBottom: 1 }}>
+								<Typography
+									variant="h3"
+									sx={{ paddingBottom: 1 }}
+								>
 									Teams
 								</Typography>
 
@@ -381,7 +421,10 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 												aria-controls={team.name}
 												id={team._id}
 											>
-												<Typography variant="h4" sx={{ width: '50%', flexShrink: 0 }}>
+												<Typography
+													variant="h4"
+													sx={{ width: '50%', flexShrink: 0 }}
+												>
 													{team.name}
 												</Typography>
 											</AccordionSummary>
@@ -403,7 +446,10 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																alignItems: 'center'
 															}}
 														>
-															<Typography variant="h6" sx={{ paddingBottom: 2 }}>
+															<Typography
+																variant="h6"
+																sx={{ paddingBottom: 2 }}
+															>
 																Leader
 															</Typography>
 
@@ -422,7 +468,10 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																alignItems: 'start'
 															}}
 														>
-															<Typography variant="h6" sx={{ paddingBottom: 2 }}>
+															<Typography
+																variant="h6"
+																sx={{ paddingBottom: 2 }}
+															>
 																Members
 															</Typography>
 															{/* Team Members Avatar Group*/}
@@ -513,7 +562,11 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																		</AccordionSummary>
 																		<AccordionDetails>
 																			{/* Action buttons */}
-																			<Stack direction="row" spacing={2} marginBottom={2}>
+																			<Stack
+																				direction="row"
+																				spacing={2}
+																				marginBottom={2}
+																			>
 																				<ButtonGroup
 																					variant="contained"
 																					aria-label="outlined primary button group"
@@ -532,7 +585,10 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																					<Button onClick={() => handleEditTask(team._id)}>
 																						Edit
 																					</Button>
-																					<Button variant="contained" color="error">
+																					<Button
+																						variant="contained"
+																						color="error"
+																					>
 																						Delete
 																					</Button>
 																				</ButtonGroup>
@@ -558,7 +614,10 @@ const ProjectsDrawer = ({ projDetailDialog, setProjDetailDialog, initFormValues 
 																					  })
 																					: ''}
 																				{/* Comments pagination */}
-																				<Stack spacing={2} paddingY={2}>
+																				<Stack
+																					spacing={2}
+																					paddingY={2}
+																				>
 																					<Pagination count={10} />
 																				</Stack>
 

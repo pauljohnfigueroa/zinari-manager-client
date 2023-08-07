@@ -56,7 +56,6 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 				},
 				body: JSON.stringify({ userId: user._id, taskId, comment: commentMessage })
 			})
-			// dispatch here
 			const lastestComment = await response.json()
 			// add the latest comment to the previous state
 			if (lastestComment.length > 0) {
@@ -84,7 +83,6 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 					}
 				)
 				let comments = await response.json()
-
 				// if there is an error, set the comment to a empty array
 				if (comments.error) {
 					comments = []
@@ -99,13 +97,25 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 	}, [initFormValues._id, token])
 
 	return (
-		<Dialog fullScreen open={openTaskDetailDialog}>
+		<Dialog
+			fullScreen
+			open={openTaskDetailDialog}
+		>
 			<AppBar sx={{ position: 'relative' }}>
 				<Toolbar>
-					<IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+					<IconButton
+						edge="start"
+						color="inherit"
+						onClick={handleClose}
+						aria-label="close"
+					>
 						<CloseIcon />
 					</IconButton>
-					<Typography sx={{ ml: 2, flex: 1 }} variant="h3" component="div">
+					<Typography
+						sx={{ ml: 2, flex: 1 }}
+						variant="h3"
+						component="div"
+					>
 						{initFormValues.title}
 					</Typography>
 				</Toolbar>
@@ -219,17 +229,28 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 					{/* Task Comments  */}
 
 					{taskComments.length > 0 && (
-						<Stack spacing={2} paddingY={2}>
+						<Stack
+							spacing={2}
+							paddingY={2}
+						>
 							<Pagination count={Math.ceil(taskComments.length / 5)} />
 						</Stack>
 					)}
 					{taskComments.length > 0
-						? taskComments.map(comment => <CommentListItem comment={comment} key={comment._id} />)
+						? taskComments.map(comment => (
+								<CommentListItem
+									comment={comment}
+									key={comment._id}
+								/>
+						  ))
 						: ''}
 
 					{/* Comments pagination */}
 					{taskComments.length > 0 && (
-						<Stack spacing={2} paddingY={2}>
+						<Stack
+							spacing={2}
+							paddingY={2}
+						>
 							<Pagination count={Math.ceil(taskComments.length / 5)} />
 						</Stack>
 					)}
@@ -256,7 +277,10 @@ const TasksDrawer = ({ openTaskDetailDialog, setOpenTaskDetailDialog, initFormVa
 										justifyContent: 'space-between'
 									}}
 								>
-									<Button variant="contained" onClick={() => handlePostComment(initFormValues._id)}>
+									<Button
+										variant="contained"
+										onClick={() => handlePostComment(initFormValues._id)}
+									>
 										Post Comment
 									</Button>
 								</Box>

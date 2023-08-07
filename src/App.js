@@ -7,7 +7,7 @@ import { themeSettings } from './theme'
 
 import LoginPage from './pages/login/LoginPage'
 import Layout from 'pages/layout/Layout'
-import Dashboard from './pages/users/Dashboard'
+import Dashboard from './pages/dashboard/Dashboard'
 import Tasks from './pages/tasks/Tasks'
 import Teams from './pages/teams/Teams'
 import Projects from './pages/projects/Projects'
@@ -35,11 +35,17 @@ function App() {
 				<ThemeProvider theme={theme}>
 					<CssBaseline />
 					<Routes>
-						<Route path="/" element={<LoginPage />} />
+						<Route
+							path="/"
+							element={<LoginPage />}
+						/>
 						<Route
 							element={isAuth ? <Layout authPermissions={authPermissions} /> : <Navigate to="/" />}
 						>
-							<Route path="/dashboard" element={isAuth ? <Dashboard /> : <Navigate to="/" />} />
+							<Route
+								path="/dashboard"
+								element={isAuth ? <Dashboard /> : <Navigate to="/" />}
+							/>
 							<Route
 								path="/tasks"
 								element={isAuth ? <Tasks authPermissions={authPermissions} /> : <Navigate to="/" />}
@@ -69,7 +75,10 @@ function App() {
 								element={isAuth ? <Roles authPermissions={authPermissions} /> : <Navigate to="/" />}
 							/>
 						</Route>
-						<Route path="/projects/drawer" element={<ProjectsDrawer />} />
+						<Route
+							path="/projects/drawer"
+							element={<ProjectsDrawer />}
+						/>
 					</Routes>
 				</ThemeProvider>
 			</BrowserRouter>

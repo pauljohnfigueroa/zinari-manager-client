@@ -69,7 +69,11 @@ const CommentListItem = ({ comment }) => {
 						{/* prop */}
 						{comment.lastModified}
 					</Typography>
-					<Typography variant="body2" color="text.secondary" sx={{ textAlign: 'left' }}>
+					<Typography
+						variant="body2"
+						color="text.secondary"
+						sx={{ textAlign: 'left' }}
+					>
 						{/* the comment */}
 						{comment.comment}
 						{/* prop */}
