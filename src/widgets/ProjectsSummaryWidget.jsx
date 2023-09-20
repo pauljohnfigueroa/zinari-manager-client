@@ -2,7 +2,7 @@ import React from 'react'
 import { Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
 
-import { useTheme } from '@emotion/react'
+// import { useTheme } from '@emotion/react'
 // import { tokens } from 'theme'
 
 const ProjectsSummaryWidget = ({ title }) => {
