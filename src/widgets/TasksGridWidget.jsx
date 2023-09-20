@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTheme } from '@emotion/react'
 
 import { fetchTasks, addTaskFormState } from 'state/tasksSlice.js'
-import TaskForm from 'components/forms/TaskForm.jsx'
+// import TaskForm from 'components/forms/TaskForm.jsx'
 import { Box, IconButton } from '@mui/material'
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
@@ -27,11 +27,11 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 
 	const dispatch = useDispatch()
 	const tasks = useSelector(state => state.task.tasks)
-	const open = useSelector(state => state.task.open)
+	// const open = useSelector(state => state.task.open)
 	const token = useSelector(state => state.auth.token)
 	const user = useSelector(state => state.auth.user)
 
-	const [currentTeam, setCurrentTeam] = useState([])
+	// const [currentTeam, setCurrentTeam] = useState([])
 
 	const [openTaskDetailDialog, setOpenTaskDetailDialog] = useState(false)
 
@@ -56,20 +56,20 @@ const TasksGridWidget = ({ initFormValues, setInitFormValues }) => {
 
 	console.log('tasks', tasks)
 	/* Update task form */
-	const showEditForm = async row => {
-		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams/${row.team}/members`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${token}`
-			}
-		})
-		const teamMembers = await response.json()
-		console.log('teamMembers', teamMembers)
-		setCurrentTeam(teamMembers)
-		setInitFormValues(row)
-		dispatch(addTaskFormState({ open: true }))
-	}
+	// const showEditForm = async row => {
+	// 	const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/teams/${row.team}/members`, {
+	// 		method: 'GET',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 			Authorization: `Bearer ${token}`
+	// 		}
+	// 	})
+	// 	const teamMembers = await response.json()
+	// 	console.log('teamMembers', teamMembers)
+	// 	setCurrentTeam(teamMembers)
+	// 	setInitFormValues(row)
+	// 	dispatch(addTaskFormState({ open: true }))
+	// }
 
 	const showTaskDrawer = row => {
 		setInitFormValues(row)
