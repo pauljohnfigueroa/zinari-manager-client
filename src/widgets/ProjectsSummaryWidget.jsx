@@ -6,7 +6,7 @@ import { useTheme } from '@emotion/react'
 // import { tokens } from 'theme'
 
 const ProjectsSummaryWidget = ({ title }) => {
-	const theme = useTheme()
+	// const theme = useTheme()
 	// const colors = tokens(theme.palette.mode)
 	return (
 		<>
